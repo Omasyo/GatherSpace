@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS message (
+    id SERIAL PRIMARY KEY,
+    content TEXT NOT NULL,
+    sender_id INT REFERENCES user_account ON DELETE SET NULL,
+    room_id INT NOT NULL REFERENCES room ON DELETE CASCADE,
+    created TIMESTAMP NOT NULL DEFAULT(CURRENT_TIMESTAMP),
+    modified TIMESTAMP NOT NULL DEFAULT(CURRENT_TIMESTAMP)
+);
+
+messagesWithRoomId:
+SELECT * FROM message WHERE created < :before AND room_id = :roomId LIMIT :limit;
+
+create:
+INSERT INTO message(content, sender_id, room_id) VALUES (?, ?, ?);

@@ -1,7 +1,10 @@
 plugins {
-    alias(libs.plugins.kotlinJvm)
+    alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.ktor)
     application
+
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.sqldelight)
 }
 
 group = "com.omasyo.gatherspace"
@@ -12,10 +15,36 @@ application {
 }
 
 dependencies {
-    implementation(projects.shared)
-    implementation(libs.logback)
+
+    implementation(project(":shared"))
+
+
+
     implementation(libs.ktor.server.core)
+    implementation(libs.ktor.server.websockets)
+    implementation(libs.ktor.serialization.json)
+    implementation(libs.ktor.server.content.negotiation)
+    implementation(libs.ktor.server.resources)
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.postgresql)
+    implementation(libs.h2)
+    implementation(libs.ktor.server.swagger)
+    implementation(libs.ktor.server.sessions)
+    implementation(libs.ktor.server.auth)
     implementation(libs.ktor.server.netty)
-    testImplementation(libs.ktor.server.tests)
+    implementation(libs.logback)
+    implementation(libs.sqldelight.jdbc.driver)
+    implementation(libs.hikari)
+
+    testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
+}
+
+sqldelight {
+    databases {
+        create("Database") {
+            packageName.set("com.omasyo.gatherspace.data")
+            dialect(libs.sqldelight.postgresql.dialect)
+        }
+    }
 }

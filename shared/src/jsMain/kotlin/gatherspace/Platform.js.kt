@@ -19,12 +19,14 @@ private val testFlow = flow<String> {
     }
 }
 
-@OptIn(ExperimentalJsExport::class, DelicateCoroutinesApi::class)
+@OptIn(ExperimentalJsExport::class)
 @JsExport
-fun callback(onEvent: (event: String) -> Unit) {
-    GlobalScope.launch {
-        testFlow.collect {
-            onEvent(it)
+class Test(private val name: String) {
+    fun callback(onEvent: (event: String) -> Unit) {
+        GlobalScope.launch {
+            testFlow.collect {
+                onEvent("$name says $it")
+            }
         }
     }
 }

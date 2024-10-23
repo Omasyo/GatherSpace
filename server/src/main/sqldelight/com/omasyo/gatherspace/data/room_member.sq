@@ -1,0 +1,16 @@
+CREATE TABLE IF NOT EXISTS room_member (
+    room_id INT NOT NULL,
+    user_id INT NOT NULL
+);
+
+create:
+INSERT INTO room_member(room_id, user_id) VALUES (?, ?);
+
+delete:
+DELETE FROM room_member WHERE room_id = ? AND user_id = ?;
+
+getRoomMembers:
+SELECT id, username, created, modified
+FROM user_account
+         JOIN room_member ON user_account.id = room_member.user_id
+WHERE room_member.room_id = ?;
