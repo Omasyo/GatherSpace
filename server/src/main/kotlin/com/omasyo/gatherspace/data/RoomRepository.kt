@@ -1,5 +1,8 @@
 package com.omasyo.gatherspace.data
 
+import com.omasyo.gatherspace.database.Database
+import com.omasyo.gatherspace.database.Room_memberQueries
+import com.omasyo.gatherspace.database.RoomQueries
 import com.omasyo.gatherspace.models.Room
 import com.omasyo.gatherspace.models.User
 import com.omasyo.gatherspace.models.UserDetails

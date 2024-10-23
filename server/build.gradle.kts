@@ -16,7 +16,7 @@ application {
 
 dependencies {
 
-    implementation(project(":shared"))
+    implementation(project(":shared:models"))
 
 
 
@@ -43,7 +43,7 @@ dependencies {
 sqldelight {
     databases {
         create("Database") {
-            packageName.set("com.omasyo.gatherspace.data")
+            packageName.set("com.omasyo.gatherspace.database")
             dialect(libs.sqldelight.postgresql.dialect)
         }
     }

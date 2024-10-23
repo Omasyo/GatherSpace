@@ -1,6 +1,7 @@
 package com.omasyo.gatherspace.data
 
 import app.cash.sqldelight.driver.jdbc.asJdbcDriver
+import com.omasyo.gatherspace.database.Database
 import com.zaxxer.hikari.HikariDataSource
 
 val database = run {

@@ -1,5 +1,7 @@
 package com.omasyo.gatherspace.data
 
+import com.omasyo.gatherspace.database.Database
+import com.omasyo.gatherspace.database.MessageQueries
 import java.time.LocalDateTime
 import com.omasyo.gatherspace.models.Message
 import kotlinx.datetime.toKotlinLocalDateTime
