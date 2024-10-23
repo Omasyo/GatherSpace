@@ -1,7 +1,8 @@
 package com.omasyo.gatherspace.data
 
 import com.omasyo.gatherspace.models.Room
-import com.omasyo.gatherspace.models.UserAccount
+import com.omasyo.gatherspace.models.User
+import com.omasyo.gatherspace.models.UserDetails
 import kotlinx.datetime.toKotlinLocalDateTime
 import java.time.LocalDateTime
 
@@ -17,7 +18,7 @@ interface RoomRepository {
 
     fun removeMember(roomId: Int, userId: Int)
 
-    fun getMembers(roomId: Int): List<UserAccount>
+    fun getMembers(roomId: Int): List<User>
 
     fun getRoom(roomId: Int): Room?
 }
@@ -42,8 +43,8 @@ class RoomRepositoryImpl(
         roomMemberQueries.delete(roomId, userId)
     }
 
-    override fun getMembers(roomId: Int): List<UserAccount> {
-        return roomMemberQueries.getRoomMembers(roomId, UserAccount::fromDb).executeAsList()
+    override fun getMembers(roomId: Int): List<User> {
+        return roomMemberQueries.getRoomMembers(roomId, ::User).executeAsList()
     }
 
     override fun getRoom(roomId: Int): Room? {
@@ -56,16 +57,3 @@ class RoomRepositoryImpl(
         }
     }
 }
-
-fun UserAccount.Companion.fromDb(
-    id: Int,
-    username: String,
-    created: LocalDateTime,
-    modified: LocalDateTime
-): UserAccount =
-    UserAccount(
-        id,
-        username,
-        created.toKotlinLocalDateTime(),
-        modified.toKotlinLocalDateTime()
-    )

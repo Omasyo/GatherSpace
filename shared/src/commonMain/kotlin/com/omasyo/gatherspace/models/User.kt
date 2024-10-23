@@ -4,9 +4,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserAccount(
+data class User(
     val id: Int,
     val username: String,
-    val created: LocalDateTime,
-    val modified: LocalDateTime,
 )

@@ -4,10 +4,9 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Room(
+data class UserDetails(
     val id: Int,
-    val name: String,
-    val members: List<User>,
+    val username: String,
     val created: LocalDateTime,
     val modified: LocalDateTime,
 )
