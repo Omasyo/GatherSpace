@@ -4,6 +4,7 @@ import com.omasyo.gatherspace.data.DatabaseResponse
 import com.omasyo.gatherspace.data.ErrorObject
 import com.omasyo.gatherspace.data.MessageRepository
 import com.omasyo.gatherspace.data.Success
+import com.omasyo.gatherspace.models.MessageRequest
 import io.ktor.http.*
 import io.ktor.serialization.*
 import io.ktor.server.application.*
@@ -21,8 +22,6 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
-@Serializable
-data class MessageRequest(val senderId: Int?, val content: String)
 
 
 val messageResponseFlow = MutableSharedFlow<MessageRequest>()
@@ -48,11 +47,12 @@ fun Application.messageController(repository: MessageRepository) {
         webSocket("/rooms/{roomId}") {
             val roomId = call.parameters["roomId"]?.toInt() ?: return@webSocket
 
-            send("You are connected to WebSocket! with ${++count} others")
+//            send("You are connected to WebSocket! with ${++count} others")
 
             val job = launch {
                 sharedFlow.collect { message ->
                     repository.create(message.content, message.senderId, roomId)
+                    sendSerialized(message)
                 }
             }
 

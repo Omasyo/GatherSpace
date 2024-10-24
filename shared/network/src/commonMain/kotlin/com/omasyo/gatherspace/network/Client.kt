@@ -11,11 +11,16 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.websocket.*
 import io.ktor.client.request.forms.submitForm
 import io.ktor.http.URLProtocol
 import io.ktor.http.isSuccess
 import io.ktor.http.parameters
+import io.ktor.serialization.kotlinx.*
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
+
+expect fun provideEngine(): HttpClientEngine
 
 fun createClient(
     engine: HttpClientEngine
@@ -27,8 +32,13 @@ fun createClient(
         defaultRequest {
             url {
                 protocol = URLProtocol.HTTP
-                host = "localhost"
+                host = "192.168.21.134"
                 port = 8080
             }
         }
+        install(WebSockets) {
+            pingIntervalMillis = 20_000
+            contentConverter = KotlinxWebsocketSerializationConverter(Json)
+        }
+
     }

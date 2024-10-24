@@ -3,19 +3,16 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import Header from './components/header.jsx'
-import {Test} from '../../shared/build/dist/js/developmentLibrary/GatherSpace-shared.mjs';
+import {Tospi} from '../../shared/network/build/dist/js/developmentLibrary/GatherSpace-shared-network.mjs';
+// import {jsSendMessage} from '../../shared/network/build/dist/js/developmentLibrary/GatherSpace-shared-network.mjs';
 
+Tospi.prototype .jsConnect()
 
 function App() {
 
-    console.log("Tasting")
-    const t = new Test("Tast")
-
-    t.callback((e) => {
-        console.log(`Logging ${e}`);
-    })
 
     const [count, setCount] = useState(0)
+    const [message, setMessage] = useState("")
 
     return (
         <>
@@ -37,6 +34,8 @@ function App() {
                     Edit <code>src/App.jsx</code> and save to test HMR
                 </p>
             </div>
+            <input type="text" value={message} onChange={(msg) => setMessage(msg.target.value)}/>
+            <button onClick={() => {Tospi.prototype .jsSendMessage(message)}}>Submit</button>
             <p className="read-the-docs">
                 Click on the Vite and React logos to learn more
             </p>
