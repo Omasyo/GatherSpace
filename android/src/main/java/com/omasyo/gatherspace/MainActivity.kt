@@ -14,15 +14,16 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.omasyo.gatherspace.network.message.jsConnect
-import com.omasyo.gatherspace.network.message.jsSendMessage
+import com.omasyo.gatherspace.network.message.Tospi
 import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
+
+val js = Tospi()
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        jsConnect()
+        js.jsConnect()
 
         enableEdgeToEdge()
         setContent {
@@ -31,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     var message by remember { mutableStateOf("") }
                     Column {
                         TextField(message, onValueChange = { message = it })
-                        Button(onClick = { jsSendMessage(message) }) { Text("Submit") }
+                        Button(onClick = { js.jsSendMessage(message) }) { Text("Submit") }
                     }
                 }
             }

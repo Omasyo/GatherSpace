@@ -6,8 +6,17 @@ CREATE TABLE IF NOT EXISTS user_account (
     modified TIMESTAMP NOT NULL DEFAULT(CURRENT_TIMESTAMP)
 );
 
-create:
-INSERT INTO user_account(username, password) VALUES (?, ?);
+CREATE UNIQUE INDEX IF NOT EXISTS ux_user_account_username ON user_account (username);
 
-get:
+create:
+INSERT INTO user_account(username, password)
+VALUES (:username, crypt(COALESCE(:password,''), gen_salt('bf', 8)));
+
+getById:
 SELECT id, username, created, modified FROM user_account WHERE id = ?;
+
+getByUsername:
+SELECT id, username, created, modified FROM user_account WHERE username = ?;
+
+validateUser:
+SELECT password = crypt(COALESCE(:password,''), password) FROM user_account WHERE username = ?;

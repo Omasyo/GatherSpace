@@ -1,15 +1,18 @@
 package com.omasyo.gatherspace
 
-import com.omasyo.gatherspace.data.createMessageRepository
-import com.omasyo.gatherspace.data.createRoomRepository
-import com.omasyo.gatherspace.data.createUserRepository
-import com.omasyo.gatherspace.data.database
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
+import com.omasyo.gatherspace.data.*
+import com.omasyo.gatherspace.routes.api.auth.AuthServiceImpl
 import com.omasyo.gatherspace.routes.api.message.messageController
 import com.omasyo.gatherspace.routes.api.room.roomController
 import com.omasyo.gatherspace.routes.api.user.userController
+import io.ktor.http.*
 import io.ktor.serialization.kotlinx.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.*
@@ -37,7 +40,9 @@ fun Application.module() {
         masking = false
         contentConverter = KotlinxWebsocketSerializationConverter(Json)
     }
-    userController(createUserRepository(database))
+    val userRepository = createUserRepository(database)
+    configureAuth(AuthServiceImpl(userRepository, TokenRepositoryImpl(database.refresh_tokenQueries)))
+    userController(userRepository)
     roomController(createRoomRepository(database))
     messageController(createMessageRepository(database))
 }

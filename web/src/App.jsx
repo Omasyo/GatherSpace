@@ -6,7 +6,9 @@ import Header from './components/header.jsx'
 import {Tospi} from '../../shared/network/build/dist/js/developmentLibrary/GatherSpace-shared-network.mjs';
 // import {jsSendMessage} from '../../shared/network/build/dist/js/developmentLibrary/GatherSpace-shared-network.mjs';
 
-Tospi.prototype .jsConnect()
+const test = new Tospi()
+
+test.jsConnect()
 
 function App() {
 
@@ -35,7 +37,7 @@ function App() {
                 </p>
             </div>
             <input type="text" value={message} onChange={(msg) => setMessage(msg.target.value)}/>
-            <button onClick={() => {Tospi.prototype .jsSendMessage(message)}}>Submit</button>
+            <button onClick={() => {test.jsSendMessage(message)}}>Submit</button>
             <p className="read-the-docs">
                 Click on the Vite and React logos to learn more
             </p>
