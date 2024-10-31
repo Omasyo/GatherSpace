@@ -1,6 +1,6 @@
 package com.omasyo.gatherspace.utils
 
-import com.omasyo.gatherspace.models.ErrorResponse
+import com.omasyo.gatherspace.models.response.ErrorResponse
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*

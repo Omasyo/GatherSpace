@@ -5,11 +5,11 @@ import com.omasyo.gatherspace.data.message.createMessageRepository
 import com.omasyo.gatherspace.data.room.RoomRepositoryImpl
 import com.omasyo.gatherspace.data.token.TokenRepositoryImpl
 import com.omasyo.gatherspace.data.user.UserRepositoryImpl
-import com.omasyo.gatherspace.routes.api.auth.AuthServiceImpl
-import com.omasyo.gatherspace.routes.api.auth.configureAuth
-import com.omasyo.gatherspace.routes.api.message.messageRoute
-import com.omasyo.gatherspace.routes.api.room.roomRoute
-import com.omasyo.gatherspace.routes.api.user.userController
+import com.omasyo.gatherspace.api.auth.AuthServiceImpl
+import com.omasyo.gatherspace.api.auth.configureAuth
+import com.omasyo.gatherspace.api.routes.messageRoute
+import com.omasyo.gatherspace.api.routes.roomRoute
+import com.omasyo.gatherspace.api.routes.userController
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.*
 import io.ktor.serialization.kotlinx.json.*
@@ -19,6 +19,8 @@ import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.resources.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import io.ktor.server.sse.*
 import io.ktor.server.websocket.*
 import kotlinx.serialization.json.Json
@@ -53,6 +55,11 @@ fun Application.module() {
         contentConverter = KotlinxWebsocketSerializationConverter(Json)
     }
     install(SSE)
+    routing {
+        get("/hello") {
+            call.respondText("Hello")
+        }
+    }
     configureAuth(AuthServiceImpl(userRepository, TokenRepositoryImpl(database.refresh_tokenQueries)))
     userController(userRepository)
     roomRoute(RoomRepositoryImpl(database.roomQueries, database.room_memberQueries))

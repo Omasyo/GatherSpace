@@ -1,8 +1,8 @@
-package com.omasyo.gatherspace.routes.api.auth
+package com.omasyo.gatherspace.api.auth
 
 import com.auth0.jwt.JWTVerifier
-import com.omasyo.gatherspace.models.TokenResponse
-import com.omasyo.gatherspace.models.UserDetails
+import com.omasyo.gatherspace.models.response.TokenResponse
+import com.omasyo.gatherspace.models.response.UserDetails
 
 const val TOKEN_VALID_DURATION = 6000000
 

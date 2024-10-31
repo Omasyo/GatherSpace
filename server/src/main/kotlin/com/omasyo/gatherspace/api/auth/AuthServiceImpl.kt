@@ -1,11 +1,12 @@
-package com.omasyo.gatherspace.routes.api.auth
+package com.omasyo.gatherspace.api.auth
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import com.omasyo.gatherspace.data.token.TokenRepository
 import com.omasyo.gatherspace.data.user.UserRepository
-import com.omasyo.gatherspace.models.*
+import com.omasyo.gatherspace.models.response.TokenResponse
+import com.omasyo.gatherspace.models.response.UserDetails
 import java.time.Instant
 import java.util.*
 

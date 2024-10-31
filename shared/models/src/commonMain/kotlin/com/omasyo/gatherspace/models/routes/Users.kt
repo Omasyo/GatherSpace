@@ -1,4 +1,4 @@
-package com.omasyo.gatherspace.routes.api.user
+package com.omasyo.gatherspace.models.routes
 
 import io.ktor.resources.*
 

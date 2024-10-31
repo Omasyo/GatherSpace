@@ -1,7 +1,12 @@
-package com.omasyo.gatherspace.routes.api.room
+package com.omasyo.gatherspace.api.routes
 
 import com.omasyo.gatherspace.data.room.RoomRepository
-import com.omasyo.gatherspace.models.ErrorResponse
+import com.omasyo.gatherspace.models.request.MembersRequest
+import com.omasyo.gatherspace.models.request.CreateRoomRequest
+import com.omasyo.gatherspace.models.response.ErrorResponse
+import com.omasyo.gatherspace.models.routes.Members
+import com.omasyo.gatherspace.models.routes.Rooms
+import com.omasyo.gatherspace.api.auth.AuthName
 import com.omasyo.gatherspace.utils.respondError
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -11,13 +16,6 @@ import io.ktor.server.resources.*
 import io.ktor.server.resources.post
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.Serializable
-
-@Serializable
-private data class CreateRoomRequest(val name: String)
-
-@Serializable
-private data class AddMembersRequest(val members: List<Int>)
 
 fun Application.roomRoute(repository: RoomRepository) {
     routing {
@@ -38,7 +36,7 @@ fun Application.roomRoute(repository: RoomRepository) {
             }
         }
 
-        authenticate("auth") {
+        authenticate(AuthName) {
             post<Rooms> { _ ->
                 val room = call.receive<CreateRoomRequest>()
                 repository.create(room.name)
@@ -46,13 +44,13 @@ fun Application.roomRoute(repository: RoomRepository) {
             }
 
             post<Members> { members ->
-                val request = call.receive<AddMembersRequest>()
+                val request = call.receive<MembersRequest>()
                 repository.addMembers(members.room.id, request.members)
                 call.respond(HttpStatusCode.Created)
             }
 
             delete<Members> { members ->
-                val request = call.receive<AddMembersRequest>()
+                val request = call.receive<MembersRequest>()
                 repository.addMembers(members.room.id, request.members)
                 call.respond(HttpStatusCode.NoContent)
             }

@@ -1,7 +1,7 @@
 package com.omasyo.gatherspace.data.user
 
 import com.omasyo.gatherspace.database.User_accountQueries
-import com.omasyo.gatherspace.models.UserDetails
+import com.omasyo.gatherspace.models.response.UserDetails
 import kotlinx.datetime.toKotlinLocalDateTime
 import java.time.LocalDateTime
 

@@ -1,12 +1,13 @@
-package com.omasyo.gatherspace.models
+package com.omasyo.gatherspace.models.response
 
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserDetails(
+data class Room(
     val id: Int,
-    val username: String,
+    val name: String,
+    val members: List<User>,
     val created: LocalDateTime,
     val modified: LocalDateTime,
 )

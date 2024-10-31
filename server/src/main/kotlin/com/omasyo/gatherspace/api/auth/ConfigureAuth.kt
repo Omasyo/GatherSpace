@@ -1,6 +1,8 @@
-package com.omasyo.gatherspace.routes.api.auth
+package com.omasyo.gatherspace.api.auth
 
-import com.omasyo.gatherspace.models.ErrorResponse
+import com.omasyo.gatherspace.models.request.LoginRequest
+import com.omasyo.gatherspace.models.request.RefreshTokenRequest
+import com.omasyo.gatherspace.models.response.ErrorResponse
 import com.omasyo.gatherspace.utils.respondError
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -9,21 +11,12 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.Serializable
 
-@Serializable
-private data class UserCredentials(
-    val username: String,
-    val password: String,
-    val deviceName: String
-)
-
-@Serializable
-private data class RefreshTokenRequest(val refreshToken: String)
+const val AuthName = "auth"
 
 fun Application.configureAuth(authService: AuthService) {
     install(Authentication) {
-        jwt("auth") {
+        jwt(AuthName) {
             verifier(authService.accessTokenVerifier)
             validate { credential ->
                 JWTPrincipal(credential.payload)
@@ -42,9 +35,9 @@ fun Application.configureAuth(authService: AuthService) {
     }
     routing {
         post("/session") {
-            val userCredentials = call.receive<UserCredentials>()
+            val loginRequest = call.receive<LoginRequest>()
 
-            if (!authService.validateUser(userCredentials.username, userCredentials.password)) {
+            if (!authService.validateUser(loginRequest.username, loginRequest.password)) {
                 call.respond(
                     ErrorResponse(
                         statusCode = HttpStatusCode.Unauthorized.value,
@@ -52,9 +45,9 @@ fun Application.configureAuth(authService: AuthService) {
                     )
                 )
             }
-            val user = authService.getUserByUsername(userCredentials.username)!!
+            val user = authService.getUserByUsername(loginRequest.username)!!
 
-            authService.generateTokens(user.id, userCredentials.deviceName).let {
+            authService.generateTokens(user.id, loginRequest.deviceName).let {
                 call.respond(it)
             }
         }
@@ -66,7 +59,7 @@ fun Application.configureAuth(authService: AuthService) {
 
             response?.let {
                 call.respond(it)
-            } ?: call.respond(
+            } ?: call.respondError(
                 ErrorResponse(
                     statusCode = HttpStatusCode.Unauthorized.value,
                     message = "Token not found"

@@ -3,9 +3,10 @@ package com.omasyo.gatherspace.data.message
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToOne
 import com.omasyo.gatherspace.database.MessageQueries
-import com.omasyo.gatherspace.models.Message
+import com.omasyo.gatherspace.models.response.Message
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toKotlinLocalDateTime
 import java.time.LocalDateTime
 
@@ -22,11 +23,11 @@ internal class MessageRepositoryImpl(private val messageQueries: MessageQueries)
     }
 
     override fun getMessages(
-        roomId: Int, before: LocalDateTime, limit: Int
+        roomId: Int, before: kotlinx.datetime.LocalDateTime, limit: Int
     ): List<Message> {
         return messageQueries.messagesWithRoomId(
             roomId = roomId,
-            before = before,
+            before = before.toJavaLocalDateTime(),
             limit = limit.toLong(),
             mapper = ::messageMapper
         ).executeAsList()
