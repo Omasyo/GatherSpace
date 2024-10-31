@@ -1,23 +1,9 @@
-package com.omasyo.gatherspace.data
+package com.omasyo.gatherspace.data.user
 
-import com.omasyo.gatherspace.database.Database
 import com.omasyo.gatherspace.database.User_accountQueries
 import com.omasyo.gatherspace.models.UserDetails
 import kotlinx.datetime.toKotlinLocalDateTime
 import java.time.LocalDateTime
-
-fun createUserRepository(database: Database) = UserRepositoryImpl(database.user_accountQueries)
-
-interface UserRepository {
-    fun create(username: String, password: String)
-
-    fun getUserById(id: Int): UserDetails?
-
-    fun getUserByUsername(username: String): UserDetails?
-
-    fun validateUser(username: String, password: String): Boolean
-}
-
 
 class UserRepositoryImpl(
     private val db: User_accountQueries
@@ -47,9 +33,9 @@ class UserRepositoryImpl(
         created: LocalDateTime,
         modified: LocalDateTime
     ) = UserDetails(
-        userId,
-        username,
-        created.toKotlinLocalDateTime(),
-        modified.toKotlinLocalDateTime()
+        id = userId,
+        username = username,
+        created = created.toKotlinLocalDateTime(),
+        modified = modified.toKotlinLocalDateTime()
     )
 }

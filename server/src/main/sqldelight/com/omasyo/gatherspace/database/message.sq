@@ -8,9 +8,20 @@ CREATE TABLE IF NOT EXISTS message (
 );
 
 messagesWithRoomId:
-SELECT id, content, sender_id, created, modified
+SELECT *
 FROM message
-WHERE created < :before AND room_id = :roomId LIMIT :limit;
+WHERE created < :before AND room_id = :roomId
+ORDER BY created
+LIMIT :limit;
 
 create:
-INSERT INTO message(content, sender_id, room_id) VALUES (?, ?, ?);
+INSERT INTO message(content, sender_id, room_id)
+VALUES (?, ?, ?)
+RETURNING * ;
+
+lastMessage:
+SELECT *
+FROM message
+WHERE room_id = ?
+ORDER BY created DESC
+LIMIT 1;

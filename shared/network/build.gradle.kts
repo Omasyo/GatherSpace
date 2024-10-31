@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDistributionDsl
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
@@ -23,7 +24,14 @@ kotlin {
                     }
                 }
             }
+
+            @OptIn(ExperimentalDistributionDsl::class)
+            distribution {
+                outputDirectory.set(parent!!.parent!!.projectDir.resolve("web/kotlin"))
+            }
         }
+
+//        generateTypeScriptDefinitions()
         binaries.library()
     }
 

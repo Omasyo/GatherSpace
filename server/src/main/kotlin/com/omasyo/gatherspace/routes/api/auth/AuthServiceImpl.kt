@@ -3,18 +3,11 @@ package com.omasyo.gatherspace.routes.api.auth
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
-import com.omasyo.gatherspace.TokenType
-import com.omasyo.gatherspace.data.TokenRepository
-import com.omasyo.gatherspace.data.UserRepository
-import com.omasyo.gatherspace.database.Refresh_tokenQueries
-import com.omasyo.gatherspace.models.TokenResponse
-import com.omasyo.gatherspace.models.User
-import com.omasyo.gatherspace.models.UserDetails
+import com.omasyo.gatherspace.data.token.TokenRepository
+import com.omasyo.gatherspace.data.user.UserRepository
+import com.omasyo.gatherspace.models.*
 import java.time.Instant
 import java.util.*
-
-const val secret = "hidden"
-const val refreshSecret = "hiddentoo"
 
 class AuthServiceImpl(
     private val userRepository: UserRepository,
@@ -23,25 +16,25 @@ class AuthServiceImpl(
     AuthService {
     override val accessTokenVerifier: JWTVerifier = JWT
         .require(Algorithm.HMAC256(secret))
+        .withClaim(JwtKeys.TOKEN_TYPE, TokenType.ACCESS_TOKEN.name)
         .build()
 
     override val refreshTokenVerifier: JWTVerifier = JWT
         .require(Algorithm.HMAC256(refreshSecret))
+        .withClaim(JwtKeys.TOKEN_TYPE, TokenType.REFRESH_TOKEN.name)
         .build()
 
     override fun generateTokens(userId: Int, deviceName: String): TokenResponse {
         val refreshToken = JWT.create()
-            .withClaim("token_type", TokenType.REFRESH_TOKEN.name)
+            .withClaim(JwtKeys.TOKEN_TYPE, TokenType.REFRESH_TOKEN.name)
             .withIssuedAt(Instant.now())
             .sign(Algorithm.HMAC256(refreshSecret))
 
         val deviceId = tokenRepository.createToken(refreshToken, userId, deviceName)
 
-
         val accessToken = generateAccessToken(userId, deviceId)
 
         return TokenResponse(accessToken = accessToken, refreshToken = refreshToken)
-
     }
 
     override fun refreshTokens(refreshToken: String): TokenResponse? {
@@ -51,11 +44,7 @@ class AuthServiceImpl(
         return TokenResponse(accessToken = accessToken, refreshToken = refreshToken)
     }
 
-    override fun revokeToken(token: String) {
-        val data = JWT.decode(token)
-        val userId = data.getClaim("user_id").asInt()
-        val deviceId = data.getClaim("device_id").asInt()
-
+    override fun revokeToken(userId: Int, deviceId: Int) {
         tokenRepository.deleteToken(userId, deviceId)
     }
 

@@ -4,7 +4,7 @@ import com.omasyo.gatherspace.routes.api.room.Rooms
 import io.ktor.resources.*
 
 @Resource("/messages")
-class Messages(val room: Rooms.Id) {
+class Routes(val room: Rooms.Id) {
     @Resource("/{id}")
-    class Id(val id: Int, val parent: Messages)
+    class Id(val id: Int, val parent: Routes)
 }

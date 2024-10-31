@@ -1,5 +1,6 @@
-package com.omasyo.gatherspace.data
+package com.omasyo.gatherspace.data.token
 
+import com.omasyo.gatherspace.models.TokenDetails
 import com.omasyo.gatherspace.database.Refresh_tokenQueries
 import kotlinx.datetime.toKotlinLocalDateTime
 
@@ -11,19 +12,19 @@ class TokenRepositoryImpl(
     }
 
     override fun deleteToken(userId: Int, deviceId: Int) {
-        return db.delete(userId, deviceId)
+        db.delete(userId, deviceId)
     }
 
     override fun getWithRefreshToken(token: String): TokenDetails? {
         return db.transactionWithResult {
             db.updateLastAccessed(token)
-            db.getByRefreshToken(token) { user_id, device_id, device_name, created, last_accessed ->
+            db.getByRefreshToken(token) { userId, deviceId, deviceName, created, lastAccessed ->
                 TokenDetails(
-                    user_id,
-                    device_id,
-                    device_name,
-                    created.toKotlinLocalDateTime(),
-                    last_accessed.toKotlinLocalDateTime()
+                    userId = userId,
+                    deviceId = deviceId,
+                    deviceName = deviceName,
+                    created = created.toKotlinLocalDateTime(),
+                    lastAccessed = lastAccessed.toKotlinLocalDateTime()
                 )
             }.executeAsOneOrNull()
         }
