@@ -11,13 +11,18 @@ import io.ktor.client.plugins.sse.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.json.Json
 
 internal class MessageNetworkSourceImpl(
     private val client: HttpClient
 ) : MessageNetworkSource {
-    override fun getRecentMessages(): List<Message> {
-        TODO("Not yet implemented")
+    override suspend fun getRecentMessages(
+        roomId: Int,
+        before: LocalDateTime,
+        limit: Int
+    ): Result<List<Message>> = mapResponse {
+        client.get(Messages(Rooms.Id(roomId), before, limit))
     }
 
     override fun getMessageFlow(roomId: Int): Flow<Message> =
@@ -31,7 +36,7 @@ internal class MessageNetworkSourceImpl(
         }
 
     override suspend fun sendMessage(roomId: Int, message: String): Result<Unit> =
-        mapResponse<Unit> {
+        mapResponse {
 
             client.post(Messages(Rooms.Id(roomId))) {
                 setBody(MessageRequest(message))

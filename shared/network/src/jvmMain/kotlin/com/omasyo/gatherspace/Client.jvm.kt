@@ -1,10 +1,12 @@
 package com.omasyo.gatherspace
 
 import com.omasyo.gatherspace.models.TokenStorage
+import com.omasyo.gatherspace.models.request.MessageRequest
 import com.omasyo.gatherspace.models.response.TokenResponse
 import com.omasyo.gatherspace.models.routes.Messages
 import com.omasyo.gatherspace.models.routes.Rooms
 import com.omasyo.gatherspace.network.createClient
+import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.client.request.*
@@ -21,8 +23,8 @@ import java.util.*
 fun main() {
     val client = createClient(CIO.create(), object : TokenStorage {
         var tokenResponse = TokenResponse(
-            "1eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ0b2tlbl90eXBlIjoiQUNDRVNTX1RPS0VOIiwiZGV2aWNlX2lkIjoyLCJleHAiOjE3MzAzNzU5MTh9.L9HazXwW4d56UEvnAQwUBYgVVTOQMNR_VJMvsHcmtOs",
-            "2eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiUkVGUkVTSF9UT0tFTiIsImlhdCI6MTczMDM2OTkxN30.mFiw83HyK6KtONByxEQtLvC_xrkP5DkfRGq_2buM3hI"
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ0b2tlbl90eXBlIjoiQUNDRVNTX1RPS0VOIiwiZGV2aWNlX2lkIjozLCJleHAiOjE3MzA0MDQzODd9.y2iwGv58NUC9p3PlDz_tC8MxJKlLJshl8Cq0CysAEL4",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiUkVGUkVTSF9UT0tFTiIsImlhdCI6MTczMDM5ODM4N30.zAZ2lysXr6GqGnAgehSn2utzZdAZifRjIT7X8kdl1rU"
         )
         override val tokenFlow: Flow<TokenResponse?>
             get() = TODO("Not yet implemented")
@@ -41,8 +43,10 @@ fun main() {
 
     })
     runBlocking {
-        client.get(Messages(Rooms.Id(1))).let {
-            println(it.bodyAsText())
+        client.post(Messages(Rooms.Id(1))){
+            setBody(MessageRequest("Hola camosa"))
+        }.let {
+            println(it.body<Unit>())
             println(it.status)
         }
     }

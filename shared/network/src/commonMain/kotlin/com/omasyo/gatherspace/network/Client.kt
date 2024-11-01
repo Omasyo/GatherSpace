@@ -56,10 +56,6 @@ fun createClient(
                         null
                     }
                 }
-//                sendWithoutRequest { request ->
-//                    request.url.host == "api.spotify.com"
-//                    true
-//                }
             }
         }
         defaultRequest {
