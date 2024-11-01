@@ -11,7 +11,6 @@ interface NetworkSource {
         get() = this::class.simpleName!!
 }
 
-
 internal suspend inline fun <reified T> NetworkSource.mapResponse(
 //    expectedStatusCode: HttpStatusCode = HttpStatusCode.OK,
     exec: () -> HttpResponse
@@ -26,7 +25,8 @@ internal suspend inline fun <reified T> NetworkSource.mapResponse(
 
         } else {
             print("$tag:makeRequest: Error - ${response.bodyAsText()}")
-            Result.failure(Exception("")) //TODO: fix this
+
+            Result.failure(NetworkException(response.body()))
 
         }
     } catch (e: Exception) {

@@ -1,6 +1,7 @@
 package com.omasyo.gatherspace.network.auth
 
 import com.omasyo.gatherspace.models.request.LoginRequest
+import com.omasyo.gatherspace.models.response.TokenResponse
 import com.omasyo.gatherspace.network.NetworkSource
 
 interface AuthNetworkSource : NetworkSource {
@@ -8,7 +9,7 @@ interface AuthNetworkSource : NetworkSource {
         username: String,
         password: String,
         deviceName: String
-    ): Result<Unit>
+    ): Result<TokenResponse>
 
     suspend fun logout(deviceId: Int? = null): Result<Unit>
 }

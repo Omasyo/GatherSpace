@@ -33,5 +33,6 @@ dependencyResolutionManagement {
 
 include(":server")
 include(":android")
+include("shared:domain")
 include("shared:models")
 include("shared:network")

@@ -9,7 +9,7 @@ interface TokenStorage {
 
     suspend fun getToken(): TokenResponse
 
-    suspend fun saveToken(accessTokenResponse: TokenResponse)
+    suspend fun saveToken(tokenResponse: TokenResponse)
 
     suspend fun clearToken()
 }

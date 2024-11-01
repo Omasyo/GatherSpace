@@ -2,6 +2,7 @@ package com.omasyo.gatherspace.network.auth
 
 import com.omasyo.gatherspace.models.TokenStorage
 import com.omasyo.gatherspace.models.request.LoginRequest
+import com.omasyo.gatherspace.models.response.TokenResponse
 import com.omasyo.gatherspace.models.routes.Session
 import com.omasyo.gatherspace.network.mapResponse
 import io.ktor.client.plugins.resources.*
@@ -16,7 +17,7 @@ internal class AuthNetworkSourceImpl(
         username: String,
         password: String,
         deviceName: String
-    ): Result<Unit> =
+    ): Result<TokenResponse> =
         mapResponse {
             client.post(Session()) {
                 setBody(LoginRequest(username, password, deviceName))
