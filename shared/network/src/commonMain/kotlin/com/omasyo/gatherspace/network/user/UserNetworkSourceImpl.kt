@@ -7,13 +7,13 @@ import io.ktor.client.*
 import io.ktor.client.plugins.resources.*
 import io.ktor.client.request.*
 
-class UserNetworkSourceImpl(
+internal class UserNetworkSourceImpl(
     private val client: HttpClient
 ) : UserNetworkSource {
     override suspend fun createAccount(userName: String, password: String): Result<Unit> =
         mapResponse {
             client.post(Users()) {
-                CreateUserRequest(userName, password)
+                setBody(CreateUserRequest(userName, password))
             }
         }
 

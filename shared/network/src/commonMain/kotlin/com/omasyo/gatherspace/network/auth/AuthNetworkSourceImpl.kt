@@ -8,7 +8,7 @@ import io.ktor.client.plugins.resources.*
 import io.ktor.client.*
 import io.ktor.client.request.*
 
-class AuthNetworkSourceImpl(
+internal class AuthNetworkSourceImpl(
     private val client: HttpClient,
     private val tokenStorage: TokenStorage
 ) : AuthNetworkSource {
