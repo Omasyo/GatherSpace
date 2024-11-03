@@ -15,5 +15,4 @@ interface MessageNetworkSource : NetworkSource {
     fun getMessageFlow(roomId: Int): Flow<Message>
 
     suspend fun sendMessage(roomId: Int, message: String): Result<Unit>
-
 }
