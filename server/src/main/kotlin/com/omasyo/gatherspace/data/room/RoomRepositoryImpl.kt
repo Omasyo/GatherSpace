@@ -9,7 +9,7 @@ import kotlinx.datetime.toKotlinLocalDateTime
 
 internal class RoomRepositoryImpl(
     private val roomQueries: RoomQueries,
-    private val roomMemberQueries: Room_memberQueries
+    private val roomMemberQueries: Room_memberQueries,
 ) : RoomRepository {
     override fun create(name: String) {
         roomQueries.create(name)

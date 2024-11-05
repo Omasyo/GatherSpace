@@ -4,6 +4,7 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToOne
 import com.omasyo.gatherspace.database.MessageQueries
 import com.omasyo.gatherspace.models.response.Message
+import com.omasyo.gatherspace.models.response.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.toJavaLocalDateTime
@@ -14,12 +15,12 @@ internal class MessageRepositoryImpl(private val messageQueries: MessageQueries)
     override fun create(
         content: String, senderId: Int?, roomId: Int
     ): Message {
-        return messageQueries.create(
+        val id = messageQueries.create(
             content = content,
             sender_id = senderId,
             room_id = roomId,
-            mapper = ::messageMapper
         ).executeAsOne()
+        return messageQueries.getById(id, ::messageMapper).executeAsOne()
     }
 
     override fun getMessages(
@@ -44,8 +45,15 @@ internal class MessageRepositoryImpl(private val messageQueries: MessageQueries)
         senderId: Int?,
         roomId: Int,
         created: LocalDateTime,
-        modified: LocalDateTime
+        modified: LocalDateTime,
+        userId: Int,
+        username: String
     ): Message = Message(
-        id, content, senderId, roomId, created.toKotlinLocalDateTime(), modified.toKotlinLocalDateTime()
+        id = id,
+        content = content,
+        senderId = User(id = userId, username = username),
+        roomId = roomId,
+        created = created.toKotlinLocalDateTime(),
+        modified = modified.toKotlinLocalDateTime()
     )
 }

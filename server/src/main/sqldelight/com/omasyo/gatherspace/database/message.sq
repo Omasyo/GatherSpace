@@ -7,21 +7,30 @@ CREATE TABLE IF NOT EXISTS message (
     modified TIMESTAMP NOT NULL DEFAULT(CURRENT_TIMESTAMP)
 );
 
-messagesWithRoomId:
-SELECT *
+getById:
+SELECT message.*, user_account.id, user_account.username
 FROM message
-WHERE created < :before AND room_id = :roomId
-ORDER BY created
+         JOIN user_account ON message.sender_id = user_account.id
+WHERE message.id = ?;
+
+messagesWithRoomId:
+SELECT message.*, user_account.id, user_account.username
+FROM message
+         JOIN user_account ON message.sender_id = user_account.id
+WHERE message.created < :before
+  AND room_id = :roomId
+ORDER BY message.created
 LIMIT :limit;
 
 create:
 INSERT INTO message(content, sender_id, room_id)
 VALUES (?, ?, ?)
-RETURNING * ;
+RETURNING id ;
 
 lastMessage:
-SELECT *
+SELECT message.*, user_account.id, user_account.username
 FROM message
+         JOIN user_account ON message.sender_id = user_account.id
 WHERE room_id = ?
-ORDER BY created DESC
+ORDER BY message.created DESC
 LIMIT 1;

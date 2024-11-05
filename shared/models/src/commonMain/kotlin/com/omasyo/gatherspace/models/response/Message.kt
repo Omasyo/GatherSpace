@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class Message(
     val id: Int,
     val content: String,
-    val senderId: Int?,
+    val senderId: User?,
     val roomId: Int,
     val created: LocalDateTime,
     val modified: LocalDateTime,

@@ -48,6 +48,8 @@ dependencies {
     implementation(project(":shared:models"))
     implementation(project(":shared:network"))
 
+    implementation(libs.kotlinx.datetime)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
