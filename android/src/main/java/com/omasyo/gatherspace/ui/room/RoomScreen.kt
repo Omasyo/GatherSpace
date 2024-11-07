@@ -1,9 +1,8 @@
-package com.omasyo.gatherspace
+package com.omasyo.gatherspace.ui.room
 
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,7 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.omasyo.gatherspace.models.response.Message
-import com.omasyo.gatherspace.models.response.Room
+import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.ui.components.PTextField
 import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
 import kotlinx.datetime.toKotlinLocalDateTime
@@ -32,7 +31,7 @@ fun RoomScreen(
     modifier: Modifier = Modifier,
     onBackTap: () -> Unit,
     onSendTap: () -> Unit,
-    room: Room,
+    room: RoomDetails,
     messages: List<Message>,
 ) {
     Scaffold(
@@ -143,7 +142,7 @@ private fun Preview() {
         RoomScreen(
             onBackTap = {},
             onSendTap = {},
-            room = Room(
+            room = RoomDetails(
                 id = 8697, name = "Caleb Wolfe", members = listOf(), created = date, modified = date
 
             ),

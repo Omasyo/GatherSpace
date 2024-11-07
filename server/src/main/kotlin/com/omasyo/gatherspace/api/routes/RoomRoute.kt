@@ -19,6 +19,12 @@ import io.ktor.server.routing.*
 
 fun Application.roomRoute(repository: RoomRepository) {
     routing {
+        get<Rooms> {
+            repository.getAllRooms().let {
+                call.respond(HttpStatusCode.OK, it)
+            }
+        }
+
         get<Rooms.Id> { room ->
             repository.getRoom(room.id)?.let {
                 call.respond(HttpStatusCode.OK, it)

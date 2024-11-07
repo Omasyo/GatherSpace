@@ -3,6 +3,7 @@ package com.omasyo.gatherspace.network.room
 import com.omasyo.gatherspace.models.request.CreateRoomRequest
 import com.omasyo.gatherspace.models.request.MembersRequest
 import com.omasyo.gatherspace.models.response.Room
+import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.models.routes.Members
 import com.omasyo.gatherspace.models.routes.Rooms
 import com.omasyo.gatherspace.network.mapResponse
@@ -33,8 +34,13 @@ internal class RoomNetworkSourceImpl(
             }
         }
 
-    override suspend fun getRoom(roomId: Int): Result<Room> =
+    override suspend fun getRoom(roomId: Int): Result<RoomDetails> =
         mapResponse {
             client.get(Rooms.Id(roomId))
+        }
+
+    override suspend fun getRooms(): Result<List<Room>> =
+        mapResponse {
+            client.get(Rooms())
         }
 }

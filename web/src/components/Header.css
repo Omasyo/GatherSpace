@@ -1,0 +1,18 @@
+.flex {
+    display: flex;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 0.2em solid #242424;
+    grid-area: header;
+}
+
+button {
+    margin: 8px;
+}
+
+#searchbar {
+    margin: auto;
+}

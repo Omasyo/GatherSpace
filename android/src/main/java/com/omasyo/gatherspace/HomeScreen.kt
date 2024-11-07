@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,8 +18,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.omasyo.gatherspace.models.response.Message
 import com.omasyo.gatherspace.models.response.Room
+import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
 import kotlinx.datetime.toKotlinLocalDateTime
 import java.time.LocalDateTime
@@ -33,9 +32,9 @@ sealed interface RoomState {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RoomsScreen(
+fun HomeScreen(
     modifier: Modifier = Modifier,
-    onRoomTap: (Room) -> Unit,
+    onRoomTap: (Int) -> Unit,
     state: RoomState
 ) {
     Scaffold(
@@ -62,7 +61,7 @@ fun RoomsScreen(
                         with(room) {
                             RoomTile(
                                 name = name,
-                                onTap = {onRoomTap(room)},
+                                onTap = {onRoomTap(room.id)},
                                 onListenTap = {}
                             )
                         }
@@ -156,15 +155,16 @@ private fun LoadingPlaceholder(
 @RequiresApi(Build.VERSION_CODES.O)
 private val date = LocalDateTime.now().toKotlinLocalDateTime()
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 private fun Preview() {
     GatherSpaceTheme {
-        RoomsScreen(onRoomTap = {}, state = RoomState.Success(rooms))
+        HomeScreen(onRoomTap = {}, state = RoomState.Success(rooms))
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 private val rooms = List(10) {
-    Room(id = it, name = "Maribel Gaines", members = listOf(), created = date, modified = date)
+    Room(id = it, name = "Maribel Gaines")
 }

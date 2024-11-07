@@ -2,6 +2,7 @@ package com.omasyo.gatherspace.data.room
 
 import com.omasyo.gatherspace.database.Database
 import com.omasyo.gatherspace.models.response.Room
+import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.models.response.User
 
 fun createRoomRepository(database: Database): RoomRepository =
@@ -18,5 +19,7 @@ interface RoomRepository {
 
     fun getMembers(roomId: Int): List<User>
 
-    fun getRoom(roomId: Int): Room?
+    fun getRoom(roomId: Int): RoomDetails?
+
+    fun getAllRooms(): List<Room>
 }

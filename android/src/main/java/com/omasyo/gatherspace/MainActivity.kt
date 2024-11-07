@@ -22,12 +22,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             GatherSpaceTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    var message by remember { mutableStateOf("") }
-                    Column {
-                        TextField(message, onValueChange = { message = it })
-                    }
-                }
+                AppNavHost()
             }
         }
     }

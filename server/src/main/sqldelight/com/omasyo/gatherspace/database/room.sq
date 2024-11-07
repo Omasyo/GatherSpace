@@ -16,3 +16,6 @@ WHERE id = ?;
 
 getRoomById:
 SELECT * FROM room WHERE room.id = ?;
+
+getAll:
+SELECT id, name FROM room;
