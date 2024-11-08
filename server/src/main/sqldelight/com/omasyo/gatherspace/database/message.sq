@@ -19,7 +19,7 @@ FROM message
          JOIN user_account ON message.sender_id = user_account.id
 WHERE message.created < :before
   AND room_id = :roomId
-ORDER BY message.created
+ORDER BY message.created DESC
 LIMIT :limit;
 
 create:

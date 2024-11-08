@@ -27,10 +27,19 @@ internal class MessageNetworkSourceImpl(
 
     override fun getMessageFlow(roomId: Int): Flow<Message> =
         flow {
-            client.sse(path = "/rooms/$roomId/messages") {
+            client.sse(path = "/rooms/$roomId/messages/events") {
                 incoming.collect { events ->
-                    val message = Json.decodeFromString<Message>(events.data!!)
-                    emit(message)
+                    println("MessageNetworkSourceImpl:getMessageFlow: $events")
+
+                    when (events.event) {
+                        "connect" -> {
+                            println("MessageNetworkSourceImpl:getMessageFlow: Connected to $roomId")
+                        }
+                        "message" -> {
+                            val message = Json.decodeFromString<Message>(events.data!!)
+                            emit(message)
+                        }
+                    }
                 }
             }
         }

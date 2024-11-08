@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -35,15 +36,22 @@ sealed interface RoomState {
 fun HomeScreen(
     modifier: Modifier = Modifier,
     onRoomTap: (Int) -> Unit,
+    onCreateRoomTap: () -> Unit,
     state: RoomState
 ) {
     Scaffold(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                navigationIcon = { IconButton(onClick = { }) { Icon(Icons.Default.Menu, null) } },
                 title = { Text("GatherSpace") })
         },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {}
+            ) {
+                Icon(Icons.Filled.Add, null)
+            }
+        }
     ) { innerPadding ->
         when (state) {
             is RoomState.Error -> ErrorPlaceholder(
@@ -61,7 +69,7 @@ fun HomeScreen(
                         with(room) {
                             RoomTile(
                                 name = name,
-                                onTap = {onRoomTap(room.id)},
+                                onTap = { onRoomTap(room.id) },
                                 onListenTap = {}
                             )
                         }
@@ -160,7 +168,11 @@ private val date = LocalDateTime.now().toKotlinLocalDateTime()
 @Composable
 private fun Preview() {
     GatherSpaceTheme {
-        HomeScreen(onRoomTap = {}, state = RoomState.Success(rooms))
+        HomeScreen(
+            onRoomTap = {},
+            onCreateRoomTap = {},
+            state = RoomState.Success(rooms)
+        )
     }
 }
 

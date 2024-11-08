@@ -1,5 +1,6 @@
 package com.omasyo.gatherspace.domain.message
 
+import androidx.paging.PagingData
 import com.omasyo.gatherspace.domain.DomainResponse
 import com.omasyo.gatherspace.models.response.Message
 import kotlinx.coroutines.flow.Flow
@@ -7,10 +8,8 @@ import kotlinx.datetime.LocalDateTime
 
 interface MessageRepository {
     fun getRecentMessages(
-        roomId: Int,
-        before: LocalDateTime,
-        limit: Int
-    ): Flow<DomainResponse<List<Message>>>
+        roomId: Int
+    ): Flow<PagingData<Message>>
 
     fun getMessageFlow(roomId: Int): Flow<Message>
 

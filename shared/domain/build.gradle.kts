@@ -42,6 +42,8 @@ kotlin {
             implementation(project(":shared:models"))
             implementation(project(":shared:network"))
 
+            implementation(libs.androidx.paging.runtime)
+
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.datetime)
 //            implementation(libs.kotlinx.serialization.json)

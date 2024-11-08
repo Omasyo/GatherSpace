@@ -17,19 +17,19 @@ internal suspend inline fun <reified T> NetworkSource.mapResponse(
 ): Result<T> =
     try {
         val response = exec()
-        print("$tag:makeRequest: Made request ${response.request.url}")
-        print("$tag:makeRequest:  Got content ${response.bodyAsText()}")
+        println("$tag:makeRequest: Made request ${response.request.url}")
+        println("$tag:makeRequest:  Got content ${response.bodyAsText()}")
         if (response.status.isSuccess()) {
             val content: T = response.body()
             Result.success(content)
 
         } else {
-            print("$tag:makeRequest: Error - ${response.bodyAsText()}")
+            println("$tag:makeRequest: Error - ${response.bodyAsText()}")
 
             Result.failure(NetworkException(response.body()))
 
         }
     } catch (e: Exception) {
-        print("$tag:makeRequest: Exception - $e")
+        println("$tag:makeRequest: Exception - $e")
         Result.failure(e)
     }
