@@ -12,12 +12,20 @@ internal class RoomRepositoryImpl(
     private val roomQueries: RoomQueries,
     private val roomMemberQueries: Room_memberQueries,
 ) : RoomRepository {
-    override fun create(name: String) {
-        roomQueries.create(name)
+    override fun create(name: String, description: String, image: String?) {
+        roomQueries.create(name, description, image)
     }
 
-    override fun updateName(name: String, roomId: Int) {
-        roomQueries.update(name, roomId)
+    override fun updateRoom(name: String?, description: String?, image: String?, roomId: Int) {
+        roomQueries.transaction {
+            val room = roomQueries.getRoomById(roomId).executeAsOne()
+            roomQueries.update(
+                name = name ?: room.name,
+                description = description ?: room.description,
+                image = image ?: room.image,
+                id = roomId
+            )
+        }
     }
 
     override fun addMembers(roomId: Int, userIds: List<Int>) {
@@ -56,6 +64,10 @@ internal class RoomRepositoryImpl(
                 )
             }
         }
+    }
+
+    override fun getUserRooms(userId: Int): List<Room> {
+        return roomQueries.getUserRooms(userId, ::Room).executeAsList()
     }
 
     override fun getAllRooms(): List<Room> {

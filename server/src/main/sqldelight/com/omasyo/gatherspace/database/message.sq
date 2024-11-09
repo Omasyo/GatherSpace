@@ -8,13 +8,13 @@ CREATE TABLE IF NOT EXISTS message (
 );
 
 getById:
-SELECT message.*, user_account.id, user_account.username
+SELECT message.*, user_account.username, user_account.image
 FROM message
          JOIN user_account ON message.sender_id = user_account.id
 WHERE message.id = ?;
 
 messagesWithRoomId:
-SELECT message.*, user_account.id, user_account.username
+SELECT message.*, user_account.username, user_account.image
 FROM message
          JOIN user_account ON message.sender_id = user_account.id
 WHERE message.created < :before
@@ -28,7 +28,7 @@ VALUES (?, ?, ?)
 RETURNING id ;
 
 lastMessage:
-SELECT message.*, user_account.id, user_account.username
+SELECT message.*, user_account.username, user_account.image
 FROM message
          JOIN user_account ON message.sender_id = user_account.id
 WHERE room_id = ?

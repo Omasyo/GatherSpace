@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 data class UserDetails(
     val id: Int,
     val username: String,
+    val imageUrl: String?,
     val created: LocalDateTime,
     val modified: LocalDateTime,
 )

@@ -9,9 +9,9 @@ fun createRoomRepository(database: Database): RoomRepository =
     RoomRepositoryImpl(database.roomQueries, database.room_memberQueries)
 
 interface RoomRepository {
-    fun create(name: String)
+    fun create(name: String, description: String, image: String?)
 
-    fun updateName(name: String, roomId: Int)
+    fun updateRoom(name: String?, description: String?, image: String?, roomId: Int)
 
     fun addMembers(roomId: Int, userIds: List<Int>)
 
@@ -20,6 +20,8 @@ interface RoomRepository {
     fun getMembers(roomId: Int): List<User>
 
     fun getRoom(roomId: Int): RoomDetails?
+
+    fun getUserRooms(userId: Int): List<Room>
 
     fun getAllRooms(): List<Room>
 }

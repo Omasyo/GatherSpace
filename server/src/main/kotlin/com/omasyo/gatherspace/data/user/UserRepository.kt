@@ -7,7 +7,7 @@ fun createUserRepository(database: Database): UserRepository =
     UserRepositoryImpl(database.user_accountQueries)
 
 interface UserRepository {
-    fun create(username: String, password: String)
+    fun create(username: String, password: String, image: String?)
 
     fun getUserById(id: Int): UserDetails?
 

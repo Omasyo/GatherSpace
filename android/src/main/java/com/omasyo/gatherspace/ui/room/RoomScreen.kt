@@ -24,16 +24,13 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.omasyo.gatherspace.models.response.Message
-import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.models.response.User
 import com.omasyo.gatherspace.ui.components.PTextField
 import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.datetime.*
-import kotlinx.datetime.format.DateTimeComponents
 import kotlinx.datetime.format.byUnicodePattern
-import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -144,7 +141,7 @@ private fun Message(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(message.senderId!!.username, style = MaterialTheme.typography.titleMedium)
+                Text(message.sender!!.username, style = MaterialTheme.typography.titleMedium)
                 Spacer(Modifier.width(8.dp))
                 Text(
                     message.created.format(
@@ -184,7 +181,7 @@ private fun Preview() {
                 Message(
                     id = it,
                     content = "molestie",
-                    senderId = User(id = 5019, username = "Will Rutledge"),
+                    sender = User(id = 5019, username = "Will Rutledge"),
                     roomId = 2479,
                     created = date,
                     modified = date
@@ -198,7 +195,7 @@ private fun Preview() {
 @RequiresApi(Build.VERSION_CODES.O)
 val fakeData = List(10) {
     Message(
-        id = it + 3, content = "molestie", senderId = User(
+        id = it + 3, content = "molestie", sender = User(
             id = 9558,
             username = "Marietta Lyons"
         ), roomId = 2479, created = date, modified = date

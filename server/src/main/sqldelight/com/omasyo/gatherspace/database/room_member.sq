@@ -10,7 +10,7 @@ delete:
 DELETE FROM room_member WHERE room_id = ? AND user_id = ?;
 
 getRoomMembers:
-SELECT id, username
+SELECT id, username, image
 FROM user_account
          JOIN room_member ON user_account.id = room_member.user_id
 WHERE room_member.room_id = ?;

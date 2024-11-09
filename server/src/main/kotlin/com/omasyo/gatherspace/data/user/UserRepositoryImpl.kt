@@ -8,8 +8,8 @@ import java.time.LocalDateTime
 class UserRepositoryImpl(
     private val db: User_accountQueries
 ) : UserRepository {
-    override fun create(username: String, password: String) {
-        db.create(username, password)
+    override fun create(username: String, password: String, image: String?) {
+        db.create(username, password, image)
     }
 
     override fun getUserById(id: Int): UserDetails? {
@@ -30,11 +30,13 @@ class UserRepositoryImpl(
     private fun userMapper(
         userId: Int,
         username: String,
+        image: String?,
         created: LocalDateTime,
         modified: LocalDateTime
     ) = UserDetails(
         id = userId,
         username = username,
+        imageUrl = image,
         created = created.toKotlinLocalDateTime(),
         modified = modified.toKotlinLocalDateTime()
     )
