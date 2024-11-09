@@ -27,7 +27,7 @@ fun Application.userController(repository: UserRepository) {
 
         post<Users> { _ ->
             val user = call.receive<CreateUserRequest>()
-            repository.create(user.name, user.password)
+            repository.create(user.name, user.password, null)
             call.respond(HttpStatusCode.Created)
         }
     }

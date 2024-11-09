@@ -8,10 +8,7 @@ import com.omasyo.gatherspace.domain.DomainError
 import com.omasyo.gatherspace.domain.Success
 import com.omasyo.gatherspace.domain.model.Room
 import com.omasyo.gatherspace.domain.room.RoomRepository
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 
 class HomeViewModel(
     private val roomRepository: RoomRepository
@@ -26,4 +23,11 @@ class HomeViewModel(
                 }
             }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), RoomState.Loading)
+
+}
+
+sealed interface RefreshState {
+    data object Loading : RefreshState
+    data class Error(val message: String) : RefreshState
+    data object Success: RefreshState
 }

@@ -12,6 +12,7 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        maven("https://us-central1-maven.pkg.dev/varabyte-repos/public")
     }
 }
 plugins {
@@ -28,10 +29,12 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+        maven("https://us-central1-maven.pkg.dev/varabyte-repos/public")
     }
 }
 
 include(":server")
+include(":web")
 include(":android")
 include("shared:domain")
 include("shared:models")

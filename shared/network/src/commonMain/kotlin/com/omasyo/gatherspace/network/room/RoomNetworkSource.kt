@@ -9,7 +9,7 @@ import com.omasyo.gatherspace.network.createClient
 import com.omasyo.gatherspace.network.provideEngine
 import kotlinx.coroutines.flow.Flow
 
-fun createNetworkSource(): RoomNetworkSource = RoomNetworkSourceImpl(createClient(
+val client = createClient(
     provideEngine(), object : TokenStorage {
         override val tokenFlow: Flow<TokenResponse?>
             get() = TODO("Not yet implemented")
@@ -25,7 +25,8 @@ fun createNetworkSource(): RoomNetworkSource = RoomNetworkSourceImpl(createClien
             TODO("Not yet implemented")
         }
 
-    }))
+    })
+fun createNetworkSource(): RoomNetworkSource = RoomNetworkSourceImpl(client)
 
 interface RoomNetworkSource : NetworkSource {
     suspend fun createRoom(name: String): Result<Unit>

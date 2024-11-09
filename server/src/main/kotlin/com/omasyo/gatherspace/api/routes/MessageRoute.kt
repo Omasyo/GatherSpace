@@ -46,9 +46,10 @@ fun Application.messageRoute(repository: MessageRepository) {
 
         sse("/rooms/{roomId}/messages/events") {
             val roomId = call.parameters["roomId"]?.toInt()!!
+            send(event = "connect")
 
             messageSharedFlow.filter { it.roomId == roomId }.collect { message ->
-                send(Json.encodeToString<Message>(message))
+                send(Json.encodeToString<Message>(message), event = "message")
             }
         }
     }

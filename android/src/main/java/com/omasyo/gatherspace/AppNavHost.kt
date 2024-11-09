@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.omasyo.gatherspace.ui.HomeRoute
+import com.omasyo.gatherspace.ui.room.RoomRoute
 import kotlinx.serialization.Serializable
 
 
@@ -59,7 +60,17 @@ fun AppNavHost(
     ) {
         composable<Home> {
             HomeRoute(
-                onRoomTap = {}
+                onRoomTap = {
+                    navController.navigate(Room(1))
+                },
+                onCreateRoom = {}
+            )
+        }
+
+        composable<Room> {
+            RoomRoute(
+                onBackTap = {},
+                onSendTap = {}
             )
         }
     }

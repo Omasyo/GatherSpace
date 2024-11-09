@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS user_account (
     id SERIAL PRIMARY KEY,
     username TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
+    image TEXT,
     created TIMESTAMP NOT NULL DEFAULT(CURRENT_TIMESTAMP),
     modified TIMESTAMP NOT NULL DEFAULT(CURRENT_TIMESTAMP)
 );
@@ -9,14 +10,14 @@ CREATE TABLE IF NOT EXISTS user_account (
 CREATE UNIQUE INDEX IF NOT EXISTS ux_user_account_username ON user_account (username);
 
 create:
-INSERT INTO user_account(username, password)
-VALUES (:username, crypt(COALESCE(:password,''), gen_salt('bf', 8)));
+INSERT INTO user_account(username, password, image)
+VALUES (:username, crypt(COALESCE(:password,''), gen_salt('bf', 8)), :image);
 
 getById:
-SELECT id, username, created, modified FROM user_account WHERE id = ?;
+SELECT id, username, image, created, modified FROM user_account WHERE id = ?;
 
 getByUsername:
-SELECT id, username, created, modified FROM user_account WHERE username = ?;
+SELECT id, username, image, created, modified FROM user_account WHERE username = ?;
 
 validateUser:
 SELECT password = crypt(COALESCE(:password,''), password) FROM user_account WHERE username = ?;

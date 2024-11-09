@@ -46,12 +46,12 @@ internal class MessageRepositoryImpl(private val messageQueries: MessageQueries)
         roomId: Int,
         created: LocalDateTime,
         modified: LocalDateTime,
-        userId: Int,
-        username: String
+        username: String,
+        image: String?
     ): Message = Message(
         id = id,
         content = content,
-        senderId = User(id = userId, username = username),
+        sender = senderId?.let { User(id = senderId, username = username, imageUrl = image) },
         roomId = roomId,
         created = created.toKotlinLocalDateTime(),
         modified = modified.toKotlinLocalDateTime()

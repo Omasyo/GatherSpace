@@ -8,18 +8,21 @@ import com.omasyo.gatherspace.HomeScreen
 import com.omasyo.gatherspace.HomeViewModel
 import com.omasyo.gatherspace.domain.room.RoomRepositoryImpl
 import com.omasyo.gatherspace.network.room.createNetworkSource
+import kotlinx.coroutines.Dispatchers
 
-val repository = RoomRepositoryImpl(createNetworkSource())
+val repository = RoomRepositoryImpl(createNetworkSource(), Dispatchers.IO)
 
 @Composable
 fun HomeRoute(
     modifier: Modifier = Modifier,
     onRoomTap: (Int) -> Unit,
+    onCreateRoom: () -> Unit,
     viewModel: HomeViewModel = viewModel { HomeViewModel(repository) }
 ) {
     HomeScreen(
         modifier = modifier,
         onRoomTap = onRoomTap,
+        onCreateRoomTap = onCreateRoom,
         state = viewModel.rooms.collectAsState().value
     )
 }

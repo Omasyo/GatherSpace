@@ -46,6 +46,14 @@ kotlin {
             implementation(libs.kotlinx.datetime)
 //            implementation(libs.kotlinx.serialization.json)
         }
+
+        androidMain.dependencies {
+            implementation(libs.androidx.paging.runtime)
+        }
+
+        jvmMain.dependencies {
+            implementation(libs.androidx.paging.runtime)
+        }
     }
 }
 
