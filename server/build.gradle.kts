@@ -39,9 +39,6 @@ dependencies {
     implementation(libs.sqldelight.coroutines)
     implementation(libs.sqldelight.jdbc.driver)
     implementation(libs.hikari)
-
-    testImplementation(libs.ktor.server.test.host)
-    testImplementation(libs.kotlin.test.junit)
 }
 
 sqldelight {

@@ -6,7 +6,7 @@ import com.omasyo.gatherspace.models.response.RoomDetails
 import kotlinx.coroutines.flow.Flow
 
 interface RoomRepository {
-    fun createRoom(name: String): Flow<DomainResponse<Unit>>
+    fun createRoom(name: String, description: String): Flow<DomainResponse<Unit>>
 
     fun addMembers(roomId: Int, memberIds: List<Int>): Flow<DomainResponse<Unit>>
 

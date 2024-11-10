@@ -5,12 +5,10 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
-//    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
     js {
-        useEsModules()
         browser {
             val rootDirPath = project.rootDir.path
             val projectDirPath = project.projectDir.path
@@ -24,7 +22,6 @@ kotlin {
                 }
             }
         }
-        binaries.library()
     }
 
     androidTarget {
@@ -42,17 +39,10 @@ kotlin {
             implementation(project(":shared:models"))
             implementation(project(":shared:network"))
 
+            implementation(libs.paging.common)
+
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.datetime)
-//            implementation(libs.kotlinx.serialization.json)
-        }
-
-        androidMain.dependencies {
-            implementation(libs.androidx.paging.runtime)
-        }
-
-        jvmMain.dependencies {
-            implementation(libs.androidx.paging.runtime)
         }
     }
 }

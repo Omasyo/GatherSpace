@@ -11,7 +11,6 @@ plugins {
 
 kotlin {
     js {
-        useEsModules()
         browser {
             val rootDirPath = project.rootDir.path
             val projectDirPath = project.projectDir.path
@@ -24,15 +23,7 @@ kotlin {
                     }
                 }
             }
-
-            @OptIn(ExperimentalDistributionDsl::class)
-            distribution {
-                outputDirectory.set(parent!!.parent!!.projectDir.resolve("web/kotlin"))
-            }
         }
-
-//        generateTypeScriptDefinitions()
-        binaries.library()
     }
 
     androidTarget {

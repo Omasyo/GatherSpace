@@ -14,9 +14,9 @@ import io.ktor.client.request.*
 internal class RoomNetworkSourceImpl(
     private val client: HttpClient
 ) : RoomNetworkSource {
-    override suspend fun createRoom(name: String): Result<Unit> = mapResponse {
+    override suspend fun createRoom(name: String, description: String): Result<Unit> = mapResponse {
         client.post(Rooms()) {
-            setBody(CreateRoomRequest(name))
+            setBody(CreateRoomRequest(name, description))
         }
     }
 

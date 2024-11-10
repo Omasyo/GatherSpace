@@ -29,7 +29,7 @@ val client = createClient(
 fun createNetworkSource(): RoomNetworkSource = RoomNetworkSourceImpl(client)
 
 interface RoomNetworkSource : NetworkSource {
-    suspend fun createRoom(name: String): Result<Unit>
+    suspend fun createRoom(name: String, description: String): Result<Unit>
 
     suspend fun addMembers(roomId: Int, memberIds: List<Int>): Result<Unit>
 

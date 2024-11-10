@@ -10,7 +10,6 @@ plugins {
 
 kotlin {
     js {
-        useEsModules()
         browser {
             val rootDirPath = project.rootDir.path
             val projectDirPath = project.projectDir.path
@@ -24,7 +23,6 @@ kotlin {
                 }
             }
         }
-        binaries.library()
     }
 
     androidTarget {
@@ -39,7 +37,6 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             // put your Multiplatform dependencies here
-            implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.ktor.client.resources)
