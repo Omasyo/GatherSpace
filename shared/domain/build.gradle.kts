@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -34,12 +35,17 @@ kotlin {
     jvm()
 
     sourceSets {
+        androidMain.dependencies {
+            implementation(libs.androidx.datastore.preferences)
+        }
+
         commonMain.dependencies {
             // put your Multiplatform dependencies here
             implementation(project(":shared:models"))
             implementation(project(":shared:network"))
 
             implementation(libs.paging.common)
+            implementation(libs.kotlinx.serialization.json)
 
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.datetime)

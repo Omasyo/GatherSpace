@@ -16,9 +16,13 @@ import com.omasyo.gatherspace.network.auth.AuthNetworkSource
 import com.omasyo.gatherspace.network.createClient
 import com.omasyo.gatherspace.network.user.UserNetworkSource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 
 object Storage : TokenStorage {
     var tokenResponse: TokenResponse? = null
+    override suspend fun observeToken(): Flow<TokenResponse?> {
+        TODO("Not yet implemented")
+    }
 
     override suspend fun getToken(): TokenResponse? {
         return tokenResponse
