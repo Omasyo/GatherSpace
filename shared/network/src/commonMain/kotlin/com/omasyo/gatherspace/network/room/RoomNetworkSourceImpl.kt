@@ -2,6 +2,7 @@ package com.omasyo.gatherspace.network.room
 
 import com.omasyo.gatherspace.models.request.CreateRoomRequest
 import com.omasyo.gatherspace.models.request.MembersRequest
+import com.omasyo.gatherspace.models.response.CreateRoomResponse
 import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.models.routes.Members
@@ -14,7 +15,7 @@ import io.ktor.client.request.*
 internal class RoomNetworkSourceImpl(
     private val client: HttpClient
 ) : RoomNetworkSource {
-    override suspend fun createRoom(name: String, description: String): Result<Unit> = mapResponse {
+    override suspend fun createRoom(name: String, description: String): Result<CreateRoomResponse> = mapResponse {
         client.post(Rooms()) {
             setBody(CreateRoomRequest(name, description))
         }

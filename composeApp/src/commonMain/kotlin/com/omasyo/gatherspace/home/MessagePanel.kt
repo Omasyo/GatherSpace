@@ -27,13 +27,23 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.datetime.*
 import kotlinx.datetime.format.byUnicodePattern
 import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.paging.compose.itemKey
 
 @Composable
 fun MessagePanel(
     modifier: Modifier = Modifier,
+    roomId: Int,
     onBackTap: () -> Unit,
-    viewModel: RoomViewModel
+    viewModel: RoomViewModel = viewModel(key = "room$roomId") {
+        RoomViewModel(
+            roomId,
+            messageRepository,
+            roomRepository
+        )
+    }
 ) {
     MessagePanel(
         modifier = modifier,
@@ -72,7 +82,13 @@ fun MessagePanel(
                             )
                         }
                     },
-                    title = { Text("room.name") },
+                    title = {
+                        when (room) {
+                            is UiState.Error -> {}
+                            UiState.Loading -> {}
+                            is UiState.Success -> Text(room.data.name)
+                        }
+                    },
                     actions = {
                         IconButton(onClick = {}) {
                             Icon(Icons.Filled.Menu, contentDescription = null)
@@ -107,9 +123,7 @@ fun MessagePanel(
                         message = message,
                     )
                 }
-                items(oldMessages.itemCount, key = {
-                    oldMessages[it]!!.id
-                }) {
+                items(oldMessages.itemCount, key = oldMessages.itemKey { it.id }) {
                     Message(
                         modifier = Modifier.padding(vertical = 8f.dp, horizontal = 16f.dp),
                         message = oldMessages[it]!!,

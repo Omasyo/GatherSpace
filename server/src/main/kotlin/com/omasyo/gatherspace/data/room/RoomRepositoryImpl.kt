@@ -12,8 +12,8 @@ internal class RoomRepositoryImpl(
     private val roomQueries: RoomQueries,
     private val roomMemberQueries: Room_memberQueries,
 ) : RoomRepository {
-    override fun create(name: String, description: String, image: String?) {
-        roomQueries.create(name, description, image)
+    override fun create(name: String, description: String, image: String?): Int {
+        return roomQueries.create(name, description, image).executeAsOne()
     }
 
     override fun updateRoom(name: String?, description: String?, image: String?, roomId: Int) {

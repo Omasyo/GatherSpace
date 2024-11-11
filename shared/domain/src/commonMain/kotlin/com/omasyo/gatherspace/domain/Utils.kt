@@ -19,8 +19,11 @@ fun <T> Flow<T>.toCallback(
 
 expect fun getDeviceName(): String
 
-fun <T> Result<T>.mapToDomain() = fold(
-    onSuccess = { Success(it) },
+
+inline fun <T, R> Result<T>.mapToDomain(
+    transform: (T) -> R
+): DomainResponse<R> = fold(
+    onSuccess = { Success(transform(it)) },
     onFailure = { error ->
         if (error is NetworkException) {
             if (error.error.statusCode == 401) {
@@ -33,3 +36,6 @@ fun <T> Result<T>.mapToDomain() = fold(
         }
     }
 )
+
+fun <T> Result<T>.mapToDomain(): DomainResponse<T> =
+    mapToDomain { it }

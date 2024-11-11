@@ -42,7 +42,7 @@ fun Application.configureAuth(authService: AuthService) {
             if (!authService.validateUser(loginRequest.username, loginRequest.password)) {
                 call.respond(
                     ErrorResponse(
-                        statusCode = HttpStatusCode.Unauthorized.value,
+                        statusCode = HttpStatusCode.NotFound.value,
                         message = "Invalid username or password"
                     )
                 )

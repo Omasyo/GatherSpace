@@ -10,9 +10,9 @@ sealed interface DomainResponse<out T>
 
 data class Success<T>(val data: T) : DomainResponse<T>
 
-sealed class Error(val message: String) : DomainResponse<Nothing>
+sealed class Error(open val message: String) : DomainResponse<Nothing>
 
-open class DomainError(val message: String) : DomainResponse<Nothing>
+open class DomainError(override val message: String) : Error(message)
 
 data object AuthError : Error("Token not valid")
 
@@ -39,12 +39,12 @@ inline fun <T> DomainResponse<T>.onAuthError(onAuthError: () -> Unit): DomainRes
 
 inline fun <T, R> DomainResponse<T>.fold(
     onSuccess: (T) -> R,
-    onError: (message: String) -> R,
-    onAuthError: () -> Unit
-) {
-    when (this) {
+    onDomainError: (message: String) -> R,
+    onAuthError: () -> R
+): R {
+    return when (this) {
         AuthError -> onAuthError()
-        is DomainError -> onError(message)
+        is DomainError -> onDomainError(message)
         is Success -> onSuccess(data)
     }
 }

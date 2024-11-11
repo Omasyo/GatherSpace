@@ -16,7 +16,7 @@ internal suspend inline fun <reified T> NetworkSource.mapResponse(
 ): Result<T> =
     try {
         val response = exec()
-        println("$tag:makeRequest: Made request ${response.request.url}")
+        println("$tag:makeRequest: Made request ${response.request.method} ${response.request.url}")
         println("$tag:makeRequest:  Got content ${response.bodyAsText()}")
         if (response.status.isSuccess()) {
             val content: T = response.body()

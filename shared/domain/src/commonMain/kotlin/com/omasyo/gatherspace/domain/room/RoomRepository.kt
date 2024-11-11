@@ -13,7 +13,7 @@ fun RoomRepository(
 ): RoomRepository = RoomRepositoryImpl(networkSource, dispatcher)
 
 interface RoomRepository {
-    fun createRoom(name: String, description: String): Flow<DomainResponse<Unit>>
+    fun createRoom(name: String, description: String): Flow<DomainResponse<Int>>
 
     fun addMembers(roomId: Int, memberIds: List<Int>): Flow<DomainResponse<Unit>>
 

@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class RoomViewModel(
-    private val roomRoute: RoomR,
+    private val roomId: Int,
     private val messageRepository: MessageRepository,
     private val roomRepository: RoomRepository
 ) : ViewModel() {
@@ -28,7 +28,7 @@ class RoomViewModel(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val room: StateFlow<UiState<RoomDetails>> = refreshRoomEvent.flatMapLatest {
-        roomRepository.getRoom(roomRoute.id)
+        roomRepository.getRoom(roomId)
             .map {
                 when (it) {
                     is DomainError -> UiState.Error(it.message)
@@ -39,7 +39,7 @@ class RoomViewModel(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UiState.Loading)
 
 
-    val oldMessages = messageRepository.getRecentMessages(roomRoute.id)
+    val oldMessages = messageRepository.getRecentMessages(roomId)
 
     val messages = mutableStateListOf<Message>()
 
@@ -48,7 +48,7 @@ class RoomViewModel(
 
     init {
         viewModelScope.launch {
-            messageRepository.getMessageFlow(roomRoute.id)
+            messageRepository.getMessageFlow(roomId)
                 .catch {
                     //TODO donerror stuffs here
                 }
@@ -70,7 +70,7 @@ class RoomViewModel(
 
     fun sendMessage() {
         viewModelScope.launch {
-            messageRepository.sendMessage(roomRoute.id, message).first()
+            messageRepository.sendMessage(roomId, message).first()
             message = ""
         }
     }

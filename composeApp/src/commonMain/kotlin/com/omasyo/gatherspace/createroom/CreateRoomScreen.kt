@@ -6,8 +6,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.omasyo.gatherspace.CreateRoom
+import com.omasyo.gatherspace.home.roomRepository
 
 sealed interface FormState {
     data object Loading : FormState
@@ -17,10 +21,26 @@ sealed interface FormState {
 
 @Composable
 fun CreateRoomScreen(
-    modifier: Modifier,
-    viewModel: CreateRoomViewModel
+    modifier: Modifier = Modifier,
+    onRoomCreated: (Int) -> Unit,
+    viewModel: CreateRoomViewModel = viewModel { CreateRoomViewModel(roomRepository) },
 ) {
+    LaunchedEffect(viewModel.state.collectAsStateWithLifecycle().value) {
+        val state = viewModel.state.value
+        if (state is CreateState.Success) {
+            println("Room is created")
+            onRoomCreated(state.id)
+        }
+    }
 
+    CreateRoomScreen(
+        modifier = modifier,
+        roomName = viewModel.name,
+        onRoomNameChange = viewModel::changeName,
+        description = viewModel.description,
+        onDescriptionChange = viewModel::changeDescription,
+        onSubmit = viewModel::submit,
+    )
 }
 
 @Composable

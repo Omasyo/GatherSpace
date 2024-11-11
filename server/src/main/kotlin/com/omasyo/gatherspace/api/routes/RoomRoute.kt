@@ -7,6 +7,7 @@ import com.omasyo.gatherspace.models.response.ErrorResponse
 import com.omasyo.gatherspace.models.routes.Members
 import com.omasyo.gatherspace.models.routes.Rooms
 import com.omasyo.gatherspace.api.auth.AuthName
+import com.omasyo.gatherspace.models.response.CreateRoomResponse
 import com.omasyo.gatherspace.models.routes.User
 import com.omasyo.gatherspace.utils.respondError
 import io.ktor.http.*
@@ -59,8 +60,8 @@ fun Application.roomRoute(repository: RoomRepository) {
 
             post<Rooms> { _ ->
                 val room = call.receive<CreateRoomRequest>()
-                repository.create(room.name, room.description, null)
-                call.respond(HttpStatusCode.Created)
+                val id = repository.create(room.name, room.description, null)
+                call.respond(HttpStatusCode.Created, CreateRoomResponse(id))
             }
 
             post<Members> { members ->

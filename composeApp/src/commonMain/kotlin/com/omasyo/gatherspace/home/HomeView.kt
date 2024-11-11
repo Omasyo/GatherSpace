@@ -10,6 +10,7 @@ import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,6 +22,7 @@ import com.omasyo.gatherspace.HomeRoutes
 import com.omasyo.gatherspace.RoomR
 import com.omasyo.gatherspace.Search
 import com.omasyo.gatherspace.auth.client
+import com.omasyo.gatherspace.createroom.CreateRoomScreen
 import com.omasyo.gatherspace.domain.message.MessageRepository
 import com.omasyo.gatherspace.domain.room.RoomRepository
 import com.omasyo.gatherspace.models.response.Room
@@ -69,9 +71,11 @@ fun HomeView(
         listPane = {
             AnimatedPane {
                 RoomsView(
-                    onRoomTap = { it -> navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomR(it.id)) },
+                    onRoomTap = {
+                        navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomR(it.id)) },
                     onRetry = onRetry,
-                    state = roomsState
+                    state = roomsState,
+                    onCreateRoomTap = { navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, CreateRoom) }
                 )
             }
         },
@@ -79,11 +83,13 @@ fun HomeView(
             AnimatedPane {
                 navigator.currentDestination?.content?.let {
                     when (it) {
-                        CreateRoom -> TODO()
+                        CreateRoom -> CreateRoomScreen(onRoomCreated = { id ->
+                            onRetry()
+                            navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomR(id))
+                        })
                         is RoomR -> MessagePanel(
-                            onBackTap = { navigator.navigateTo(ListDetailPaneScaffoldRole.Extra) },
-                            viewModel = viewModel { RoomViewModel(it, messageRepository, roomRepository) }
-
+                            onBackTap = { navigator.navigateBack() },
+                            roomId = it.id
                         )
 
                         Search -> TODO()

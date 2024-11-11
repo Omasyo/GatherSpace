@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.omasyo.gatherspace.auth.LoginRoute
 import com.omasyo.gatherspace.auth.SignupRoute
+import com.omasyo.gatherspace.createroom.CreateRoomScreen
 import com.omasyo.gatherspace.home.HomeRoute
 import kotlinx.serialization.Serializable
 
@@ -32,32 +33,32 @@ fun AppNavHost(
 ) {
     NavHost(
         navController,
-        startDestination = Home,
+        startDestination = Login,
         modifier = modifier,
-        enterTransition = {
-            slideInHorizontally(
-                spec,
-                initialOffsetX = { it }
-            )
-        },
-        exitTransition = {
-            slideOutHorizontally(
-                spec,
-                targetOffsetX = { -it }
-            )
-        },
-        popEnterTransition = {
-            slideInHorizontally(
-                spec,
-                initialOffsetX = { -it }
-            )
-        },
-        popExitTransition = {
-            slideOutHorizontally(
-                spec,
-                targetOffsetX = { it }
-            )
-        }
+//        enterTransition = {
+//            slideInHorizontally(
+//                spec,
+//                initialOffsetX = { it }
+//            )
+//        },
+//        exitTransition = {
+//            slideOutHorizontally(
+//                spec,
+//                targetOffsetX = { -it }
+//            )
+//        },
+//        popEnterTransition = {
+//            slideInHorizontally(
+//                spec,
+//                initialOffsetX = { -it }
+//            )
+//        },
+//        popExitTransition = {
+//            slideOutHorizontally(
+//                spec,
+//                targetOffsetX = { it }
+//            )
+//        }
     ) {
         composable<Signup> {
             SignupRoute(

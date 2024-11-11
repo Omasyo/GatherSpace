@@ -9,7 +9,7 @@ fun createRoomRepository(database: Database): RoomRepository =
     RoomRepositoryImpl(database.roomQueries, database.room_memberQueries)
 
 interface RoomRepository {
-    fun create(name: String, description: String, image: String?)
+    fun create(name: String, description: String, image: String?): Int
 
     fun updateRoom(name: String?, description: String?, image: String?, roomId: Int)
 

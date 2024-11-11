@@ -24,12 +24,13 @@ fun RoomsView(
     modifier: Modifier = Modifier,
     onRoomTap: (Room) -> Unit,
     onRetry: () -> Unit,
+    onCreateRoomTap: () -> Unit,
     state: UiState<List<Room>>
 ) {
     when (state) {
         is UiState.Loading -> LoadingPlaceholder(modifier)
         is UiState.Error -> ErrorPlaceholder(modifier, state.reason, onRetry)
-        is UiState.Success -> RoomsList(modifier, state.data, onRoomTap, {})
+        is UiState.Success -> RoomsList(modifier, state.data, onRoomTap, onCreateRoomTap)
     }
 }
 
@@ -142,6 +143,7 @@ private fun Preview() {
         RoomsView(
             onRoomTap = {},
             onRetry = {},
+            onCreateRoomTap = {},
             state = UiState.Success(rooms)
         )
     }

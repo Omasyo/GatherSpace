@@ -14,9 +14,9 @@ internal class RoomRepositoryImpl(
     private val networkSource: RoomNetworkSource,
     private val dispatcher: CoroutineDispatcher
 ) : RoomRepository {
-    override fun createRoom(name: String, description: String): Flow<DomainResponse<Unit>> =
+    override fun createRoom(name: String, description: String): Flow<DomainResponse<Int>> =
         flow {
-            emit(networkSource.createRoom(name, description).mapToDomain())
+            emit(networkSource.createRoom(name, description).mapToDomain { it.id })
         }.flowOn(dispatcher)
 
     override fun addMembers(roomId: Int, memberIds: List<Int>): Flow<DomainResponse<Unit>> =
