@@ -1,8 +1,8 @@
 package com.omasyo.gatherspace.domain.message
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
+import app.cash.paging.Pager
+import app.cash.paging.PagingConfig
+import app.cash.paging.PagingData
 import com.omasyo.gatherspace.domain.DomainResponse
 import com.omasyo.gatherspace.domain.mapToDomain
 import com.omasyo.gatherspace.models.response.Message
@@ -11,9 +11,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.datetime.LocalDateTime
 
-class MessageRepositoryImpl(
+internal class MessageRepositoryImpl(
     private val networkSource: MessageNetworkSource,
     private val dispatcher: CoroutineDispatcher
 ) : MessageRepository {

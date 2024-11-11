@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-class UserRepositoryImpl(
+internal class UserRepositoryImpl(
     private val userNetworkSource: UserNetworkSource,
     private val dispatcher: CoroutineDispatcher
 ) : UserRepository {

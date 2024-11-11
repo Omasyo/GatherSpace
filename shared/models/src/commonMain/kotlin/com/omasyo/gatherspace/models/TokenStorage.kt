@@ -5,9 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 
 interface TokenStorage {
-    val tokenFlow: Flow<TokenResponse?>
-
-    suspend fun getToken(): TokenResponse
+    suspend fun getToken(): TokenResponse?
 
     suspend fun saveToken(tokenResponse: TokenResponse)
 

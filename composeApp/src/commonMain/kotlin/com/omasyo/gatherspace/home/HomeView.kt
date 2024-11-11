@@ -20,17 +20,19 @@ import com.omasyo.gatherspace.CreateRoom
 import com.omasyo.gatherspace.HomeRoutes
 import com.omasyo.gatherspace.RoomR
 import com.omasyo.gatherspace.Search
-import com.omasyo.gatherspace.domain.message.MessageRepositoryImpl
-import com.omasyo.gatherspace.domain.room.RoomRepositoryImpl
+import com.omasyo.gatherspace.auth.client
+import com.omasyo.gatherspace.domain.message.MessageRepository
+import com.omasyo.gatherspace.domain.room.RoomRepository
 import com.omasyo.gatherspace.models.response.Room
-import com.omasyo.gatherspace.network.message.createMessageNetworkSource
-import com.omasyo.gatherspace.network.room.createNetworkSource
+import com.omasyo.gatherspace.network.message.MessageNetworkSource
+import com.omasyo.gatherspace.network.room.RoomNetworkSource
 import kotlinx.coroutines.Dispatchers
 
+val messageNetworkSource = MessageNetworkSource(client)
+val messageRepository = MessageRepository(messageNetworkSource, Dispatchers.IO)
 
-val messageRepository = MessageRepositoryImpl(createMessageNetworkSource(), Dispatchers.IO)
-
-val roomRepository = RoomRepositoryImpl(createNetworkSource(), Dispatchers.IO)
+val roomNetworkSource = RoomNetworkSource(client)
+val roomRepository = RoomRepository(roomNetworkSource, Dispatchers.IO)
 
 @Composable
 fun HomeRoute(
@@ -79,7 +81,7 @@ fun HomeView(
                     when (it) {
                         CreateRoom -> TODO()
                         is RoomR -> MessagePanel(
-                            onBackTap = { navigator.navigateTo(ListDetailPaneScaffoldRole.Extra, Search) },
+                            onBackTap = { navigator.navigateTo(ListDetailPaneScaffoldRole.Extra) },
                             viewModel = viewModel { RoomViewModel(it, messageRepository, roomRepository) }
 
                         )

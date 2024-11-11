@@ -1,6 +1,9 @@
 package com.omasyo.gatherspace.home
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.omasyo.gatherspace.RoomR
@@ -21,7 +24,7 @@ class RoomViewModel(
     private val roomRepository: RoomRepository
 ) : ViewModel() {
 
-    private val refreshRoomEvent = MutableStateFlow(Unit)
+    private val refreshRoomEvent = MutableStateFlow(Any())
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val room: StateFlow<UiState<RoomDetails>> = refreshRoomEvent.flatMapLatest {
@@ -40,18 +43,35 @@ class RoomViewModel(
 
     val messages = mutableStateListOf<Message>()
 
+    var message by mutableStateOf("")
+        private set
+
     init {
         viewModelScope.launch {
             messageRepository.getMessageFlow(roomRoute.id)
+                .catch {
+                    //TODO donerror stuffs here
+                }
                 .collect {
                     messages.add(it)
                 }
         }
     }
 
-    fun refreshRooms() {
+    fun changeMessage(message: String) {
+        this.message = message
+    }
+
+    fun refreshRoom() {
         viewModelScope.launch {
-            refreshRoomEvent.emit(Unit)
+            refreshRoomEvent.emit(Any())
+        }
+    }
+
+    fun sendMessage() {
+        viewModelScope.launch {
+            messageRepository.sendMessage(roomRoute.id, message).first()
+            message = ""
         }
     }
 }

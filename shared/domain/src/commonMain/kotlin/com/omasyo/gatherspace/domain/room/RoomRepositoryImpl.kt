@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-class RoomRepositoryImpl(
+internal class RoomRepositoryImpl(
     private val networkSource: RoomNetworkSource,
     private val dispatcher: CoroutineDispatcher
 ) : RoomRepository {

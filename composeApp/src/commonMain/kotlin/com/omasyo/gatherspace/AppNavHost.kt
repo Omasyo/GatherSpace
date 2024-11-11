@@ -12,6 +12,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.omasyo.gatherspace.auth.LoginRoute
+import com.omasyo.gatherspace.auth.SignupRoute
 import com.omasyo.gatherspace.home.HomeRoute
 import kotlinx.serialization.Serializable
 
@@ -57,6 +59,20 @@ fun AppNavHost(
             )
         }
     ) {
+        composable<Signup> {
+            SignupRoute(
+                onLoginTap = { navController.navigate(Login) },
+                onAuthenticated = { navController.navigate(Home) },
+            )
+        }
+
+        composable<Login> {
+            LoginRoute(
+                onAuthenticated = { navController.navigate(Home) },
+                onSignupTap = { navController.navigate(Signup) },
+            )
+        }
+
         composable<Home> {
             HomeRoute(
             )
@@ -65,15 +81,22 @@ fun AppNavHost(
 }
 
 @Serializable
+data object Signup
+
+@Serializable
+data object Login
+
+
+@Serializable
 data object Home
 
 sealed interface HomeRoutes
 
 @Serializable
-data class RoomR(val id: Int): HomeRoutes
+data class RoomR(val id: Int) : HomeRoutes
 
 @Serializable
-data object CreateRoom: HomeRoutes
+data object CreateRoom : HomeRoutes
 
 @Serializable
-data object Search: HomeRoutes
+data object Search : HomeRoutes

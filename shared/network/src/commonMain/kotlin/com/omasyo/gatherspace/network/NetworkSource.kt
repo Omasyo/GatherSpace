@@ -12,7 +12,6 @@ interface NetworkSource {
 }
 
 internal suspend inline fun <reified T> NetworkSource.mapResponse(
-//    expectedStatusCode: HttpStatusCode = HttpStatusCode.OK,
     exec: () -> HttpResponse
 ): Result<T> =
     try {

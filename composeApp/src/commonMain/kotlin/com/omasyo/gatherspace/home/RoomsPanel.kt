@@ -29,7 +29,7 @@ fun RoomsView(
     when (state) {
         is UiState.Loading -> LoadingPlaceholder(modifier)
         is UiState.Error -> ErrorPlaceholder(modifier, state.reason, onRetry)
-        is UiState.Success -> RoomsList(modifier, state.data, onRoomTap)
+        is UiState.Success -> RoomsList(modifier, state.data, onRoomTap, {})
     }
 }
 

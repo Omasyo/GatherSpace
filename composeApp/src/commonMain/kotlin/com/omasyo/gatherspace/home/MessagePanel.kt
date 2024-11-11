@@ -38,11 +38,13 @@ fun MessagePanel(
     MessagePanel(
         modifier = modifier,
         onBackTap = onBackTap,
-        onSendTap = {},
+        message = viewModel.message,
+        onMessageChange = viewModel::changeMessage,
+        onSendTap = viewModel::sendMessage,
         room = viewModel.room.collectAsStateWithLifecycle().value,
         oldMessages = viewModel.oldMessages.collectAsLazyPagingItems(),
         messages = viewModel.messages
-        )
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,6 +52,8 @@ fun MessagePanel(
 fun MessagePanel(
     modifier: Modifier = Modifier,
     onBackTap: () -> Unit,
+    message: String,
+    onMessageChange: (String) -> Unit,
     onSendTap: () -> Unit,
     room: UiState<RoomDetails>,
     oldMessages: LazyPagingItems<Message>,
@@ -121,8 +125,8 @@ fun MessagePanel(
                     Icon(Icons.Default.AccountBox, contentDescription = null)
                 }
                 TextField(
-                    "Messenger",
-                    onValueChange = {},
+                    message,
+                    onValueChange = onMessageChange,
                     modifier = Modifier.weight(1f)
                 )
                 IconButton(onClick = onSendTap) {
@@ -183,11 +187,15 @@ private fun Preview() {
     MaterialTheme {
         MessagePanel(
             onBackTap = {},
+            message = "Message",
+            onMessageChange = {},
             onSendTap = {},
-            room = UiState.Success(RoomDetails(
-                id = 8697, name = "Caleb Wolfe", members = listOf(), created = date, modified = date
+            room = UiState.Success(
+                RoomDetails(
+                    id = 8697, name = "Caleb Wolfe", members = listOf(), created = date, modified = date
 
-            )),
+                )
+            ),
             oldMessages = fakeDataFlow.collectAsLazyPagingItems(),
             messages = List(3) {
                 Message(

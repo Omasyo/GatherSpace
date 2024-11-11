@@ -16,28 +16,28 @@ open class DomainError(val message: String) : DomainResponse<Nothing>
 
 data object AuthError : Error("Token not valid")
 
-fun <T, R> DomainResponse<T>.onSuccess(onSuccess: (T) -> R): DomainResponse<T> {
+inline fun <T, R> DomainResponse<T>.onSuccess(onSuccess: (T) -> R): DomainResponse<T> {
     if (this is Success) {
         onSuccess(data)
     }
     return this
 }
 
-fun <T, R> DomainResponse<T>.onError(onError: (message: String) -> R): DomainResponse<T> {
+inline fun <T, R> DomainResponse<T>.onError(onError: (message: String) -> R): DomainResponse<T> {
     if (this is Error) {
         onError(message)
     }
     return this
 }
 
-fun <T> DomainResponse<T>.onAuthError(onAuthError: () -> Unit): DomainResponse<T> {
+inline fun <T> DomainResponse<T>.onAuthError(onAuthError: () -> Unit): DomainResponse<T> {
     if (this is AuthError) {
         onAuthError()
     }
     return this
 }
 
-fun <T, R> DomainResponse<T>.fold(
+inline fun <T, R> DomainResponse<T>.fold(
     onSuccess: (T) -> R,
     onError: (message: String) -> R,
     onAuthError: () -> Unit

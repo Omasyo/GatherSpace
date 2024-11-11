@@ -10,6 +10,7 @@ import io.ktor.client.plugins.resources.*
 import io.ktor.client.plugins.sse.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.json.Json
@@ -35,6 +36,7 @@ internal class MessageNetworkSourceImpl(
                         "connect" -> {
                             println("MessageNetworkSourceImpl:getMessageFlow: Connected to $roomId")
                         }
+
                         "message" -> {
                             val message = Json.decodeFromString<Message>(events.data!!)
                             emit(message)

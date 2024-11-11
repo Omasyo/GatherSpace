@@ -3,7 +3,14 @@ package com.omasyo.gatherspace.domain.room
 import com.omasyo.gatherspace.domain.DomainResponse
 import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.models.response.RoomDetails
+import com.omasyo.gatherspace.network.room.RoomNetworkSource
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+
+fun RoomRepository(
+    networkSource: RoomNetworkSource,
+    dispatcher: CoroutineDispatcher
+): RoomRepository = RoomRepositoryImpl(networkSource, dispatcher)
 
 interface RoomRepository {
     fun createRoom(name: String, description: String): Flow<DomainResponse<Unit>>

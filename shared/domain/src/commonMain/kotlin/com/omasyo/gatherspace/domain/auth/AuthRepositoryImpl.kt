@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-class AuthRepositoryImpl(
+internal class AuthRepositoryImpl(
     private val authNetworkSource: AuthNetworkSource,
     private val tokenStorage: TokenStorage,
     private val dispatcher: CoroutineDispatcher

@@ -1,8 +1,6 @@
 package com.omasyo.gatherspace.domain.message
 
-import androidx.paging.PagingSource
-import androidx.paging.PagingState
-import com.omasyo.gatherspace.domain.Success
+import app.cash.paging.*
 import com.omasyo.gatherspace.models.response.Message
 import com.omasyo.gatherspace.network.message.MessageNetworkSource
 import kotlinx.datetime.Clock
@@ -15,28 +13,26 @@ internal class MessagePagingSource(
     private val networkSource: MessageNetworkSource
 ) : PagingSource<LocalDateTime, Message>() {
     override fun getRefreshKey(state: PagingState<LocalDateTime, Message>): LocalDateTime? {
-        return null
-
-        state.anchorPosition?.let { anchorPosition ->
+        return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey
         }
     }
 
-    override suspend fun load(params: LoadParams<LocalDateTime>): LoadResult<LocalDateTime, Message> {
+    override suspend fun load(params: PagingSourceLoadParams<LocalDateTime>): PagingSourceLoadResult<LocalDateTime, Message> {
         return try {
             val date = params.key ?: Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
             val response = networkSource.getRecentMessages(roomId, date, 50)
             response.getOrNull()?.let { messages ->
-                LoadResult.Page(
+                PagingSourceLoadResultPage(
                     data = messages,
                     prevKey = null,
                     nextKey = messages.lastOrNull()?.created
                 )
-            } ?: LoadResult.Error(response.exceptionOrNull()!!)
+            } ?: PagingSourceLoadResultError(response.exceptionOrNull()!!)
         } catch (e: Exception) {
             println("MessagePagingSource:load: $e")
-            LoadResult.Error(e)
+            PagingSourceLoadResultError(e)
         }
     }
 }

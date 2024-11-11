@@ -13,18 +13,14 @@ import io.ktor.client.plugins.auth.providers.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.resources.*
 import io.ktor.client.plugins.sse.*
-import io.ktor.client.plugins.websocket.*
 import io.ktor.client.request.*
-import io.ktor.client.request.forms.*
 import io.ktor.http.*
-import io.ktor.serialization.kotlinx.*
 import io.ktor.serialization.kotlinx.json.*
-import kotlinx.serialization.json.Json
 
 expect fun provideEngine(): HttpClientEngine
 
 fun createClient(
-    engine: HttpClientEngine,
+    engine: HttpClientEngine = provideEngine(),
     tokenStorage: TokenStorage
 ) =
     HttpClient(engine) {
@@ -33,21 +29,21 @@ fun createClient(
         install(ContentNegotiation) {
             json()
         }
-//        install(WebSockets) {
-//            pingIntervalMillis = 20_000
-//            contentConverter = KotlinxWebsocketSerializationConverter(Json)
-//        }
         install(Auth) {
             bearer {
                 loadTokens {
                     val tokenResponse = tokenStorage.getToken()
-                    BearerTokens(tokenResponse.accessToken, tokenResponse.refreshToken)
+                    println("createClient:loadTokens tokenResponse: $tokenResponse")
+                    tokenResponse?.let {
+                        BearerTokens(it.accessToken, it.refreshToken)
+                    }
                 }
                 refreshTokens {
                     val response = client.patch(Session()) {
                         markAsRefreshTokenRequest()
                         setBody(RefreshTokenRequest(oldTokens?.refreshToken ?: ""))
                     }
+                    println("createClient:refreshTokens response $response")
                     if (response.status.isSuccess()) {
                         val tokenResponse: TokenResponse = response.body()
                         tokenStorage.saveToken(tokenResponse)
