@@ -9,6 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.omasyo.gatherspace.dependencyProvider
 
 
 @Composable
@@ -16,11 +17,11 @@ fun LoginRoute(
     modifier: Modifier = Modifier,
     onSignupTap: () -> Unit,
     onAuthenticated: () -> Unit,
-    viewModel: LoginViewModel = viewModel { LoginViewModel(authRepository)}
+    viewModel: LoginViewModel = dependencyProvider { viewModel { LoginViewModel(authRepository) } }
 ) {
     val state = viewModel.state.collectAsState().value
     LaunchedEffect(state) {
-        if(state is AuthState.Success) {
+        if (state is AuthState.Success) {
             onAuthenticated()
         }
     }

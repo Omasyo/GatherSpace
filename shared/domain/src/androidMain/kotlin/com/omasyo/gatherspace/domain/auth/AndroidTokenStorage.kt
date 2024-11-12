@@ -23,7 +23,7 @@ class AndroidTokenStorage(
     private val tokenKey = stringPreferencesKey("token")
 
 
-    override suspend fun observeToken(): Flow<TokenResponse?> {
+    override fun observeToken(): Flow<TokenResponse?> {
         return dataStore.data.map { preferences ->
             preferences[tokenKey]?.let {
                 Json.decodeFromString<TokenResponse>(it)
@@ -46,4 +46,11 @@ class AndroidTokenStorage(
             preferences.remove(tokenKey)
         }
     }
+}
+
+class AndroidTokenStorageFactory(private val context: Context) : TokenStorageFactory {
+    override fun createTokenStorage(): TokenStorage {
+        return AndroidTokenStorage(context.dataStore)
+    }
+
 }

@@ -57,7 +57,7 @@ fun createClient(
         defaultRequest {
             url {
                 protocol = URLProtocol.HTTP
-                host = "192.168.1.105"
+                host = "192.168.37.134"
                 port = 8080
             }
             contentType(ContentType.Application.Json)

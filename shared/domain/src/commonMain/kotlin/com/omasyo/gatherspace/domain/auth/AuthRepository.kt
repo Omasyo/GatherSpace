@@ -14,6 +14,8 @@ fun AuthRepository(
 ): AuthRepository = AuthRepositoryImpl(authNetworkSource, tokenStorage, dispatcher)
 
 interface AuthRepository {
+    fun isAuthenticated(): Flow<Boolean>
+
     fun login(username: String, password: String): Flow<DomainResponse<Unit>>
 
     fun logout(): Flow<DomainResponse<Unit>>

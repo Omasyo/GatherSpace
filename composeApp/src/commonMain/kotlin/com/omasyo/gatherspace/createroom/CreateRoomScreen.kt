@@ -10,8 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.omasyo.gatherspace.CreateRoom
-import com.omasyo.gatherspace.home.roomRepository
+import com.omasyo.gatherspace.dependencyProvider
 
 sealed interface FormState {
     data object Loading : FormState
@@ -23,7 +22,9 @@ sealed interface FormState {
 fun CreateRoomScreen(
     modifier: Modifier = Modifier,
     onRoomCreated: (Int) -> Unit,
-    viewModel: CreateRoomViewModel = viewModel { CreateRoomViewModel(roomRepository) },
+    viewModel: CreateRoomViewModel = dependencyProvider {
+        viewModel { CreateRoomViewModel(roomRepository) }
+    },
 ) {
     LaunchedEffect(viewModel.state.collectAsStateWithLifecycle().value) {
         val state = viewModel.state.value

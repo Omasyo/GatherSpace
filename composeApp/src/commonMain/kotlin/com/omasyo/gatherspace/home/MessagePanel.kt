@@ -1,5 +1,6 @@
 package com.omasyo.gatherspace.home
 
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,32 +18,36 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
+import com.omasyo.gatherspace.dependencyProvider
 import com.omasyo.gatherspace.models.response.Message
 import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.models.response.User
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.datetime.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format
 import kotlinx.datetime.format.byUnicodePattern
-import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.runtime.remember
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.paging.compose.itemKey
+import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun MessagePanel(
     modifier: Modifier = Modifier,
     roomId: Int,
     onBackTap: () -> Unit,
-    viewModel: RoomViewModel = viewModel(key = "room$roomId") {
-        RoomViewModel(
-            roomId,
-            messageRepository,
-            roomRepository
-        )
+    viewModel: RoomViewModel = dependencyProvider {
+        viewModel(key = "room$roomId") {
+            RoomViewModel(
+                roomId,
+                messageRepository,
+                roomRepository
+            )
+        }
     }
 ) {
     MessagePanel(

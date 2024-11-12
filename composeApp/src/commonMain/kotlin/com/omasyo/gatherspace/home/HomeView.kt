@@ -10,39 +10,21 @@ import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
-import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.omasyo.gatherspace.CreateRoom
-import com.omasyo.gatherspace.HomeRoutes
-import com.omasyo.gatherspace.RoomR
-import com.omasyo.gatherspace.Search
-import com.omasyo.gatherspace.auth.client
+import com.omasyo.gatherspace.*
 import com.omasyo.gatherspace.createroom.CreateRoomScreen
-import com.omasyo.gatherspace.domain.message.MessageRepository
-import com.omasyo.gatherspace.domain.room.RoomRepository
 import com.omasyo.gatherspace.models.response.Room
-import com.omasyo.gatherspace.network.message.MessageNetworkSource
-import com.omasyo.gatherspace.network.room.RoomNetworkSource
-import kotlinx.coroutines.Dispatchers
-
-val messageNetworkSource = MessageNetworkSource(client)
-val messageRepository = MessageRepository(messageNetworkSource, Dispatchers.IO)
-
-val roomNetworkSource = RoomNetworkSource(client)
-val roomRepository = RoomRepository(roomNetworkSource, Dispatchers.IO)
 
 @Composable
 fun HomeRoute(
     modifier: Modifier = Modifier,
-    homeViewModel: HomeViewModel = viewModel {
-        HomeViewModel(
-            roomRepository
-        )
+    homeViewModel: HomeViewModel = dependencyProvider {
+        viewModel { HomeViewModel(roomRepository) }
     },
 ) {
     HomeView(

@@ -29,11 +29,12 @@ private val spec: FiniteAnimationSpec<IntOffset> =
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
+    isAuthenticated: Boolean,
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(
         navController,
-        startDestination = Login,
+        startDestination = if(isAuthenticated) Home else Login,
         modifier = modifier,
 //        enterTransition = {
 //            slideInHorizontally(

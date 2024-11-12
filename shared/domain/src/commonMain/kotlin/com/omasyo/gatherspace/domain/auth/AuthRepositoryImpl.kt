@@ -6,16 +6,17 @@ import com.omasyo.gatherspace.network.NetworkException
 import com.omasyo.gatherspace.network.auth.AuthNetworkSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 
 internal class AuthRepositoryImpl(
     private val authNetworkSource: AuthNetworkSource,
     private val tokenStorage: TokenStorage,
     private val dispatcher: CoroutineDispatcher
 ) : AuthRepository {
+    override fun isAuthenticated(): Flow<Boolean> =
+        tokenStorage.observeToken().map { it != null }
+
+
     override fun login(username: String, password: String): Flow<DomainResponse<Unit>> =
         flow {
             emit(authNetworkSource.login(username, password, getDeviceName())
