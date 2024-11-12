@@ -26,14 +26,14 @@ class MainActivity : ComponentActivity() {
 
     private val tokenStorage: TokenStorage by lazy { AndroidTokenStorage(dataStore) }
 
-    private val networkComponent by lazy { object : NetworkComponent(tokenStorage) {} }
+    private val networkComponent by lazy { NetworkComponent(tokenStorage) }
 
     private val domainComponent by lazy {
-        object : DomainComponent(
+        DomainComponent(
             networkComponent = networkComponent,
             tokenStorage = tokenStorage,
             dispatcher = Dispatchers.IO
-        ) {}
+        )
     }
 }
 

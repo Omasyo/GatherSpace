@@ -13,9 +13,9 @@ import java.util.prefs.Preferences
 val tokenStorage =
     JvmTokenStorage(Preferences.userNodeForPackage(MethodHandles.lookup().lookupClass()))
 
-val networkComponent = object : NetworkComponent(tokenStorage) {}
+val networkComponent = NetworkComponent(tokenStorage)
 
-val domainComponent = object : DomainComponent(networkComponent, tokenStorage, Dispatchers.IO) {}
+val domainComponent = DomainComponent(networkComponent, tokenStorage, Dispatchers.IO)
 
 fun main() = application {
     Window(

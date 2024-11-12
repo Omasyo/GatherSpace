@@ -11,7 +11,7 @@ import com.omasyo.gatherspace.network.room.RoomNetworkSourceImpl
 import com.omasyo.gatherspace.network.user.UserNetworkSource
 import com.omasyo.gatherspace.network.user.UserNetworkSourceImpl
 
-abstract class NetworkComponent(tokenStorage: TokenStorage) {
+class NetworkComponent(tokenStorage: TokenStorage) {
     val authNetworkSource: AuthNetworkSource by lazy {
         AuthNetworkSourceImpl(client)
     }

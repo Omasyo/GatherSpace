@@ -12,7 +12,7 @@ import com.omasyo.gatherspace.models.TokenStorage
 import com.omasyo.gatherspace.network.deps.NetworkComponent
 import kotlinx.coroutines.CoroutineDispatcher
 
-abstract class DomainComponent(
+class DomainComponent(
     networkComponent: NetworkComponent,
     tokenStorage: TokenStorage,
     dispatcher: CoroutineDispatcher
