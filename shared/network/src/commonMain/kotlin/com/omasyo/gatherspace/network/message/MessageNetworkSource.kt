@@ -6,8 +6,6 @@ import io.ktor.client.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
 
-fun MessageNetworkSource(client: HttpClient): MessageNetworkSource = MessageNetworkSourceImpl(client)
-
 interface MessageNetworkSource : NetworkSource {
     suspend fun getRecentMessages(
         roomId: Int,

@@ -12,8 +12,6 @@ import io.ktor.client.plugins.resources.*
 import io.ktor.client.request.*
 import io.ktor.client.plugins.auth.authProviders
 
-fun AuthNetworkSource(client: HttpClient): AuthNetworkSource = AuthNetworkSourceImpl(client)
-
 internal class AuthNetworkSourceImpl(
     private val client: HttpClient
 ) : AuthNetworkSource {
@@ -22,20 +20,18 @@ internal class AuthNetworkSourceImpl(
         password: String,
         deviceName: String
     ): Result<TokenResponse> =
-        mapResponse {
+        mapResponse<TokenResponse> {
             client.post(Session()) {
                 setBody(LoginRequest(username, password, deviceName))
-            }.also {
-                clearAuth()
             }
-        }
+        }.onSuccess { clearAuth() }
 
-    override suspend fun logout(deviceId: Int?): Result<Unit> = mapResponse {
+    override suspend fun logout(deviceId: Int?): Result<Unit> = mapResponse<Unit> {
         client.delete(Session(deviceId))
-    }
+    }.onSuccess { clearAuth() }
 
 
-    private fun clearAuth() { //TODO places neeed you
+    private fun clearAuth() {
         client.authProviders.filterIsInstance<BearerAuthProvider>()
             .firstOrNull()?.clearToken()
     }

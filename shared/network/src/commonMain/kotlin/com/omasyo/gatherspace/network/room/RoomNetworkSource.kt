@@ -6,8 +6,6 @@ import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.network.NetworkSource
 import io.ktor.client.*
 
-fun RoomNetworkSource(client: HttpClient): RoomNetworkSource = RoomNetworkSourceImpl(client)
-
 interface RoomNetworkSource : NetworkSource {
     suspend fun createRoom(name: String, description: String): Result<CreateRoomResponse>
 
