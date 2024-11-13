@@ -4,6 +4,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.omasyo.gatherspace.domain.deps.DomainComponent
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -14,7 +15,8 @@ fun App(
 ) {
     MaterialTheme {
         AppNavHost(
-            isAuthenticated = appViewModel.isAuthenticated.collectAsStateWithLifecycle().value
+            isAuthenticated = appViewModel.isAuthenticated.collectAsStateWithLifecycle().value,
+            logout = appViewModel::logout,
         )
     }
 }

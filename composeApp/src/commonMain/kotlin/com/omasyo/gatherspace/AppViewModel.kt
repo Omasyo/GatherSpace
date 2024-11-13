@@ -21,13 +21,19 @@ class AppViewModel(
     private var initialAuthState by Delegates.notNull<Boolean>()
         private set
 
-    init {
-        runBlocking {
-//            initialSchemeId = settingsRepository.getColorSchemeId().first()
-            initialAuthState = !authRepository.isAuthenticated().first()
-        }
-    }
+//    init {
+//        runBlocking {
+////            initialSchemeId = settingsRepository.getColorSchemeId().first()
+//            initialAuthState = !authRepository.isAuthenticated().first()
+//        }
+//    }
 
     val isAuthenticated = authRepository.isAuthenticated()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), initialAuthState)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
+
+    fun logout() {
+        viewModelScope.launch {
+            authRepository.logout().first()
+        }
+    }
 }

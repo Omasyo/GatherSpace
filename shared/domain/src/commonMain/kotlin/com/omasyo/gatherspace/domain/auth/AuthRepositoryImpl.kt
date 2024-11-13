@@ -14,7 +14,9 @@ internal class AuthRepositoryImpl(
     private val dispatcher: CoroutineDispatcher
 ) : AuthRepository {
     override fun isAuthenticated(): Flow<Boolean> =
-        tokenStorage.observeToken().map { it != null }
+        tokenStorage.observeToken().map {
+        println("Is auth ${it != null}")
+            it != null }
 
 
     override fun login(username: String, password: String): Flow<DomainResponse<Unit>> =

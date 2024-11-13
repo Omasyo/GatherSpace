@@ -6,11 +6,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.cash.paging.cachedIn
 import com.omasyo.gatherspace.RoomR
 import com.omasyo.gatherspace.domain.AuthError
 import com.omasyo.gatherspace.domain.DomainError
 import com.omasyo.gatherspace.domain.Success
 import com.omasyo.gatherspace.domain.message.MessageRepository
+import com.omasyo.gatherspace.domain.onSuccess
 import com.omasyo.gatherspace.domain.room.RoomRepository
 import com.omasyo.gatherspace.models.response.Message
 import com.omasyo.gatherspace.models.response.RoomDetails
@@ -39,7 +41,7 @@ class RoomViewModel(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UiState.Loading)
 
 
-    val oldMessages = messageRepository.getRecentMessages(roomId)
+    val oldMessages = messageRepository.getRecentMessages(roomId).cachedIn(viewModelScope)
 
     val messages = mutableStateListOf<Message>()
 
@@ -71,7 +73,9 @@ class RoomViewModel(
     fun sendMessage() {
         viewModelScope.launch {
             messageRepository.sendMessage(roomId, message).first()
-            message = ""
+                .onSuccess {
+                    message = ""
+                }
         }
     }
 }

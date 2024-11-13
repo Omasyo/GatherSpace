@@ -1,5 +1,6 @@
 package com.omasyo.gatherspace.domain.room
 
+import com.omasyo.gatherspace.domain.DomainError
 import com.omasyo.gatherspace.domain.DomainResponse
 import com.omasyo.gatherspace.domain.mapToDomain
 import com.omasyo.gatherspace.models.response.Room
@@ -16,7 +17,11 @@ internal class RoomRepositoryImpl(
 ) : RoomRepository {
     override fun createRoom(name: String, description: String): Flow<DomainResponse<Int>> =
         flow {
-            emit(networkSource.createRoom(name, description).mapToDomain { it.id })
+            if (name.isBlank()) {
+                emit(DomainError("Room name cannot be blank"))
+                return@flow
+            }
+            emit(networkSource.createRoom(name.trim(), description.trim()).mapToDomain { it.id })
         }.flowOn(dispatcher)
 
     override fun addMembers(roomId: Int, memberIds: List<Int>): Flow<DomainResponse<Unit>> =

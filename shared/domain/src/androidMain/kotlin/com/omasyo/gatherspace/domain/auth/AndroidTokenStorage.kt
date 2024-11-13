@@ -25,6 +25,7 @@ class AndroidTokenStorage(
 
     override fun observeToken(): Flow<TokenResponse?> {
         return dataStore.data.map { preferences ->
+            println("TokenChanging ${preferences[tokenKey]}")
             preferences[tokenKey]?.let {
                 Json.decodeFromString<TokenResponse>(it)
             }

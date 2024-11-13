@@ -24,13 +24,12 @@ fun RoomsView(
     modifier: Modifier = Modifier,
     onRoomTap: (Room) -> Unit,
     onRetry: () -> Unit,
-    onCreateRoomTap: () -> Unit,
     state: UiState<List<Room>>
 ) {
     when (state) {
         is UiState.Loading -> LoadingPlaceholder(modifier)
         is UiState.Error -> ErrorPlaceholder(modifier, state.reason, onRetry)
-        is UiState.Success -> RoomsList(modifier, state.data, onRoomTap, onCreateRoomTap)
+        is UiState.Success -> RoomsList(modifier, state.data, onRoomTap)
     }
 }
 
@@ -38,19 +37,9 @@ fun RoomsView(
 private fun RoomsList(
     modifier: Modifier,
     rooms: List<Room>,
-    onRoomTap: (Room) -> Unit,
-    onCreateRoomTap: () -> Unit
+    onRoomTap: (Room) -> Unit
 ) {
     LazyColumn(modifier) {
-        item {
-            Row(
-                modifier = Modifier
-                    .clickable(onClick = onCreateRoomTap)
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-            ) {
-                Text("Create a new room")
-            }
-        }
         items(rooms, key = { it.id }) { room ->
             RoomTile(room = room, onTap = { onRoomTap(room) })
         }
@@ -143,7 +132,6 @@ private fun Preview() {
         RoomsView(
             onRoomTap = {},
             onRetry = {},
-            onCreateRoomTap = {},
             state = UiState.Success(rooms)
         )
     }

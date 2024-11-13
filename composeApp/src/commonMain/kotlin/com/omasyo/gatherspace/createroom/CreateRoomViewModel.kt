@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.omasyo.gatherspace.domain.*
 import com.omasyo.gatherspace.domain.room.RoomRepository
+import com.omasyo.gatherspace.ui.components.SubmitState
+import com.omasyo.gatherspace.ui.components.TextFieldState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -16,39 +18,41 @@ class CreateRoomViewModel(
     private val roomRepository: RoomRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<CreateState>(CreateState.Idle)
-    val state: StateFlow<CreateState> = _state
+    private val _state = MutableStateFlow<SubmitState>(SubmitState.Idle)
+    val state: StateFlow<SubmitState> = _state
 
-    var name by mutableStateOf("")
+    var nameField by mutableStateOf(TextFieldState(""))
         private set
 
-    var description by mutableStateOf("")
+    var descriptionField by mutableStateOf(TextFieldState(""))
         private set
 
     fun changeName(value: String) {
-        name = value
+        nameField = nameField.copy(value = value)
     }
 
     fun changeDescription(value: String) {
-        description = value
+        descriptionField = descriptionField.copy(value = value)
+    }
+
+    private fun validate(): Boolean {
+        if (nameField.value.isBlank()) {
+            nameField = nameField.copy(errorMessage = "Please enter a username")
+            return false
+        }
+        return true
     }
 
     fun submit() {
-        _state.value = CreateState.Loading
+        if (!validate()) return
+
+        _state.value = SubmitState.Submitting
         viewModelScope.launch {
-            roomRepository.createRoom(name, description).first().onError {
-                _state.value = CreateState.Error(it)
+            roomRepository.createRoom(nameField.value, descriptionField.value).first().onError {
+                _state.value = SubmitState.Error(it)
             }.onSuccess {
-                _state.value = CreateState.Success(it)
+                _state.value = SubmitState.Submitted(it)
             }
         }
     }
-}
-
-
-sealed interface CreateState {
-    data object Idle : CreateState
-    data object Loading : CreateState
-    data class Success(val id: Int) : CreateState
-    data class Error(val message: String) : CreateState
 }

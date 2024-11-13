@@ -30,11 +30,12 @@ private val spec: FiniteAnimationSpec<IntOffset> =
 fun AppNavHost(
     modifier: Modifier = Modifier,
     isAuthenticated: Boolean,
+    logout: () -> Unit,
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(
         navController,
-        startDestination = if(isAuthenticated) Home else Login,
+        startDestination = Home,
         modifier = modifier,
 //        enterTransition = {
 //            slideInHorizontally(
@@ -77,6 +78,10 @@ fun AppNavHost(
 
         composable<Home> {
             HomeRoute(
+                isAuthenticated = isAuthenticated,
+                onLoginTap = { navController.navigate(Login) },
+                onProfileTap = logout,
+                onAuthError = {}
             )
         }
     }

@@ -30,7 +30,6 @@ class HomeViewModel(
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UiState.Loading)
 
     fun refreshRooms() {
-        println("Attempting refresh")
         viewModelScope.launch {
             refreshRoomsEvent.emit(Any())
         }

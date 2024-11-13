@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.omasyo.gatherspace.dependencyProvider
+import com.omasyo.gatherspace.ui.components.SubmitState
+import com.omasyo.gatherspace.ui.components.TextFieldState
 
 sealed interface FormState {
     data object Loading : FormState
@@ -22,42 +24,59 @@ sealed interface FormState {
 fun CreateRoomScreen(
     modifier: Modifier = Modifier,
     onRoomCreated: (Int) -> Unit,
+    onAuthError: () -> Unit,
     viewModel: CreateRoomViewModel = dependencyProvider {
         viewModel { CreateRoomViewModel(roomRepository) }
     },
 ) {
-    LaunchedEffect(viewModel.state.collectAsStateWithLifecycle().value) {
-        val state = viewModel.state.value
-        if (state is CreateState.Success) {
-            println("Room is created")
-            onRoomCreated(state.id)
-        }
-    }
-
     CreateRoomScreen(
         modifier = modifier,
-        roomName = viewModel.name,
+        roomName = viewModel.nameField,
         onRoomNameChange = viewModel::changeName,
-        description = viewModel.description,
+        description = viewModel.descriptionField,
         onDescriptionChange = viewModel::changeDescription,
         onSubmit = viewModel::submit,
+        onRoomCreated = onRoomCreated,
+        onAuthError = onAuthError,
+        state = viewModel.state.collectAsStateWithLifecycle().value
     )
 }
 
 @Composable
 fun CreateRoomScreen(
     modifier: Modifier = Modifier,
-    roomName: String,
+    roomName: TextFieldState,
     onRoomNameChange: (String) -> Unit,
-    description: String,
+    description: TextFieldState,
     onDescriptionChange: (String) -> Unit,
     onSubmit: () -> Unit,
+    onRoomCreated: (Int) -> Unit,
+    onAuthError: () -> Unit,
+    state: SubmitState
 ) {
     Column(modifier = modifier.fillMaxSize()) {
-        TextField(value = roomName, onValueChange = onRoomNameChange)
-        TextField(value = description, onValueChange = onDescriptionChange)
+        TextField(
+            value = roomName.value,
+            onValueChange = onRoomNameChange,
+            supportingText = roomName.errorMessage?.let { { Text(it) } },
+            isError = roomName.isError
+        )
+        TextField(
+            value = description.value,
+            onValueChange = onDescriptionChange,
+            supportingText = description.errorMessage?.let { { Text(it) } },
+            isError = description.isError
+        )
         Button(onClick = onSubmit) {
             Text(text = "Submit")
+        }
+    }
+
+    LaunchedEffect(state) {
+        when (state) {
+            is SubmitState.Error -> onAuthError()
+            is SubmitState.Submitted -> onRoomCreated(state.id)
+            else -> {}
         }
     }
 }
