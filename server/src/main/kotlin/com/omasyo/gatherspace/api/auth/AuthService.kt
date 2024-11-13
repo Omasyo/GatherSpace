@@ -6,8 +6,8 @@ import com.omasyo.gatherspace.models.response.UserDetails
 
 const val TOKEN_VALID_DURATION = 6000000
 
-const val secret = "hidden"
-const val refreshSecret = "hiddentoo"
+const val ACCESS_TOKEN_SECRET = "hidden"
+const val REFRESH_TOKEN_SECRET = "hidden-too"
 
 object JwtKeys {
     const val TOKEN_TYPE = "token_type"

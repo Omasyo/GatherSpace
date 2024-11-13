@@ -10,7 +10,6 @@ import io.ktor.client.plugins.resources.*
 import io.ktor.client.plugins.sse.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.json.Json

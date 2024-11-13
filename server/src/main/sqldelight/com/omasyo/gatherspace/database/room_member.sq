@@ -1,13 +1,18 @@
-CREATE TABLE IF NOT EXISTS room_member (
+CREATE TABLE IF NOT EXISTS room_member
+(
     room_id INT NOT NULL,
     user_id INT NOT NULL
 );
 
 create:
-INSERT INTO room_member(room_id, user_id) VALUES (?, ?);
+INSERT INTO room_member(room_id, user_id)
+VALUES (?, ?);
 
 delete:
-DELETE FROM room_member WHERE room_id = ? AND user_id = ?;
+DELETE
+FROM room_member
+WHERE room_id = ?
+  AND user_id = ?;
 
 getRoomMembers:
 SELECT id, username, image

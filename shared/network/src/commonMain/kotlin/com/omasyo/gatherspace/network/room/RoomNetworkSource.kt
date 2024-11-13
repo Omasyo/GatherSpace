@@ -4,7 +4,6 @@ import com.omasyo.gatherspace.models.response.CreateRoomResponse
 import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.network.NetworkSource
-import io.ktor.client.*
 
 interface RoomNetworkSource : NetworkSource {
     suspend fun createRoom(name: String, description: String): Result<CreateRoomResponse>

@@ -1,15 +1,20 @@
 package com.omasyo.gatherspace
 
-import com.omasyo.gatherspace.data.*
-import com.omasyo.gatherspace.data.message.createMessageRepository
-import com.omasyo.gatherspace.data.room.RoomRepositoryImpl
-import com.omasyo.gatherspace.data.token.TokenRepositoryImpl
-import com.omasyo.gatherspace.data.user.UserRepositoryImpl
+import com.omasyo.gatherspace.api.auth.AuthService
 import com.omasyo.gatherspace.api.auth.AuthServiceImpl
 import com.omasyo.gatherspace.api.auth.configureAuth
 import com.omasyo.gatherspace.api.routes.messageRoute
 import com.omasyo.gatherspace.api.routes.roomRoute
-import com.omasyo.gatherspace.api.routes.userController
+import com.omasyo.gatherspace.api.routes.userRoute
+import com.omasyo.gatherspace.data.createDatabase
+import com.omasyo.gatherspace.data.message.MessageRepository
+import com.omasyo.gatherspace.data.message.MessageRepositoryImpl
+import com.omasyo.gatherspace.data.room.RoomRepository
+import com.omasyo.gatherspace.data.room.RoomRepositoryImpl
+import com.omasyo.gatherspace.data.token.TokenRepository
+import com.omasyo.gatherspace.data.token.TokenRepositoryImpl
+import com.omasyo.gatherspace.data.user.UserRepository
+import com.omasyo.gatherspace.data.user.UserRepositoryImpl
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.*
 import io.ktor.serialization.kotlinx.json.*
@@ -19,8 +24,6 @@ import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.resources.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
 import io.ktor.server.sse.*
 import io.ktor.server.websocket.*
 import kotlinx.serialization.json.Json
@@ -32,10 +35,6 @@ fun main() {
 }
 
 fun Application.module() {
-
-    val database = createDatabase("postgres", "pass")
-    val userRepository = UserRepositoryImpl(database.user_accountQueries)
-
     install(Resources)
     install(ContentNegotiation) {
         json()
@@ -55,13 +54,16 @@ fun Application.module() {
         contentConverter = KotlinxWebsocketSerializationConverter(Json)
     }
     install(SSE)
-    routing {
-        get("/hello") {
-            call.respondText("Hello")
-        }
-    }
-    configureAuth(AuthServiceImpl(userRepository, TokenRepositoryImpl(database.refresh_tokenQueries)))
-    userController(userRepository)
-    roomRoute(RoomRepositoryImpl(database.roomQueries, database.room_memberQueries))
-    messageRoute(createMessageRepository(database))
+    configureAuth(authService)
+    userRoute(userRepository)
+    roomRoute(roomRepository)
+    messageRoute(messageRepository)
 }
+
+
+val database = createDatabase("postgres", "pass")
+val userRepository: UserRepository = UserRepositoryImpl(database.user_accountQueries)
+val tokenRepository: TokenRepository = TokenRepositoryImpl(database.refresh_tokenQueries)
+val roomRepository: RoomRepository = RoomRepositoryImpl(database.roomQueries, database.room_memberQueries)
+val messageRepository: MessageRepository = MessageRepositoryImpl(database.messageQueries)
+val authService: AuthService = AuthServiceImpl(userRepository, tokenRepository)

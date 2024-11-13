@@ -12,7 +12,7 @@ import io.ktor.server.resources.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.routing
 
-fun Application.userController(repository: UserRepository) {
+fun Application.userRoute(repository: UserRepository) {
     routing {
         get<Users.Id> { user ->
             repository.getUserById(user.id)?.let {

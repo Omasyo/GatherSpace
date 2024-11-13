@@ -1,6 +1,5 @@
 package com.omasyo.gatherspace.network.auth
 
-import com.omasyo.gatherspace.models.request.LoginRequest
 import com.omasyo.gatherspace.models.response.TokenResponse
 import com.omasyo.gatherspace.network.NetworkSource
 

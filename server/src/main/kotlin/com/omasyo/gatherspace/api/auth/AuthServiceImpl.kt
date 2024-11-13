@@ -16,12 +16,12 @@ class AuthServiceImpl(
 ) :
     AuthService {
     override val accessTokenVerifier: JWTVerifier = JWT
-        .require(Algorithm.HMAC256(secret))
+        .require(Algorithm.HMAC256(ACCESS_TOKEN_SECRET))
         .withClaim(JwtKeys.TOKEN_TYPE, TokenType.ACCESS_TOKEN.name)
         .build()
 
     override val refreshTokenVerifier: JWTVerifier = JWT
-        .require(Algorithm.HMAC256(refreshSecret))
+        .require(Algorithm.HMAC256(REFRESH_TOKEN_SECRET))
         .withClaim(JwtKeys.TOKEN_TYPE, TokenType.REFRESH_TOKEN.name)
         .build()
 
@@ -29,7 +29,7 @@ class AuthServiceImpl(
         val refreshToken = JWT.create()
             .withClaim(JwtKeys.TOKEN_TYPE, TokenType.REFRESH_TOKEN.name)
             .withIssuedAt(Instant.now())
-            .sign(Algorithm.HMAC256(refreshSecret))
+            .sign(Algorithm.HMAC256(REFRESH_TOKEN_SECRET))
 
         val deviceId = tokenRepository.createToken(refreshToken, userId, deviceName)
 
@@ -59,10 +59,10 @@ class AuthServiceImpl(
 
     private fun generateAccessToken(userId: Int, deviceId: Int): String {
         return JWT.create()
-            .withClaim("user_id", userId)
-            .withClaim("token_type", TokenType.ACCESS_TOKEN.name)
-            .withClaim("device_id", deviceId)
+            .withClaim(JwtKeys.USER_ID, userId)
+            .withClaim(JwtKeys.TOKEN_TYPE, TokenType.ACCESS_TOKEN.name)
+            .withClaim(JwtKeys.DEVICE_ID, deviceId)
             .withExpiresAt(Date(System.currentTimeMillis() + TOKEN_VALID_DURATION))
-            .sign(Algorithm.HMAC256(secret))
+            .sign(Algorithm.HMAC256(ACCESS_TOKEN_SECRET))
     }
 }

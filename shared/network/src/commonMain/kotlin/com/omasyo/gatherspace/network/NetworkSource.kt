@@ -1,9 +1,7 @@
 package com.omasyo.gatherspace.network
 
-import io.ktor.client.call.body
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.bodyAsText
-import io.ktor.client.statement.request
+import io.ktor.client.call.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 
 interface NetworkSource {

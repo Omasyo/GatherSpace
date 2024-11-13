@@ -1,10 +1,4 @@
-@file:OptIn(ExperimentalJsExport::class)
-@file:JsExport
-
 package com.omasyo.gatherspace.domain
-
-import kotlin.js.ExperimentalJsExport
-import kotlin.js.JsExport
 
 sealed interface DomainResponse<out T>
 

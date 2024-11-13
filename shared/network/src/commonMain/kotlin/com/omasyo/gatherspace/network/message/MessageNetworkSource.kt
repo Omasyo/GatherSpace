@@ -2,7 +2,6 @@ package com.omasyo.gatherspace.network.message
 
 import com.omasyo.gatherspace.models.response.Message
 import com.omasyo.gatherspace.network.NetworkSource
-import io.ktor.client.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
 

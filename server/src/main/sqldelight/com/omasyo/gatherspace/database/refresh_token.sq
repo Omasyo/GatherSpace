@@ -1,10 +1,11 @@
-CREATE TABLE IF NOT EXISTS refresh_token (
-    token BYTEA NOT NULL PRIMARY KEY,
-    user_id INT NOT NULL REFERENCES user_account ON DELETE CASCADE,
-    device_id SERIAL NOT NULL,
-    device_name TEXT NOT NULL,
-    created TIMESTAMP NOT NULL DEFAULT(CURRENT_TIMESTAMP),
-    last_accessed TIMESTAMP NOT NULL DEFAULT(CURRENT_TIMESTAMP)
+CREATE TABLE IF NOT EXISTS refresh_token
+(
+    token         BYTEA     NOT NULL PRIMARY KEY,
+    user_id       INT       NOT NULL REFERENCES user_account ON DELETE CASCADE,
+    device_id     SERIAL    NOT NULL,
+    device_name   TEXT      NOT NULL,
+    created       TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+    last_accessed TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP)
 );
 
 create:
@@ -12,11 +13,11 @@ INSERT INTO refresh_token(token, user_id, device_name)
 VALUES (digest(COALESCE(:token, ''), 'sha256'), :userId, :deviceName)
 RETURNING device_id;
 
--- deleteByToken:
--- DELETE FROM refresh_token WHERE token = ?;
-
 delete:
-DELETE FROM refresh_token WHERE user_id = ? AND device_id = ?;
+DELETE
+FROM refresh_token
+WHERE user_id = ?
+  AND device_id = ?;
 
 updateLastAccessed:
 UPDATE refresh_token

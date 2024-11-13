@@ -1,31 +1,37 @@
-CREATE TABLE IF NOT EXISTS room (
-    id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL,
-    description TEXT NOT NULL,
-    image TEXT,
-    created TIMESTAMP NOT NULL DEFAULT(CURRENT_TIMESTAMP),
-    modified TIMESTAMP NOT NULL DEFAULT(CURRENT_TIMESTAMP)
+CREATE TABLE IF NOT EXISTS room
+(
+    id          SERIAL PRIMARY KEY,
+    name        TEXT      NOT NULL,
+    description TEXT      NOT NULL,
+    image       TEXT,
+    created     TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+    modified    TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP)
 );
 
 create:
-INSERT INTO room(name, description, image) VALUES (?, ?, ?)
+INSERT INTO room(name, description, image)
+VALUES (?, ?, ?)
 RETURNING id;
 
 update:
 UPDATE room
-SET name = ?,
+SET name        = ?,
     description = ?,
-    image = ?,
-    modified = CURRENT_TIMESTAMP
+    image       = ?,
+    modified    = CURRENT_TIMESTAMP
 WHERE id = ?;
 
 getRoomById:
-SELECT * FROM room WHERE room.id = ?;
+SELECT *
+FROM room
+WHERE room.id = ?;
 
 getAll:
-SELECT id, name FROM room;
+SELECT id, name
+FROM room;
 
 getUserRooms:
-SELECT id, name FROM room
-JOIN room_member ON room.id = room_member.user_id
+SELECT id, name
+FROM room
+         JOIN room_member ON room.id = room_member.user_id
 WHERE room_member.user_id = :userId;

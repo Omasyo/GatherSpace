@@ -17,6 +17,7 @@ import kotlinx.serialization.json.Json
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "token")
 
+@Suppress("unused")
 class AndroidTokenStorage(
     private val dataStore: DataStore<Preferences>
 ) : TokenStorage {
@@ -47,11 +48,4 @@ class AndroidTokenStorage(
             preferences.remove(tokenKey)
         }
     }
-}
-
-class AndroidTokenStorageFactory(private val context: Context) : TokenStorageFactory {
-    override fun createTokenStorage(): TokenStorage {
-        return AndroidTokenStorage(context.dataStore)
-    }
-
 }

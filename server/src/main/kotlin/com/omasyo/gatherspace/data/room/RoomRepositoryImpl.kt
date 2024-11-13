@@ -7,7 +7,6 @@ import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.models.response.User
 import kotlinx.datetime.toKotlinLocalDateTime
 
-
 internal class RoomRepositoryImpl(
     private val roomQueries: RoomQueries,
     private val roomMemberQueries: Room_memberQueries,

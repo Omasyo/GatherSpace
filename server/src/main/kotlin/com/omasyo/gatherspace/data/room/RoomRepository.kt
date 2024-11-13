@@ -1,12 +1,8 @@
 package com.omasyo.gatherspace.data.room
 
-import com.omasyo.gatherspace.database.Database
 import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.models.response.User
-
-fun createRoomRepository(database: Database): RoomRepository =
-    RoomRepositoryImpl(database.roomQueries, database.room_memberQueries)
 
 interface RoomRepository {
     fun create(name: String, description: String, image: String?): Int
