@@ -3,12 +3,14 @@ package com.omasyo.gatherspace.auth
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.omasyo.gatherspace.dependencyProvider
+import com.omasyo.gatherspace.ui.components.TextField
+import com.omasyo.gatherspace.ui.components.TextFieldState
 
 @Composable
 fun SignupRoute(
@@ -32,32 +34,61 @@ fun SignupRoute(
     SignupScreen(
         modifier = modifier,
         onLoginTap = onLoginTap,
-        username = viewModel.username,
+        username = viewModel.usernameField,
         onUsernameChange = viewModel::changeUsername,
-        password = viewModel.password,
+        password = viewModel.passwordField,
         onPasswordChange = viewModel::changePassword,
-        onSubmit = viewModel::submit
+        onSubmit = viewModel::submit,
+        onAuthenticated = onAuthenticated,
+        state = viewModel.state.collectAsStateWithLifecycle().value,
     )
 }
 
 @Composable
 fun SignupScreen(
     modifier: Modifier = Modifier,
-    username: String,
+    username: TextFieldState,
     onUsernameChange: (String) -> Unit,
-    password: String,
+    password: TextFieldState,
     onPasswordChange: (String) -> Unit,
     onSubmit: () -> Unit,
-    onLoginTap: () -> Unit
+    onLoginTap: () -> Unit,
+    onAuthenticated: () -> Unit,
+    state: AuthState
 ) {
     Column(modifier) {
-        TextField(value = username, onValueChange = onUsernameChange)
-        TextField(value = password, onValueChange = onPasswordChange)
+        TextField(
+            value = username.value,
+            onValueChange = onUsernameChange,
+            supportingText = username.errorMessage,
+            isError = username.isError
+        )
+        TextField(
+            value = password.value,
+            onValueChange = onPasswordChange,
+            supportingText = password.errorMessage,
+            isError = password.isError
+        )
         Button(onClick = onSubmit) {
             Text(text = "Sign up")
         }
         Button(onClick = onLoginTap) {
             Text(text = "Swap")
+        }
+    }
+
+
+    LaunchedEffect(state) {
+        if (state is AuthState.Success) {
+            onAuthenticated()
+        }
+        when (state) {
+            AuthState.Success -> onAuthenticated()
+            is AuthState.Error -> {
+                //TODO Indicate error
+            }
+
+            else -> Unit
         }
     }
 }

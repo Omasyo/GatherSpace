@@ -1,6 +1,6 @@
 package com.omasyo.gatherspace.home
 
-import BackHandler
+import com.omasyo.gatherspace.BackHandler
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,8 +21,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.omasyo.gatherspace.*
-import com.omasyo.gatherspace.createroom.CreateRoomScreen
+import com.omasyo.gatherspace.createroom.CreateRoomRoute
 import com.omasyo.gatherspace.models.response.Room
 
 @Composable
@@ -33,7 +37,7 @@ fun HomeRoute(
     onLoginTap: () -> Unit,
     onProfileTap: () -> Unit,
     homeViewModel: HomeViewModel = dependencyProvider {
-        viewModel { HomeViewModel(roomRepository) }
+        viewModel { HomeViewModel(roomRepository, userRepository) }
     },
 ) {
     HomeView(
@@ -75,6 +79,12 @@ fun HomeView(
         value = navigator.scaffoldValue,
         listPane = {
             AnimatedPane {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalPlatformContext.current)
+                        .data("https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Flag_of_Nigeria.svg/255px-Flag_of_Nigeria.svg.png")
+                        .crossfade(true).build(),
+                    null
+                )
                 Column {
                     if (navigator.scaffoldValue.primary == PaneAdaptedValue.Hidden) {
                         TopBar(
@@ -86,7 +96,7 @@ fun HomeView(
                     }
                     RoomsView(
                         onRoomTap = {
-                            navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomR(it.id))
+                            navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomRoute(it.id))
                         },
                         onRetry = onRetry,
                         state = roomsState,
@@ -99,15 +109,15 @@ fun HomeView(
                 val route = navigator.currentDestination?.content
                 if (route != null) {
                     when (route) {
-                        CreateRoom -> CreateRoomScreen(
+                        CreateRoom -> CreateRoomRoute(
                             onRoomCreated = { id ->
                                 onRetry()
-                                navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomR(id))
+                                navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomRoute(id))
                             },
                             onAuthError = onAuthError
                         )
 
-                        is RoomR -> MessagePanel(
+                        is RoomRoute -> MessagePanel(
                             onBackTap = { navigator.navigateBack() },
                             roomId = route.id
                         )
@@ -116,7 +126,11 @@ fun HomeView(
                     }
                 } else {
                     Column {
-                        TopBar(onProfileTap = onProfileTap, onCreateRoomTap = onCreateRoomTap, isAuthenticated = isAuthenticated)
+                        TopBar(
+                            onProfileTap = onProfileTap,
+                            onCreateRoomTap = onCreateRoomTap,
+                            isAuthenticated = isAuthenticated
+                        )
                         if (isAuthenticated) {
                         } else {
                             LoginPlaceholder(

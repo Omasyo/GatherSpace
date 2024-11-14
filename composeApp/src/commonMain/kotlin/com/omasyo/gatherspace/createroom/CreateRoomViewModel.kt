@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.omasyo.gatherspace.domain.*
 import com.omasyo.gatherspace.domain.room.RoomRepository
-import com.omasyo.gatherspace.ui.components.SubmitState
 import com.omasyo.gatherspace.ui.components.TextFieldState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,8 +17,8 @@ class CreateRoomViewModel(
     private val roomRepository: RoomRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<SubmitState>(SubmitState.Idle)
-    val state: StateFlow<SubmitState> = _state
+    private val _state = MutableStateFlow<CreateRoomState>(CreateRoomState.Idle)
+    val state: StateFlow<CreateRoomState> = _state
 
     var nameField by mutableStateOf(TextFieldState(""))
         private set
@@ -46,12 +45,12 @@ class CreateRoomViewModel(
     fun submit() {
         if (!validate()) return
 
-        _state.value = SubmitState.Submitting
+        _state.value = CreateRoomState.Submitting
         viewModelScope.launch {
             roomRepository.createRoom(nameField.value, descriptionField.value).first().onError {
-                _state.value = SubmitState.Error(it)
+                _state.value = CreateRoomState.Error(it)
             }.onSuccess {
-                _state.value = SubmitState.Submitted(it)
+                _state.value = CreateRoomState.Submitted(it)
             }
         }
     }

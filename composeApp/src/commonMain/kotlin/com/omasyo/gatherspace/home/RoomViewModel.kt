@@ -7,11 +7,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.cash.paging.cachedIn
-import com.omasyo.gatherspace.RoomR
 import com.omasyo.gatherspace.domain.AuthError
 import com.omasyo.gatherspace.domain.DomainError
 import com.omasyo.gatherspace.domain.Success
 import com.omasyo.gatherspace.domain.message.MessageRepository
+import com.omasyo.gatherspace.domain.onError
 import com.omasyo.gatherspace.domain.onSuccess
 import com.omasyo.gatherspace.domain.room.RoomRepository
 import com.omasyo.gatherspace.models.response.Message
@@ -40,6 +40,8 @@ class RoomViewModel(
             }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UiState.Loading)
 
+    val _sendMessageState = MutableStateFlow<SendMessageState>(SendMessageState.Idle)
+    val sendMessageState: StateFlow<SendMessageState> = _sendMessageState
 
     val oldMessages = messageRepository.getRecentMessages(roomId).cachedIn(viewModelScope)
 
@@ -52,7 +54,7 @@ class RoomViewModel(
         viewModelScope.launch {
             messageRepository.getMessageFlow(roomId)
                 .catch {
-                    //TODO donerror stuffs here
+                    //TODO do error stuffs here
                 }
                 .collect {
                     messages.add(it)
@@ -72,9 +74,14 @@ class RoomViewModel(
 
     fun sendMessage() {
         viewModelScope.launch {
+            _sendMessageState.value = SendMessageState.Loading
             messageRepository.sendMessage(roomId, message).first()
+                .onError {
+                    _sendMessageState.value = SendMessageState.Error(it)
+                }
                 .onSuccess {
                     message = ""
+                    _sendMessageState.value = SendMessageState.Idle
                 }
         }
     }

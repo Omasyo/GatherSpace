@@ -24,7 +24,7 @@ internal class AuthRepositoryImpl(
 
     override fun login(username: String, password: String): Flow<DomainResponse<Unit>> =
         flow {
-            emit(authNetworkSource.login(username, password, getDeviceName())
+            emit(authNetworkSource.login(username.trim(), password.trim(), getDeviceName())
                 .onSuccess { tokenStorage.saveToken(it) }
                 .map { }.mapToDomain()
             )

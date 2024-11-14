@@ -3,8 +3,6 @@ package com.omasyo.gatherspace
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntOffset
@@ -14,7 +12,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.omasyo.gatherspace.auth.LoginRoute
 import com.omasyo.gatherspace.auth.SignupRoute
-import com.omasyo.gatherspace.createroom.CreateRoomScreen
 import com.omasyo.gatherspace.home.HomeRoute
 import kotlinx.serialization.Serializable
 
@@ -100,7 +97,7 @@ data object Home
 sealed interface HomeRoutes
 
 @Serializable
-data class RoomR(val id: Int) : HomeRoutes
+data class RoomRoute(val id: Int) : HomeRoutes
 
 @Serializable
 data object CreateRoom : HomeRoutes

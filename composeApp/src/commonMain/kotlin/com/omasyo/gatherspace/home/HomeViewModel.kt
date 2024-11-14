@@ -6,13 +6,16 @@ import com.omasyo.gatherspace.domain.AuthError
 import com.omasyo.gatherspace.domain.DomainError
 import com.omasyo.gatherspace.domain.Success
 import com.omasyo.gatherspace.domain.room.RoomRepository
+import com.omasyo.gatherspace.domain.user.UserRepository
 import com.omasyo.gatherspace.models.response.Room
+import com.omasyo.gatherspace.models.response.User
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val roomRepository: RoomRepository
+    private val roomRepository: RoomRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
     private val refreshRoomsEvent = MutableStateFlow(Any())
 
@@ -28,6 +31,9 @@ class HomeViewModel(
                     }
                 }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UiState.Loading)
+
+//    val user: StateFlow<UiState<User>> =
+//        userRepository
 
     fun refreshRooms() {
         viewModelScope.launch {

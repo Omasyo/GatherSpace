@@ -20,26 +20,6 @@ kotlin {
 
     jvm("desktop")
 
-//    @OptIn(ExperimentalWasmDsl::class)
-//    wasmJs {
-//        moduleName = "composeApp"
-//        browser {
-//            val rootDirPath = project.rootDir.path
-//            val projectDirPath = project.projectDir.path
-//            commonWebpackConfig {
-//                outputFileName = "composeApp.js"
-//                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-//                    static = (static ?: mutableListOf()).apply {
-//                        // Serve sources to debug inside browser
-//                        add(rootDirPath)
-//                        add(projectDirPath)
-//                    }
-//                }
-//            }
-//        }
-//        binaries.executable()
-//    }
-
     sourceSets {
         val desktopMain by getting
 
@@ -51,9 +31,9 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.kotlinx.datetime)
 
-            implementation("org.jetbrains.compose.material3.adaptive:adaptive:1.0.0-alpha03")
-            implementation("org.jetbrains.compose.material3.adaptive:adaptive-layout:1.0.0-alpha03")
-            implementation("org.jetbrains.compose.material3.adaptive:adaptive-navigation:1.0.0-alpha03")
+            implementation(libs.material.adaptive)
+            implementation(libs.material.adaptive.layout)
+            implementation(libs.material.adaptive.navigation)
 
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor3)

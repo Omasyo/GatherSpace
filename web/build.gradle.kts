@@ -29,6 +29,11 @@ kotlin {
         }
 
         jsMain.dependencies {
+
+            implementation(projects.shared.models)
+            implementation(projects.shared.network)
+            implementation(projects.shared.domain)
+
             implementation(libs.compose.html.core)
             implementation(libs.kobweb.core)
             implementation(libs.kobweb.silk)

@@ -18,16 +18,6 @@ import kotlin.properties.Delegates
 class AppViewModel(
     private val authRepository: AuthRepository
 ) : ViewModel() {
-    private var initialAuthState by Delegates.notNull<Boolean>()
-        private set
-
-//    init {
-//        runBlocking {
-////            initialSchemeId = settingsRepository.getColorSchemeId().first()
-//            initialAuthState = !authRepository.isAuthenticated().first()
-//        }
-//    }
-
     val isAuthenticated = authRepository.isAuthenticated()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
 

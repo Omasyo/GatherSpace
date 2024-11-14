@@ -11,17 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.omasyo.gatherspace.dependencyProvider
-import com.omasyo.gatherspace.ui.components.SubmitState
 import com.omasyo.gatherspace.ui.components.TextFieldState
 
-sealed interface FormState {
-    data object Loading : FormState
-    data object Success : FormState
-    data class Error(val message: String) : FormState
-}
-
 @Composable
-fun CreateRoomScreen(
+fun CreateRoomRoute(
     modifier: Modifier = Modifier,
     onRoomCreated: (Int) -> Unit,
     onAuthError: () -> Unit,
@@ -52,7 +45,7 @@ fun CreateRoomScreen(
     onSubmit: () -> Unit,
     onRoomCreated: (Int) -> Unit,
     onAuthError: () -> Unit,
-    state: SubmitState
+    state: CreateRoomState
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         TextField(
@@ -74,8 +67,8 @@ fun CreateRoomScreen(
 
     LaunchedEffect(state) {
         when (state) {
-            is SubmitState.Error -> onAuthError()
-            is SubmitState.Submitted -> onRoomCreated(state.id)
+            is CreateRoomState.Error -> onAuthError()
+            is CreateRoomState.Submitted -> onRoomCreated(state.id)
             else -> {}
         }
     }

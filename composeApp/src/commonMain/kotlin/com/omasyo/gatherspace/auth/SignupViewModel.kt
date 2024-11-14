@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.omasyo.gatherspace.domain.*
 import com.omasyo.gatherspace.domain.auth.AuthRepository
 import com.omasyo.gatherspace.domain.user.UserRepository
+import com.omasyo.gatherspace.ui.components.TextFieldState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -20,33 +21,57 @@ class SignupViewModel(
     private val _state = MutableStateFlow<AuthState>(AuthState.Idle)
     val state: StateFlow<AuthState> = _state
 
-    var username by mutableStateOf("")
+    var usernameField by mutableStateOf(TextFieldState(""))
         private set
 
-    var password by mutableStateOf("")
+    var passwordField by mutableStateOf(TextFieldState(""))
         private set
 
     fun changeUsername(value: String) {
-        username = value
+        usernameField = usernameField.copy(value = value)
     }
 
     fun changePassword(value: String) {
-        password = value
+        passwordField = passwordField.copy(value = value)
+    }
+
+    private fun validate(): Boolean {
+        var isValid = true
+        if (usernameField.value.isEmpty()) {
+            usernameField = usernameField.copy(errorMessage = "Username cannot be empty")
+            isValid = false
+        }
+        if (passwordField.value.isEmpty()) {
+            passwordField = passwordField.copy(errorMessage = "Password cannot be empty")
+            isValid = false
+        }
+        if (passwordField.value.contains(Regex("\\s"))) {
+            passwordField = passwordField.copy(errorMessage = "Password cannot contain whitespace")
+            isValid = false
+        }
+        if (passwordField.value.length < 3) {
+            passwordField = passwordField.copy(errorMessage = "Password should be at least 3 characters")
+            isValid = false
+        }
+        return isValid
     }
 
     fun submit() {
+        if (!validate()) return
+
         _state.value = AuthState.Loading
         viewModelScope.launch {
-            userRepository.createAccount(username, password).first()
+            userRepository.createAccount(usernameField.value, passwordField.value).first()
                 .onError {
                     _state.value = AuthState.Error(it)
                 }
                 .onSuccess {
-                    _state.value = when (val response = authRepository.login(username, password).first()) {
-                        is DomainError -> AuthState.Error(response.message)
-                        AuthError -> TODO()
-                        is Success -> AuthState.Success
-                    }
+                    _state.value =
+                        when (val response = authRepository.login(usernameField.value, passwordField.value).first()) {
+                            is DomainError -> AuthState.Error(response.message)
+                            AuthError -> throw IllegalStateException()
+                            is Success -> AuthState.Success
+                        }
                 }
 
         }

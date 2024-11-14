@@ -1,3 +1,5 @@
+package com.omasyo.gatherspace
+
 import androidx.compose.runtime.Composable
 
 @Composable

@@ -41,7 +41,6 @@ fun calculateCustomPaneScaffoldDirective(
         verticalPartitionSpacerSize = 0.dp
     }
 
-    // TODO(conradchen): add 412.dp for L/XL window size class when they are available
     val defaultPanePreferredWidth = 360.dp
 
     return PaneScaffoldDirective(

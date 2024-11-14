@@ -3,13 +3,15 @@ package com.omasyo.gatherspace.auth
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.omasyo.gatherspace.dependencyProvider
+import com.omasyo.gatherspace.ui.components.TextField
+import com.omasyo.gatherspace.ui.components.TextFieldState
 
 
 @Composable
@@ -19,37 +21,44 @@ fun LoginRoute(
     onAuthenticated: () -> Unit,
     viewModel: LoginViewModel = dependencyProvider { viewModel { LoginViewModel(authRepository) } }
 ) {
-    val state = viewModel.state.collectAsState().value
-    LaunchedEffect(state) {
-        if (state is AuthState.Success) {
-            onAuthenticated()
-        }
-    }
-
     LoginScreen(
         modifier = modifier,
         onSignupTap = onSignupTap,
-        username = viewModel.username,
+        username = viewModel.usernameField,
         onUsernameChange = viewModel::changeUsername,
-        password = viewModel.password,
+        password = viewModel.passwordField,
         onPasswordChange = viewModel::changePassword,
-        onSubmit = viewModel::submit
+        onSubmit = viewModel::submit,
+        onAuthenticated = onAuthenticated,
+        state = viewModel.state.collectAsStateWithLifecycle().value,
     )
 }
 
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    username: String,
+    username: TextFieldState,
     onUsernameChange: (String) -> Unit,
-    password: String,
+    password: TextFieldState,
     onPasswordChange: (String) -> Unit,
     onSubmit: () -> Unit,
-    onSignupTap: () -> Unit
+    onSignupTap: () -> Unit,
+    onAuthenticated: () -> Unit,
+    state: AuthState
 ) {
     Column(modifier) {
-        TextField(value = username, onValueChange = onUsernameChange)
-        TextField(value = password, onValueChange = onPasswordChange)
+        TextField(
+            value = username.value,
+            onValueChange = onUsernameChange,
+            supportingText = username.errorMessage,
+            isError = username.isError
+        )
+        TextField(
+            value = password.value,
+            onValueChange = onPasswordChange,
+            supportingText = password.errorMessage,
+            isError = password.isError
+        )
         Button(onClick = onSubmit) {
             Text(text = "Log in")
         }
@@ -57,4 +66,19 @@ fun LoginScreen(
             Text(text = "Swap")
         }
     }
+
+    LaunchedEffect(state) {
+        if (state is AuthState.Success) {
+            onAuthenticated()
+        }
+        when (state) {
+            AuthState.Success -> onAuthenticated()
+            is AuthState.Error -> {
+                //TODO Indicate error
+            }
+
+            else -> Unit
+        }
+    }
+
 }

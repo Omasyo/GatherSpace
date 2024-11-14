@@ -1,6 +1,8 @@
 package org.example.app.pages
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import com.omasyo.gatherspace.models.response.Room
 import com.varabyte.kobweb.compose.css.StyleVariable
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
@@ -68,13 +70,18 @@ private fun GridCell(color: Color, row: Int, column: Int, width: Int? = null, he
 
 @Page
 @Composable
-fun HomePage() {
+fun HomePage(
+    rooms: List<Room> = roomsFlow.collectAsState(emptyList()).value
+) {
     PageLayout("Home") {
         Row(HeroContainerStyle.toModifier()) {
             Box {
                 val sitePalette = ColorMode.current.toSitePalette()
 
                 Column(Modifier.gap(2.cssRem)) {
+                    for (room in rooms) {
+                        Text(room.name)
+                    }
                     Div(HeadlineTextStyle.toAttrs()) {
                         SpanText(
                             "Use this template as your starting point for ", Modifier.color(
@@ -116,7 +123,7 @@ fun HomePage() {
                 .displayIfAtLeast(Breakpoint.MD)
                 .grid {
                     rows { repeat(3) { size(1.fr) } }
-                    columns { repeat(5) {size(1.fr) } }
+                    columns { repeat(5) { size(1.fr) } }
                 }
                 .toAttrs()
             ) {
