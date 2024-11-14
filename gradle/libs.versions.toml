@@ -20,6 +20,7 @@ kotlinxCoroutinesCore = "1.9.0"
 kotlinxDatetime = "0.6.1"
 kotlinxSerializationJson = "1.7.3"
 ktor = "3.0.1"
+napier = "2.7.1"
 paging = "3.3.0-alpha02-0.5.1"
 postgres = "42.7.3"
 sqldelight = "2.0.2"
@@ -64,6 +65,7 @@ ktor-server-websockets = { module = "io.ktor:ktor-server-websockets-jvm", versio
 material-adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
 material-adaptive-layout = { module = "org.jetbrains.compose.material3.adaptive:adaptive-layout", version.ref = "adaptive" }
 material-adaptive-navigation = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation", version.ref = "adaptive" }
+napier = { module = "io.github.aakira:napier", version.ref = "napier" }
 paging-common = { module = "app.cash.paging:paging-common", version.ref = "paging" }
 paging-compose-common = { module = "app.cash.paging:paging-compose-common", version.ref = "paging" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgres" }

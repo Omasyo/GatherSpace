@@ -5,6 +5,7 @@ import com.omasyo.gatherspace.models.response.Message
 import com.omasyo.gatherspace.models.routes.Messages
 import com.omasyo.gatherspace.models.routes.Rooms
 import com.omasyo.gatherspace.network.mapResponse
+import io.github.aakira.napier.Napier
 import io.ktor.client.*
 import io.ktor.client.plugins.resources.*
 import io.ktor.client.plugins.sse.*
@@ -29,15 +30,15 @@ internal class MessageNetworkSourceImpl(
         flow {
             client.sse(path = "/rooms/$roomId/messages/events") {
                 incoming.collect { events ->
-                    println("MessageNetworkSourceImpl:getMessageFlow: $events")
 
                     when (events.event) {
                         "connect" -> {
-                            println("MessageNetworkSourceImpl:getMessageFlow: Connected to $roomId")
+                            Napier.i(tag = tag) { "getMessageFlow: Connected to $roomId" }
                         }
 
                         "message" -> {
                             val message = Json.decodeFromString<Message>(events.data!!)
+                            Napier.i(tag = tag) { "getMessageFlow: Received message $message" }
                             emit(message)
                         }
                     }
@@ -51,9 +52,6 @@ internal class MessageNetworkSourceImpl(
             client.post(Messages(Rooms.Id(roomId))) {
                 setBody(MessageRequest(message))
             }
-//            client.post("/rooms/${roomId}/messages") {
-//                setBody(MessageRequest(message))
-//            }
         }
 
 

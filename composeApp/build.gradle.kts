@@ -38,6 +38,7 @@ kotlin {
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor3)
             implementation(libs.ktor.client.cio)
+            implementation(libs.napier)
 
             implementation(compose.runtime)
             implementation(compose.foundation)
