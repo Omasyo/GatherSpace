@@ -4,6 +4,7 @@ import com.omasyo.gatherspace.models.TokenStorage
 import com.omasyo.gatherspace.models.request.RefreshTokenRequest
 import com.omasyo.gatherspace.models.response.TokenResponse
 import com.omasyo.gatherspace.models.routes.Session
+import io.github.aakira.napier.Napier
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.*
@@ -33,7 +34,7 @@ fun createClient(
             bearer {
                 loadTokens {
                     val tokenResponse = tokenStorage.getToken()
-                    println("createClient:loadTokens tokenResponse: $tokenResponse")
+                    Napier.i(tag = "createClient") { "Loaded tokens $tokenResponse" }
                     tokenResponse?.let {
                         BearerTokens(it.accessToken, it.refreshToken)
                     }
@@ -43,7 +44,7 @@ fun createClient(
                         markAsRefreshTokenRequest()
                         setBody(RefreshTokenRequest(oldTokens?.refreshToken ?: ""))
                     }
-                    println("createClient:refreshTokens response $response")
+                    Napier.i(tag = "createClient") { "refreshToken response $response" }
                     if (response.status.isSuccess()) {
                         val tokenResponse: TokenResponse = response.body()
                         tokenStorage.saveToken(tokenResponse)

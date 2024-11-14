@@ -1,6 +1,7 @@
 package com.omasyo.gatherspace.domain.auth
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -26,7 +27,6 @@ class AndroidTokenStorage(
 
     override fun observeToken(): Flow<TokenResponse?> {
         return dataStore.data.map { preferences ->
-            println("TokenChanging ${preferences[tokenKey]}")
             preferences[tokenKey]?.let {
                 Json.decodeFromString<TokenResponse>(it)
             }

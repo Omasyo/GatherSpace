@@ -1,5 +1,8 @@
 package com.omasyo.gatherspace.network
 
+import io.github.aakira.napier.LogLevel
+import io.github.aakira.napier.Napier
+import io.github.aakira.napier.Napier.log
 import io.ktor.client.call.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -14,19 +17,20 @@ internal suspend inline fun <reified T> NetworkSource.mapResponse(
 ): Result<T> =
     try {
         val response = exec()
-        println("$tag:makeRequest: Made request ${response.request.method} ${response.request.url}")
-        println("$tag:makeRequest:  Got content ${response.bodyAsText()}")
+
+        Napier.i(tag = tag) { "Made request ${response.request.method} ${response.request.url}" }
+        Napier.i(tag = tag) { "Received: $response" }
         if (response.status.isSuccess()) {
             val content: T = response.body()
             Result.success(content)
 
         } else {
-            println("$tag:makeRequest: Error - ${response.bodyAsText()}")
+            Napier.e("Response error - ${response.bodyAsText()}", tag = tag)
 
             Result.failure(NetworkException(response.body()))
 
         }
     } catch (e: Exception) {
-        println("$tag:makeRequest: Exception - $e")
+        Napier.e(throwable = e, tag = tag) { "Exception ${e.message}" }
         Result.failure(e)
     }

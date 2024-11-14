@@ -3,6 +3,7 @@ package com.omasyo.gatherspace.domain.message
 import app.cash.paging.*
 import com.omasyo.gatherspace.models.response.Message
 import com.omasyo.gatherspace.network.message.MessageNetworkSource
+import io.github.aakira.napier.Napier
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -12,6 +13,8 @@ internal class MessagePagingSource(
     private val roomId: Int,
     private val networkSource: MessageNetworkSource
 ) : PagingSource<LocalDateTime, Message>() {
+    val tag = this::class.simpleName
+
     override fun getRefreshKey(state: PagingState<LocalDateTime, Message>): LocalDateTime? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey
@@ -31,7 +34,7 @@ internal class MessagePagingSource(
                 )
             } ?: PagingSourceLoadResultError(response.exceptionOrNull()!!)
         } catch (e: Exception) {
-            println("MessagePagingSource:load: $e")
+            Napier.e(e, tag) { "load error: ${e.message}" }
             PagingSourceLoadResultError(e)
         }
     }

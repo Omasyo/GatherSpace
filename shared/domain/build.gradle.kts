@@ -46,6 +46,7 @@ kotlin {
 
             implementation(libs.paging.common)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.napier)
 
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.datetime)

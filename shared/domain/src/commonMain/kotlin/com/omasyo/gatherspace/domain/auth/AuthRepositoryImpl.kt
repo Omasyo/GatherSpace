@@ -5,6 +5,7 @@ import com.omasyo.gatherspace.domain.getDeviceName
 import com.omasyo.gatherspace.domain.mapToDomain
 import com.omasyo.gatherspace.models.TokenStorage
 import com.omasyo.gatherspace.network.auth.AuthNetworkSource
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -18,6 +19,7 @@ internal class AuthRepositoryImpl(
 ) : AuthRepository {
     override fun isAuthenticated(): Flow<Boolean> =
         tokenStorage.observeToken().map {
+            Napier.i(tag = "AuthRepository") { "observeToken: $it" }
             it != null
         }
 
