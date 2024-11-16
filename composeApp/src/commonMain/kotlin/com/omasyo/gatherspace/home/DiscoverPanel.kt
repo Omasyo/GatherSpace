@@ -1,1 +1,0 @@
-package com.omasyo.gatherspace.home

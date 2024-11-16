@@ -101,6 +101,3 @@ data class RoomRoute(val id: Int) : HomeRoutes
 
 @Serializable
 data object CreateRoom : HomeRoutes
-
-@Serializable
-data object Search : HomeRoutes

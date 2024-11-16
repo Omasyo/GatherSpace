@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.omasyo.gatherspace.models.response.Room
 import androidx.compose.desktop.ui.tooling.preview.Preview
+import com.omasyo.gatherspace.ui.components.ErrorPlaceholder
 
 @Composable
 fun RoomsView(
@@ -71,25 +72,6 @@ fun RoomTile(
             verticalArrangement = Arrangement.Center
         ) {
             Text(room.name)
-        }
-    }
-}
-
-@Composable
-private fun ErrorPlaceholder(
-    modifier: Modifier = Modifier,
-    reason: String,
-    onRetry: () -> Unit
-) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(reason, style = MaterialTheme.typography.titleLarge)
-        Spacer(Modifier.height(8.dp))
-        Button(onClick = onRetry) {
-            Text("Retry")
         }
     }
 }

@@ -7,6 +7,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.omasyo.gatherspace.domain.deps.DomainComponent
+import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -20,7 +21,7 @@ fun App(
         Napier.base(DebugAntilog())
         Napier.i { "Starting Napier" }
     }
-    MaterialTheme {
+    GatherSpaceTheme {
         AppNavHost(
             isAuthenticated = appViewModel.isAuthenticated.collectAsStateWithLifecycle().value,
             logout = appViewModel::logout,

@@ -2,32 +2,21 @@ package com.omasyo.gatherspace.home
 
 import com.omasyo.gatherspace.BackHandler
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
-import androidx.compose.material3.adaptive.layout.AnimatedPane
-import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
-import androidx.compose.material3.adaptive.layout.PaneAdaptedValue
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil3.compose.AsyncImage
-import coil3.compose.LocalPlatformContext
-import coil3.request.ImageRequest
-import coil3.request.crossfade
 import com.omasyo.gatherspace.*
-import com.omasyo.gatherspace.createroom.CreateRoomRoute
 import com.omasyo.gatherspace.models.response.Room
+import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
 
 @Composable
 fun HomeRoute(
@@ -72,100 +61,50 @@ fun HomeView(
     val onCreateRoomTap = { navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, CreateRoom) }
     BackHandler(enabled = navigator.canNavigateBack(), onBack = { navigator.navigateBack() })
 
-
-    ListDetailPaneScaffold(
-        modifier = modifier,
-        directive = navigator.scaffoldDirective,
-        value = navigator.scaffoldValue,
-        listPane = {
-            AnimatedPane {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalPlatformContext.current)
-                        .data("https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Flag_of_Nigeria.svg/255px-Flag_of_Nigeria.svg.png")
-                        .crossfade(true).build(),
-                    null
+    Surface(modifier) {
+        Home(
+            modifier = Modifier.fillMaxSize(),
+            isAuthenticated = isAuthenticated,
+            topBar = {
+                TopBar(
+                    modifier = Modifier.padding(horizontal = 16f.dp, vertical = 8f.dp),
+                    onProfileTap = onProfileTap,
+                    onCreateRoomTap = onCreateRoomTap,
+                    isAuthenticated = isAuthenticated
                 )
-                Column {
-                    if (navigator.scaffoldValue.primary == PaneAdaptedValue.Hidden) {
-                        TopBar(
-                            modifier = Modifier.clickable { onLoginTap() },
-                            onProfileTap = onProfileTap,
-                            onCreateRoomTap = onCreateRoomTap,
-                            isAuthenticated = isAuthenticated,
-                        )
-                    }
-                    RoomsView(
-                        onRoomTap = {
-                            navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomRoute(it.id))
-                        },
-                        onRetry = onRetry,
-                        state = roomsState,
-                    )
-                }
-            }
-        },
-        detailPane = {
-            AnimatedPane {
-                val route = navigator.currentDestination?.content
-                if (route != null) {
-                    when (route) {
-                        CreateRoom -> CreateRoomRoute(
-                            onRoomCreated = { id ->
-                                onRetry()
-                                navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomRoute(id))
-                            },
-                            onAuthError = onAuthError
-                        )
 
-                        is RoomRoute -> MessagePanel(
-                            onBackTap = { navigator.navigateBack() },
-                            roomId = route.id
-                        )
-
-                        Search -> TODO()
-                    }
-                } else {
-                    Column {
-                        TopBar(
-                            onProfileTap = onProfileTap,
-                            onCreateRoomTap = onCreateRoomTap,
-                            isAuthenticated = isAuthenticated
-                        )
-                        if (isAuthenticated) {
-                        } else {
-                            LoginPlaceholder(
-                                modifier = Modifier.fillMaxSize(),
-                                onLoginTap = onLoginTap
-                            )
-                        }
-                    }
-                }
-            }
-        },
-        extraPane = {
-            AnimatedPane {
-                Box(Modifier.fillMaxSize().background(Color.Cyan))
-            }
-        },
-    )
-}
-
-@Composable
-private fun LoginPlaceholder(
-    modifier: Modifier = Modifier,
-    onLoginTap: () -> Unit
-) {
-    Box(modifier, contentAlignment = Alignment.Center) {
-        Button(onClick = onLoginTap) {
-            Text("Login")
-        }
+            },
+            roomsList = {
+                RoomsList(
+                    onRoomTap = { navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomRoute(it)) },
+                    onRetry = onRetry,
+                    state = roomsState,
+                )
+            },
+            roomsGrid = {
+//                Box(Modifier.fillMaxSize().background(Color.Green))
+            },
+            roomView = { roomId ->
+                RoomPanel(
+                    roomId = roomId,
+                    onBackTap = navigator::navigateBack,
+                )
+            },
+            createRoomView = {
+//                Box(Modifier.fillMaxSize().background(Color.Yellow))
+            },
+            loginPlaceholder = {
+//                Box(Modifier.fillMaxSize().background(Color.Red))
+            },
+            navigator = navigator
+        )
     }
 }
 
 @Preview
 @Composable
 private fun Preview() {
-    MaterialTheme {
+    GatherSpaceTheme {
 
         HomeView(
             modifier = Modifier.fillMaxSize(),

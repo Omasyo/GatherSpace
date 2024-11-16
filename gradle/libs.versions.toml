@@ -6,7 +6,7 @@ android-minSdk = "24"
 android-targetSdk = "34"
 
 activityCompose = "1.9.3"
-coilCompose = "3.0.1"
+coilCompose = "3.0.3"
 compose = "1.7.0"
 datastorePreferencesCore = "1.1.1"
 jetbrainsLifecycle = "2.8.3"

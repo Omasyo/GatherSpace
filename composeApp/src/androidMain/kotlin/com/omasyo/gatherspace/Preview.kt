@@ -1,73 +1,55 @@
-package com.omasyo.gatherspace.home
+package com.omasyo.gatherspace
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.automirrored.outlined.Send
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.paging.PagingData
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.itemKey
-import com.omasyo.gatherspace.dependencyProvider
+import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.omasyo.gatherspace.domain.formatTime
+import com.omasyo.gatherspace.home.UiState
+import com.omasyo.gatherspace.home.fakeDataFlow
+import com.omasyo.gatherspace.ui.components.TextField
 import com.omasyo.gatherspace.models.response.Message
 import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.models.response.User
-import com.omasyo.gatherspace.ui.components.Image
-import com.omasyo.gatherspace.ui.components.TextField
-import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
 import gatherspace.composeapp.generated.resources.Res
 import gatherspace.composeapp.generated.resources.user_placeholder
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-
-@Composable
-fun RoomPanel(
-    modifier: Modifier = Modifier,
-    roomId: Int,
-    onBackTap: () -> Unit,
-    viewModel: RoomViewModel = dependencyProvider {
-        viewModel(key = "room$roomId") {
-            RoomViewModel(
-                roomId,
-                messageRepository,
-                roomRepository
-            )
-        }
-    }
-) {
-    RoomPanel(
-        modifier = modifier,
-        onBackTap = onBackTap,
-        message = viewModel.message,
-        onMessageChange = viewModel::changeMessage,
-        onSendTap = viewModel::sendMessage,
-        room = viewModel.room.collectAsStateWithLifecycle().value,
-        oldMessages = viewModel.oldMessages.collectAsLazyPagingItems(),
-        messages = viewModel.messages
-    )
-}
-
+import org.jetbrains.compose.resources.imageResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RoomPanel(
+fun MessagePanel(
     modifier: Modifier = Modifier,
     onBackTap: () -> Unit,
     message: String,
@@ -140,7 +122,7 @@ fun RoomPanel(
             }
             HorizontalDivider()
             Row(
-                modifier = Modifier.padding(8f.dp),
+                modifier = Modifier.padding(vertical = 4f.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 IconButton(onClick = { }) {
@@ -152,7 +134,7 @@ fun RoomPanel(
                     placeholder = "Message",
                     modifier = Modifier
                         .weight(1f)
-                        .padding(horizontal = 8f.dp),
+                        .padding(horizontal = 8f.dp, vertical = 8f.dp),
                 )
                 IconButton(onClick = onSendTap) {
                     Icon(Icons.AutoMirrored.Default.Send, contentDescription = null)
@@ -172,22 +154,20 @@ private fun Message(
         verticalAlignment = Alignment.Top,
     ) {
         Box(
-
+            modifier = Modifier
+                .padding(top = 2f.dp)
+                .size(40f.dp)
+                .clip(MaterialTheme.shapes.small)
         ) {
-            Image(
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Flag_of_Nigeria.svg/255px-Flag_of_Nigeria.svg.png",
-                placeholder = Res.drawable.user_placeholder,
-                modifier = Modifier
-                    .padding(top = 2f.dp)
-                    .size(40f.dp)
-                    .clip(MaterialTheme.shapes.small)
+            AsyncImage(
+                model = ImageRequest.Builder(LocalPlatformContext.current)
+                    .data(
+                        imageResource(Res.drawable.user_placeholder)
+//                        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Flag_of_Nigeria.svg/255px-Flag_of_Nigeria.svg.png"
+                    )
+                    .crossfade(true).build(),
+                null
             )
-//            Image(
-//                painterResource(Res.drawable.user_placeholder),
-//                null,
-//                alignment = Alignment.Center,
-//                contentScale = ContentScale.Crop
-//            )
         }
         Spacer(Modifier.width(8.dp))
         Column(
@@ -211,18 +191,20 @@ private fun Message(
     }
 }
 
+
 //@RequiresApi(Build.VERSION_CODES.O)
 val date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+
 
 @Preview
 @Composable
 private fun Preview() {
-    GatherSpaceTheme {
-
-        RoomPanel(
+    MaterialTheme {
+        var message by remember { mutableStateOf("") }
+        MessagePanel(
             onBackTap = {},
-            message = "Lorem Ipsum",
-            onMessageChange = {},
+            message = message,
+            onMessageChange = { message = it },
             onSendTap = {},
             room = UiState.Success(
                 RoomDetails(
@@ -244,18 +226,3 @@ private fun Preview() {
         )
     }
 }
-
-
-val fakeData = List(10) {
-    Message(
-        id = it + 3, content = "molestie", sender = User(
-            id = 9558,
-            username = "Marietta Lyons",
-            imageUrl = null
-        ), roomId = 2479, created = date, modified = date
-    )
-}
-
-val pagingData = PagingData.from(fakeData)
-
-val fakeDataFlow = MutableStateFlow(pagingData)
