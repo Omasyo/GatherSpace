@@ -40,7 +40,7 @@ fun Application.configureAuth(authService: AuthService) {
             val loginRequest = call.receive<LoginRequest>()
 
             if (!authService.validateUser(loginRequest.username, loginRequest.password)) {
-                call.respond(
+                call.respondError(
                     ErrorResponse(
                         statusCode = HttpStatusCode.NotFound.value,
                         message = "Invalid username or password"
