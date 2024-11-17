@@ -82,7 +82,11 @@ fun HomeView(
                 )
             },
             roomsGrid = {
-//                Box(Modifier.fillMaxSize().background(Color.Green))
+                RoomsGrid(
+                    onRoomTap = { navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomRoute(it)) },
+                    onRetry = onRetry,
+                    state = roomsState,
+                )
             },
             roomView = { roomId ->
                 RoomPanel(
