@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.util.prefs.PreferenceChangeEvent
+import java.util.prefs.PreferenceChangeListener
 import java.util.prefs.Preferences
 
 class JvmTokenStorage(private val preferences: Preferences) : TokenStorage {
@@ -15,9 +16,9 @@ class JvmTokenStorage(private val preferences: Preferences) : TokenStorage {
 
     override fun observeToken(): Flow<TokenResponse?> {
         return callbackFlow {
-            val listener = { event: PreferenceChangeEvent ->
-                if (event.key == tokenKey) {
-                    trySend(event.newValue?.let { Json.decodeFromString<TokenResponse>(it) })
+            val listener = PreferenceChangeListener { evt ->
+                if (evt?.key == tokenKey) {
+                    trySend(evt.newValue?.let { Json.decodeFromString<TokenResponse>(it) })
                 }
             }
             send(getToken())
