@@ -1,17 +1,11 @@
 package com.omasyo.gatherspace.home
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,10 +18,8 @@ import androidx.compose.ui.unit.dp
 import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.ui.components.ErrorPlaceholder
 import com.omasyo.gatherspace.ui.components.Image
-import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
 import gatherspace.composeapp.generated.resources.Res
 import gatherspace.composeapp.generated.resources.room_placeholder
-
 
 @Composable
 fun RoomsGrid(
@@ -43,7 +35,7 @@ fun RoomsGrid(
         is UiState.Success -> BoxWithConstraints {
             LazyVerticalGrid(
                 modifier = modifier,
-                columns = GridCells.Adaptive(if(maxWidth < 480f.dp) 120f.dp else 200f.dp),
+                columns = GridCells.Adaptive(if (maxWidth < 480f.dp) 120f.dp else 200f.dp),
                 contentPadding = PaddingValues(vertical = 24f.dp, horizontal = 16f.dp),
                 verticalArrangement = Arrangement.spacedBy(16f.dp),
                 horizontalArrangement = Arrangement.spacedBy(16f.dp)
@@ -87,7 +79,7 @@ private fun Room(
         ) {
             Text(
                 text = room.name,
-                style =  MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.End,
                 minLines = if (expanded) 2 else 1,
                 maxLines = if (expanded) 2 else 1,
@@ -98,7 +90,6 @@ private fun Room(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun LoadingPlaceholder(
     modifier: Modifier = Modifier,
@@ -118,23 +109,5 @@ private fun LoadingPlaceholder(
                     .background(MaterialTheme.colorScheme.surfaceVariant)
             )
         }
-    }
-}
-
-@Preview
-@Composable
-private fun RoomsListPreview() {
-    GatherSpaceTheme(false) {
-        RoomsGrid(
-            onRoomTap = {},
-            onRetry = {},
-            state = UiState.Loading
-//                UiState.Success(List(20) {
-//                    Room(
-//                        id = it,
-//                        name = "Message Owl"
-//                    )
-//                })
-        )
     }
 }

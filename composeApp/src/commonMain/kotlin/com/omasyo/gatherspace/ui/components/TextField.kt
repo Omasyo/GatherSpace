@@ -26,11 +26,11 @@ fun TextField(
     modifier: Modifier = Modifier,
     textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
     placeholder: String? = null,
-    supportingText: String? = null,
-    isError: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-    singleLine: Boolean = false
+    singleLine: Boolean = false,
+    minLines: Int = 1,
+    maxLines: Int = Int.MAX_VALUE,
 ) {
     BasicTextField(
         value = value,
@@ -40,12 +40,14 @@ fun TextField(
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         singleLine = singleLine,
+        minLines = minLines,
+        maxLines = maxLines,
         cursorBrush = SolidColor(LocalContentColor.current),
     ) { innerTextField ->
         if (value.isEmpty() && placeholder != null) {
             Text(
                 placeholder,
-                style = textStyle.copy(LocalContentColor.current.copy(0.7f))
+                style = textStyle.copy(LocalContentColor.current.copy(0.5f))
             )
         }
         innerTextField()

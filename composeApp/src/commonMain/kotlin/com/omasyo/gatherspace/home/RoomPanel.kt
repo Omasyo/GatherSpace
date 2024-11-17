@@ -12,6 +12,7 @@ import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -94,7 +95,7 @@ fun RoomPanel(
                         when (room) {
                             is UiState.Error -> {}
                             UiState.Loading -> {}
-                            is UiState.Success -> Text(room.data.name)
+                            is UiState.Success -> Text(room.data.name, maxLines = 1)
                         }
                     },
 //                    actions = {

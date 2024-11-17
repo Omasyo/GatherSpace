@@ -1,4 +1,4 @@
-package com.omasyo.gatherspace.home
+package com.omasyo.gatherspace.home.layout
 
 import androidx.compose.material3.adaptive.*
 import androidx.compose.material3.adaptive.layout.HingePolicy

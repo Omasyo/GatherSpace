@@ -14,5 +14,7 @@ interface RoomNetworkSource : NetworkSource {
 
     suspend fun getRoom(roomId: Int): Result<RoomDetails>
 
-    suspend fun getRooms(): Result<List<Room>>
+    suspend fun getUserRooms(): Result<List<Room>>
+
+    suspend fun getAllRooms(): Result<List<Room>>
 }

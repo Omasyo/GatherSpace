@@ -40,7 +40,7 @@ internal class RoomNetworkSourceImpl(
             client.get(Rooms.Id(roomId))
         }
 
-    override suspend fun getRooms(): Result<List<Room>> =
+    override suspend fun getAllRooms(): Result<List<Room>> =
         mapResponse {
             client.get(Rooms())
         }

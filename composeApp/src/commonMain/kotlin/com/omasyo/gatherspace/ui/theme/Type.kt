@@ -57,7 +57,10 @@ val Typography
             bodyLarge = bodyLarge.copy(fontFamily = atkinsonHyperLegibleFontFamily),
             bodyMedium = bodyMedium.copy(fontFamily = atkinsonHyperLegibleFontFamily),
             bodySmall = bodySmall.copy(fontFamily = atkinsonHyperLegibleFontFamily),
-            labelLarge = labelLarge.copy(fontFamily = atkinsonHyperLegibleFontFamily),
+            labelLarge = labelLarge.copy(
+                fontFamily = atkinsonHyperLegibleFontFamily,
+                fontWeight = FontWeight.Bold
+            ),
             labelMedium = labelMedium.copy(fontFamily = atkinsonHyperLegibleFontFamily),
             labelSmall = labelSmall.copy(fontFamily = atkinsonHyperLegibleFontFamily),
         )

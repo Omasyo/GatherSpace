@@ -36,6 +36,7 @@ fun TopBar(
     onProfileTap: () -> Unit,
     onCreateRoomTap: () -> Unit,
     isAuthenticated: Boolean,
+    isExpanded: Boolean,
 ) {
     Row(
         modifier = modifier,
@@ -51,14 +52,18 @@ fun TopBar(
             IconButton(onClick = onCreateRoomTap) {
                 Icon(Icons.Default.Add, null)
             }
+            if (isExpanded) {
+                Text("Username", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(end = 4f.dp))
+            }
         }
         Image(
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Flag_of_Nigeria.svg/255px-Flag_of_Nigeria.svg.png",
+            "todo",
             placeholder = Res.drawable.user_placeholder,
             modifier = Modifier
                 .padding(top = 2f.dp)
                 .size(40f.dp)
                 .clip(MaterialTheme.shapes.small)
+                .clickable(onClick = onProfileTap)
         )
     }
 }
@@ -67,6 +72,6 @@ fun TopBar(
 @Composable
 private fun Preview() {
     GatherSpaceTheme(false) {
-        TopBar(onCreateRoomTap = {}, onProfileTap = {}, isAuthenticated = true)
+        TopBar(onCreateRoomTap = {}, onProfileTap = {}, isAuthenticated = true, isExpanded = true)
     }
 }

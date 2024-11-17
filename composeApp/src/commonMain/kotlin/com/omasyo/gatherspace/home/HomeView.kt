@@ -15,8 +15,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.omasyo.gatherspace.*
+import com.omasyo.gatherspace.createroom.CreateRoomRoute
+import com.omasyo.gatherspace.home.layout.HomeLayout
+import com.omasyo.gatherspace.home.layout.calculateCustomPaneScaffoldDirective
 import com.omasyo.gatherspace.models.response.Room
-import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
+import com.omasyo.gatherspace.ui.components.LoginPlaceholder
+import com.omasyo.gatherspace.ui.theme.*
 
 @Composable
 fun HomeRoute(
@@ -62,15 +66,16 @@ fun HomeView(
     BackHandler(enabled = navigator.canNavigateBack(), onBack = { navigator.navigateBack() })
 
     Surface(modifier) {
-        Home(
+        HomeLayout(
             modifier = Modifier.fillMaxSize(),
             isAuthenticated = isAuthenticated,
-            topBar = {
+            topBar = { isExpanded ->
                 TopBar(
                     modifier = Modifier.padding(horizontal = 16f.dp, vertical = 8f.dp),
-                    onProfileTap = onProfileTap,
+                    onProfileTap = onLoginTap,
                     onCreateRoomTap = onCreateRoomTap,
-                    isAuthenticated = isAuthenticated
+                    isAuthenticated = isAuthenticated,
+                    isExpanded = isExpanded
                 )
 
             },
@@ -95,10 +100,13 @@ fun HomeView(
                 )
             },
             createRoomView = {
-//                Box(Modifier.fillMaxSize().background(Color.Yellow))
+                CreateRoomRoute(
+                    onRoomCreated = { navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomRoute(it)) },
+                    onAuthError = onAuthError,
+                )
             },
             loginPlaceholder = {
-//                Box(Modifier.fillMaxSize().background(Color.Red))
+                LoginPlaceholder(onLoginTap = onLoginTap)
             },
             navigator = navigator
         )
@@ -108,7 +116,9 @@ fun HomeView(
 @Preview
 @Composable
 private fun Preview() {
-    GatherSpaceTheme {
+    GatherSpaceTheme(
+//        colorScheme = lightScheme
+    ) {
 
         HomeView(
             modifier = Modifier.fillMaxSize(),
