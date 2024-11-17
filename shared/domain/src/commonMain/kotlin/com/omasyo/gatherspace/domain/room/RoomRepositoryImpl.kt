@@ -39,7 +39,12 @@ internal class RoomRepositoryImpl(
             emit(networkSource.getRoom(roomId).mapToDomain())
         }.flowOn(dispatcher)
 
-    override fun getRooms(): Flow<DomainResponse<List<Room>>> =
+    override fun getUserRooms(): Flow<DomainResponse<List<Room>>> =
+        flow {
+            emit(networkSource.getUserRooms().mapToDomain())
+        }.flowOn(dispatcher)
+
+    override fun getAllRooms(): Flow<DomainResponse<List<Room>>> =
         flow {
             emit(networkSource.getAllRooms().mapToDomain())
         }.flowOn(dispatcher)

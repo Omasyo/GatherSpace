@@ -7,6 +7,7 @@ import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.models.routes.Members
 import com.omasyo.gatherspace.models.routes.Rooms
+import com.omasyo.gatherspace.models.routes.User
 import com.omasyo.gatherspace.network.mapResponse
 import io.ktor.client.*
 import io.ktor.client.plugins.resources.*
@@ -38,6 +39,11 @@ internal class RoomNetworkSourceImpl(
     override suspend fun getRoom(roomId: Int): Result<RoomDetails> =
         mapResponse {
             client.get(Rooms.Id(roomId))
+        }
+
+    override suspend fun getUserRooms(): Result<List<Room>> =
+        mapResponse {
+            client.get(User.Rooms(User()))
         }
 
     override suspend fun getAllRooms(): Result<List<Room>> =

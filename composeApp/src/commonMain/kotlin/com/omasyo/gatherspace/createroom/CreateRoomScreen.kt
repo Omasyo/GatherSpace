@@ -1,20 +1,24 @@
 package com.omasyo.gatherspace.createroom
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.omasyo.gatherspace.auth.AuthTextField
 import com.omasyo.gatherspace.dependencyProvider
 import com.omasyo.gatherspace.ui.components.TextField
 import com.omasyo.gatherspace.ui.components.TextFieldState
@@ -36,7 +40,10 @@ fun CreateRoomRoute(
         description = viewModel.descriptionField,
         onDescriptionChange = viewModel::changeDescription,
         onSubmit = viewModel::submit,
-        onRoomCreated = onRoomCreated,
+        onRoomCreated = {
+            viewModel.clearState()
+            onRoomCreated(it)
+        },
         onAuthError = onAuthError,
         state = viewModel.state.collectAsStateWithLifecycle().value
     )
@@ -73,12 +80,23 @@ fun CreateRoomScreen(
                 state = roomName,
                 onValueChange = onRoomNameChange,
                 hint = "Room name",
+                maxLines = 1,
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next,
+                ),
             )
             CreateRoomTextField(
                 state = description,
                 onValueChange = onDescriptionChange,
                 hint = "Description",
-                minLines = 3
+                minLines = 3,
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Done,
+                ),
             )
             Button(onClick = onSubmit) {
                 Text(text = "Submit")
@@ -103,6 +121,8 @@ private fun CreateRoomTextField(
     hint: String,
     minLines: Int = 1,
     maxLines: Int = Int.MAX_VALUE,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
     Column(modifier = modifier) {
         TextField(
@@ -111,6 +131,8 @@ private fun CreateRoomTextField(
             placeholder = hint,
             minLines = minLines,
             maxLines = maxLines,
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
             modifier = Modifier
                 .fillMaxWidth()
                 .border(

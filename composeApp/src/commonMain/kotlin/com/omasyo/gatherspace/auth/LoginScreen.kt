@@ -12,6 +12,10 @@ import com.omasyo.gatherspace.dependencyProvider
 import com.omasyo.gatherspace.ui.components.TextFieldState
 import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
 import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 
 
 @Composable
@@ -68,12 +72,22 @@ fun LoginScreen(
                 state = username,
                 onValueChange = onUsernameChange,
                 hint = "Username",
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next,
+                )
             )
             Spacer(Modifier.height(8.dp))
             AuthTextField(
                 state = password,
                 onValueChange = onPasswordChange,
                 hint = "Password",
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.None,
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done,
+                )
             )
             Spacer(Modifier.height(16.dp))
             Button(onClick = onSubmit) {

@@ -54,4 +54,10 @@ class CreateRoomViewModel(
             }
         }
     }
+
+    fun clearState() {
+        _state.value = CreateRoomState.Idle
+        nameField = TextFieldState("")
+        descriptionField = TextFieldState("")
+    }
 }

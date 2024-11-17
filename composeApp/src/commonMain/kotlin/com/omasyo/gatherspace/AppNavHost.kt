@@ -61,15 +61,27 @@ fun AppNavHost(
     ) {
         composable<Signup> {
             SignupRoute(
-                onLoginTap = { navController.navigate(Login) },
-                onAuthenticated = { navController.navigate(Home) },
+                onLoginTap = {
+                    navController.navigate(Login) {
+                        popUpTo(Home)
+                    }
+                },
+                onAuthenticated = {
+                    navController.navigate(Home) {
+
+                    }
+                },
             )
         }
 
         composable<Login> {
             LoginRoute(
                 onAuthenticated = { navController.navigate(Home) },
-                onSignupTap = { navController.navigate(Signup) },
+                onSignupTap = {
+                    navController.navigate(Signup) {
+                        popUpTo(Home)
+                    }
+                },
             )
         }
 
@@ -77,7 +89,7 @@ fun AppNavHost(
             HomeRoute(
                 isAuthenticated = isAuthenticated,
                 onLoginTap = { navController.navigate(Login) },
-                onProfileTap = logout,
+                onProfileTap = { navController.navigate(Login) },
                 onAuthError = {}
             )
         }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,17 +20,16 @@ fun AuthTextField(
     modifier: Modifier = Modifier,
     state: TextFieldState,
     onValueChange: (String) -> Unit,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     hint: String,
-    minLines: Int = 1,
-    maxLines: Int = Int.MAX_VALUE,
 ) {
     Column(modifier = modifier) {
         TextField(
             value = state.value,
             onValueChange = onValueChange,
             placeholder = hint,
-            minLines = minLines,
-            maxLines = maxLines,
+            singleLine = true,
+            keyboardOptions = keyboardOptions,
             modifier = Modifier
                 .fillMaxWidth()
                 .border(

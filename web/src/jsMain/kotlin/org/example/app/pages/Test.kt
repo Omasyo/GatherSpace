@@ -36,7 +36,7 @@ val networkComponent = NetworkComponent(tokenStorage)
 
 val domainComponent = DomainComponent(networkComponent, tokenStorage, Dispatchers.Main)
 
-val roomsFlow = domainComponent.roomRepository.getRooms().map {
+val roomsFlow = domainComponent.roomRepository.getAllRooms().map {
     when(it) {
         AuthError -> TODO()
         is DomainError -> TODO()

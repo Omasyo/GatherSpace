@@ -14,5 +14,7 @@ interface RoomRepository {
 
     fun getRoom(roomId: Int): Flow<DomainResponse<RoomDetails>>
 
-    fun getRooms(): Flow<DomainResponse<List<Room>>>
+    fun getUserRooms(): Flow<DomainResponse<List<Room>>>
+
+    fun getAllRooms(): Flow<DomainResponse<List<Room>>>
 }

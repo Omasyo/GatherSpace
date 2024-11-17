@@ -1,6 +1,7 @@
 package com.omasyo.gatherspace.auth
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
@@ -8,6 +9,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -75,12 +79,22 @@ fun SignupScreen(
                 state = username,
                 onValueChange = onUsernameChange,
                 hint = "Username",
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next,
+                )
             )
             Spacer(Modifier.height(8.dp))
             AuthTextField(
                 state = password,
                 onValueChange = onPasswordChange,
                 hint = "Password",
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.None,
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done,
+                )
             )
             Spacer(Modifier.height(16.dp))
             Button(onClick = onSubmit) {

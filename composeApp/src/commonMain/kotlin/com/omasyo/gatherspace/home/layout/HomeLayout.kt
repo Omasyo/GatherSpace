@@ -73,7 +73,7 @@ fun HomeLayout(
                         }
                         roomsGrid()
                     }
-                } else {
+                } else if(!scaffoldStateTransition.isRunning) {
                     if (isAuthenticated) {
                         roomsList()
                     } else {
@@ -96,7 +96,6 @@ fun HomeLayout(
                                 Box(
                                     Modifier
                                         .heightIn(max = 64f.dp)
-//                                    .fillMaxWidth()
                                         .drawBehind {
                                             drawLine(
                                                 borderColor,

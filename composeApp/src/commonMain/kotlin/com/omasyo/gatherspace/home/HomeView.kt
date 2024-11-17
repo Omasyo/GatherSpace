@@ -30,7 +30,7 @@ fun HomeRoute(
     onLoginTap: () -> Unit,
     onProfileTap: () -> Unit,
     homeViewModel: HomeViewModel = dependencyProvider {
-        viewModel { HomeViewModel(roomRepository, userRepository) }
+        viewModel { HomeViewModel(roomRepository, userRepository, authRepository) }
     },
 ) {
     HomeView(
@@ -39,8 +39,9 @@ fun HomeRoute(
         onAuthError = onAuthError,
         onLoginTap = onLoginTap,
         onProfileTap = onProfileTap,
-        onRetry = homeViewModel::refreshRooms,
-        roomsState = homeViewModel.rooms.collectAsStateWithLifecycle().value,
+        onRefresh = homeViewModel::refreshRooms,
+        allRoomsState = homeViewModel.allRooms.collectAsStateWithLifecycle().value,
+        userRoomsState = homeViewModel.userRooms.collectAsStateWithLifecycle().value,
     )
 }
 
@@ -53,8 +54,9 @@ fun HomeView(
     onAuthError: () -> Unit,
     onLoginTap: () -> Unit,
     onProfileTap: () -> Unit,
-    onRetry: () -> Unit,
-    roomsState: UiState<List<Room>>,
+    onRefresh: () -> Unit,
+    allRoomsState: UiState<List<Room>>,
+    userRoomsState: UiState<List<Room>>,
 
     ) {
     val navigator = rememberListDetailPaneScaffoldNavigator<HomeRoutes>(
@@ -72,7 +74,7 @@ fun HomeView(
             topBar = { isExpanded ->
                 TopBar(
                     modifier = Modifier.padding(horizontal = 16f.dp, vertical = 8f.dp),
-                    onProfileTap = onLoginTap,
+                    onProfileTap = onProfileTap,
                     onCreateRoomTap = onCreateRoomTap,
                     isAuthenticated = isAuthenticated,
                     isExpanded = isExpanded
@@ -82,15 +84,15 @@ fun HomeView(
             roomsList = {
                 RoomsList(
                     onRoomTap = { navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomRoute(it)) },
-                    onRetry = onRetry,
-                    state = roomsState,
+                    onRetry = onRefresh,
+                    state = if (isAuthenticated) userRoomsState else allRoomsState,
                 )
             },
             roomsGrid = {
                 RoomsGrid(
                     onRoomTap = { navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomRoute(it)) },
-                    onRetry = onRetry,
-                    state = roomsState,
+                    onRetry = onRefresh,
+                    state = allRoomsState,
                 )
             },
             roomView = { roomId ->
@@ -101,7 +103,9 @@ fun HomeView(
             },
             createRoomView = {
                 CreateRoomRoute(
-                    onRoomCreated = { navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomRoute(it)) },
+                    onRoomCreated = {
+                        onRefresh()
+                        navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomRoute(it)) },
                     onAuthError = onAuthError,
                 )
             },
@@ -123,11 +127,12 @@ private fun Preview() {
         HomeView(
             modifier = Modifier.fillMaxSize(),
             onLoginTap = {},
-            onRetry = {},
+            onRefresh = {},
             isAuthenticated = true,
             onAuthError = {},
             onProfileTap = {},
-            roomsState = UiState.Success(rooms),
+            allRoomsState = UiState.Success(rooms),
+            userRoomsState = UiState.Success(rooms)
         )
     }
 }
