@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.io.Buffer
 
 class CreateRoomViewModel(
     private val roomRepository: RoomRepository
@@ -26,12 +27,20 @@ class CreateRoomViewModel(
     var descriptionField by mutableStateOf(TextFieldState(""))
         private set
 
+    var image by mutableStateOf<Buffer?>(null)
+        private set
+
     fun changeName(value: String) {
         nameField = nameField.copy(value = value)
     }
 
     fun changeDescription(value: String) {
         descriptionField = descriptionField.copy(value = value)
+    }
+
+    fun updateImage(image: Buffer) {
+        println("Setting image $image")
+        this.image = image
     }
 
     private fun validate(): Boolean {

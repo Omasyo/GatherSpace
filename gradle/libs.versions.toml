@@ -1,11 +1,11 @@
 [versions]
 adaptive = "1.0.0"
-agp = "8.2.2"
-android-compileSdk = "34"
+agp = "8.6.1"
+android-compileSdk = "35"
 android-minSdk = "24"
-android-targetSdk = "34"
+android-targetSdk = "35"
 
-activityCompose = "1.9.3"
+activityCompose = "1.10.0-beta01"
 coilCompose = "3.0.3"
 compose = "1.7.0"
 datastorePreferencesCore = "1.1.1"
@@ -13,8 +13,9 @@ jetbrainsLifecycle = "2.8.3"
 jetbrainsNavigation = "2.8.0-alpha10"
 h2 = "2.2.220"
 hikari = "5.1.0"
+kotlinxIoCore = "0.5.4"
 logback = "1.5.8"
-kobweb = "0.19.2"
+kobweb = "0.19.3"
 kotlin = "2.0.21"
 kotlinxCoroutinesCore = "1.9.0"
 kotlinxDatetime = "0.6.1"
@@ -37,6 +38,7 @@ jetbrains-lifecycle-viewmodel-compose = { group = "org.jetbrains.androidx.lifecy
 jetbrains-navigation-compose = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "jetbrainsNavigation" }
 h2 = { module = "com.h2database:h2", version.ref = "h2" }
 hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
+kotlinx-io-core = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kotlinxIoCore" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }

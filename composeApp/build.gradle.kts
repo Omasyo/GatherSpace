@@ -39,6 +39,7 @@ kotlin {
             implementation(libs.coil.network.ktor3)
             implementation(libs.ktor.client.cio)
             implementation(libs.napier)
+            implementation(libs.kotlinx.io.core)
 
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -62,6 +63,7 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.logback)
+            implementation("com.github.sarxos:webcam-capture:0.3.12")
         }
     }
 }
