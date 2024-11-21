@@ -13,6 +13,7 @@ data class Room(
 data class RoomDetails(
     val id: Int,
     val name: String,
+    val imageUrl: String?,
     val members: List<User>,
     val created: LocalDateTime,
     val modified: LocalDateTime,

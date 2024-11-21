@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS room_member
 (
-    room_id INT NOT NULL,
-    user_id INT NOT NULL
+    room_id INT NOT NULL REFERENCES room ON DELETE CASCADE,
+    user_id INT NOT NULL REFERENCES user_account ON DELETE CASCADE
 );
 
 create:
@@ -19,3 +19,7 @@ SELECT id, username, image
 FROM user_account
          JOIN room_member ON user_account.id = room_member.user_id
 WHERE room_member.room_id = ?;
+
+contains:
+SELECT COUNT(*) > 0
+FROM room_member WHERE room_id = ? AND user_id = ?;

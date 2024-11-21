@@ -57,6 +57,8 @@ internal class RoomRepositoryImpl(
                 RoomDetails(
                     id = id,
                     name = name,
+                    imageUrl = image, //TODO image will have relative path
+
                     members = members,
                     created = created.toKotlinLocalDateTime(),
                     modified = modified.toKotlinLocalDateTime()
