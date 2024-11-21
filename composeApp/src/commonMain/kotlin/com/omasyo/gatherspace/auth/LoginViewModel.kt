@@ -35,19 +35,6 @@ class LoginViewModel(
         passwordField = passwordField.copy(value = value)
     }
 
-    private fun validate(): Boolean {
-        var isValid = true
-        if (usernameField.value.isEmpty()) {
-            usernameField = usernameField.copy(errorMessage = "Username cannot be empty")
-            isValid = false
-        }
-        if (passwordField.value.isEmpty()) {
-            passwordField = passwordField.copy(errorMessage = "Password cannot be empty")
-            isValid = false
-        }
-        return isValid
-    }
-
     fun submit() {
         if (!validate()) return
 
@@ -60,5 +47,24 @@ class LoginViewModel(
                     is Success -> AuthState.Success
                 }
         }
+    }
+
+    private fun validate(): Boolean {
+        var isValid = true
+        if (usernameField.value.isEmpty()) {
+            usernameField = usernameField.copy(errorMessage = "Username cannot be empty")
+            isValid = false
+        } else {
+            usernameField = usernameField.copy(errorMessage = null)
+        }
+
+        if (passwordField.value.isEmpty()) {
+            passwordField = passwordField.copy(errorMessage = "Password cannot be empty")
+            isValid = false
+        } else {
+            passwordField = passwordField.copy(errorMessage = null)
+        }
+        
+        return isValid
     }
 }

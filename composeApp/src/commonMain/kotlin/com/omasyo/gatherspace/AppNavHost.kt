@@ -13,12 +13,9 @@ import androidx.navigation.compose.rememberNavController
 import com.omasyo.gatherspace.auth.LoginRoute
 import com.omasyo.gatherspace.auth.SignupRoute
 import com.omasyo.gatherspace.home.HomeRoute
+import com.omasyo.gatherspace.parcelize.MyParcelable
+import com.omasyo.gatherspace.parcelize.MyParcelize
 import kotlinx.serialization.Serializable
-
-
-interface NavRoute {
-    val route: String
-}
 
 private val spec: FiniteAnimationSpec<IntOffset> =
     spring(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessLow)
@@ -102,14 +99,13 @@ data object Signup
 @Serializable
 data object Login
 
-
 @Serializable
 data object Home
 
-sealed interface HomeRoutes
+sealed interface HomeRoutes : MyParcelable
 
-@Serializable
+@MyParcelize
 data class RoomRoute(val id: Int) : HomeRoutes
 
-@Serializable
+@MyParcelize
 data object CreateRoom : HomeRoutes
