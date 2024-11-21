@@ -31,13 +31,17 @@ private fun createTempFile(context: Context): Uri {
 
 @Composable
 actual fun TakePictureItem(modifier: Modifier, onComplete: (Buffer) -> Unit) {
+    val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
         if (success) {
-            onComplete(Buffer().transferFrom(fileUri!!.toFile().inputStream()))
+
+            val inputStream =
+                fileUri?.let { context.contentResolver.openInputStream(it) } ?: return@rememberLauncherForActivityResult
+            val buffer = Buffer().transferFrom(inputStream)
+            onComplete(buffer)
         }
     }
 
-    val context = LocalContext.current
     BottomSheetMenuItem(
         text = "Take a picture",
         onTap = {

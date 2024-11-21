@@ -43,14 +43,6 @@ class CreateRoomViewModel(
         this.image = image
     }
 
-    private fun validate(): Boolean {
-        if (nameField.value.isBlank()) {
-            nameField = nameField.copy(errorMessage = "Please enter a username")
-            return false
-        }
-        return true
-    }
-
     fun submit() {
         if (!validate()) return
 
@@ -68,5 +60,16 @@ class CreateRoomViewModel(
         _state.value = CreateRoomState.Idle
         nameField = TextFieldState("")
         descriptionField = TextFieldState("")
+    }
+
+
+    private fun validate(): Boolean {
+        if (nameField.value.isBlank()) {
+            nameField = nameField.copy(errorMessage = "Please enter a username")
+            return false
+        } else {
+            nameField = nameField.copy(errorMessage = null)
+        }
+        return true
     }
 }

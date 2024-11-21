@@ -161,8 +161,16 @@ fun CreateRoomScreen(
                 }
             }
 
-            Button(onClick = onSubmit, modifier = Modifier.align(Alignment.End)) {
-                Text(text = "Submit")
+            Button(
+                onClick = onSubmit,
+                modifier = Modifier.align(Alignment.End),
+                enabled = !state.isSubmitting,
+            ) {
+                if (state.isSubmitting) {
+                    CircularProgressIndicator()
+                } else {
+                    Text(text = "Submit")
+                }
             }
         }
 

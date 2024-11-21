@@ -6,3 +6,5 @@ sealed interface CreateRoomState {
     data class Submitted(val id: Int) : CreateRoomState
     data class Error(val message: String) : CreateRoomState
 }
+
+val CreateRoomState.isSubmitting: Boolean get() = this is CreateRoomState.Submitting
