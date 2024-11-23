@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
@@ -12,10 +14,11 @@ import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -42,7 +45,10 @@ import kotlinx.datetime.toLocalDateTime
 fun RoomPanel(
     modifier: Modifier = Modifier,
     roomId: Int,
+    isAuthenticated: Boolean,
     onBackTap: () -> Unit,
+    onRegisterTap: () -> Unit,
+    onJoin: () -> Unit,
     viewModel: RoomViewModel = dependencyProvider {
         viewModel(key = "room$roomId") {
             RoomViewModel(
@@ -56,6 +62,9 @@ fun RoomPanel(
     RoomPanel(
         modifier = modifier,
         onBackTap = onBackTap,
+        onRegisterTap = onRegisterTap,
+        onJoinTap = viewModel::joinRoom,
+        isAuthenticated = isAuthenticated,
         message = viewModel.message,
         onMessageChange = viewModel::changeMessage,
         onSendTap = viewModel::sendMessage,
@@ -71,6 +80,9 @@ fun RoomPanel(
 fun RoomPanel(
     modifier: Modifier = Modifier,
     onBackTap: () -> Unit,
+    onRegisterTap: () -> Unit,
+    onJoinTap: () -> Unit,
+    isAuthenticated: Boolean,
     message: String,
     onMessageChange: (String) -> Unit,
     onSendTap: () -> Unit,
@@ -98,14 +110,6 @@ fun RoomPanel(
                             is UiState.Success -> Text(room.data.name, maxLines = 1)
                         }
                     },
-//                    actions = {
-//                        IconButton(onClick = {}) {
-//                            Icon(Icons.Outlined.Call, contentDescription = null)
-//                        }
-//                        IconButton(onClick = {}) {
-//                            Icon(Icons.Outlined.Info, contentDescription = null)
-//                        }
-//                    }
                 )
                 HorizontalDivider()
             }
@@ -140,25 +144,81 @@ fun RoomPanel(
                 }
             }
             HorizontalDivider()
-            Row(
-                modifier = Modifier.padding(8f.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                IconButton(onClick = { }) {
-                    Icon(Icons.Outlined.Image, contentDescription = null)
+            when {
+                !isAuthenticated -> {
+                    MessageFieldPlaceholder("Share your thoughts", actionText = "Login", action = onRegisterTap)
                 }
-                TextField(
-                    message,
-                    onValueChange = onMessageChange,
-                    placeholder = "Message",
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(horizontal = 8f.dp),
-                )
-                IconButton(onClick = onSendTap) {
-                    Icon(Icons.AutoMirrored.Default.Send, contentDescription = null)
+
+                !((room is UiState.Success) && room.data.isMember) -> {
+                    MessageFieldPlaceholder("Not a member of this room", actionText = "Join?", action = onJoinTap)
+                }
+
+                else -> {
+                    MessageField(
+                        modifier = Modifier.padding(8f.dp),
+                        message = message,
+                        onMessageChange = onMessageChange,
+                        onSendTap = onSendTap,
+                    )
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun MessageField(
+    modifier: Modifier = Modifier,
+    message: String,
+    onMessageChange: (String) -> Unit,
+    onSendTap: () -> Unit
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        IconButton(onClick = { }) {
+            Icon(Icons.Outlined.Image, contentDescription = null)
+        }
+        TextField(
+            message,
+            onValueChange = onMessageChange,
+            placeholder = "Message",
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+            ),
+            keyboardActions = KeyboardActions(
+                onSend = { onSendTap() }
+            ),
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 8f.dp),
+        )
+        IconButton(onClick = onSendTap) {
+            Icon(Icons.AutoMirrored.Default.Send, contentDescription = null)
+        }
+    }
+}
+
+@Composable
+private fun MessageFieldPlaceholder(
+    message: String,
+    actionText: String,
+    action: () -> Unit,
+    modifier: Modifier = Modifier.padding(horizontal = 16f.dp, vertical = 8f.dp),
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4f.dp, Alignment.CenterHorizontally)
+    ) {
+        Text(
+            text = message,
+            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        TextButton(onClick = action) {
+            Text(actionText)
         }
     }
 }
@@ -176,7 +236,7 @@ private fun Message(
 
         ) {
             Image(
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Flag_of_Nigeria.svg/255px-Flag_of_Nigeria.svg.png",
+                message.sender?.imageUrl,
                 placeholder = Res.drawable.user_placeholder,
                 modifier = Modifier
                     .padding(top = 2f.dp)
@@ -197,7 +257,7 @@ private fun Message(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(message.sender!!.username, style = MaterialTheme.typography.titleMedium)
+                Text(message.sender?.username ?: "[deleted]", style = MaterialTheme.typography.titleMedium)
                 Spacer(Modifier.width(8.dp))
                 Text(
                     message.created.formatTime(),
@@ -224,11 +284,14 @@ private fun Preview() {
             onBackTap = {},
             message = "Lorem Ipsum",
             onMessageChange = {},
+            onRegisterTap = {},
+            onJoinTap = {},
+            isAuthenticated = true,
             onSendTap = {},
             room = UiState.Success(
                 RoomDetails(
                     id = 8697, name = "Caleb Wolfe", members = listOf(), created = date, modified = date,
-                    imageUrl = ""
+                    imageUrl = "", isMember = true
                 )
             ),
             oldMessages = fakeDataFlow.collectAsLazyPagingItems(),

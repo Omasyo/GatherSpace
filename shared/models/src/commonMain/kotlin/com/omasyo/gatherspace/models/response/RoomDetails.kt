@@ -15,6 +15,7 @@ data class RoomDetails(
     val id: Int,
     val name: String,
     val imageUrl: String?,
+    val isMember: Boolean,
     val members: List<User>,
     val created: LocalDateTime,
     val modified: LocalDateTime,

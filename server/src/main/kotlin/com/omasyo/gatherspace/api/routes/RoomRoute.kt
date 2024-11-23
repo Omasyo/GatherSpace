@@ -1,5 +1,6 @@
 package com.omasyo.gatherspace.api.routes
 
+import com.auth0.jwt.JWT
 import com.omasyo.gatherspace.data.room.RoomRepository
 import com.omasyo.gatherspace.models.request.MembersRequest
 import com.omasyo.gatherspace.models.request.CreateRoomRequest
@@ -7,8 +8,10 @@ import com.omasyo.gatherspace.models.response.ErrorResponse
 import com.omasyo.gatherspace.models.routes.Members
 import com.omasyo.gatherspace.models.routes.Rooms
 import com.omasyo.gatherspace.api.auth.AuthName
+import com.omasyo.gatherspace.api.auth.JwtKeys
 import com.omasyo.gatherspace.data.DatabaseResponse
 import com.omasyo.gatherspace.models.request.CreateUserRequest
+import com.omasyo.gatherspace.models.request.UserRoomRequest
 import com.omasyo.gatherspace.models.response.CreateRoomResponse
 import com.omasyo.gatherspace.models.routes.User
 import com.omasyo.gatherspace.utils.respond
@@ -37,7 +40,15 @@ fun Application.roomRoute(repository: RoomRepository) {
         }
 
         get<Rooms.Id> { room ->
-            repository.getRoom(room.id)?.let {
+
+//            val principal = call.principal<JWTPrincipal>()
+            //todo find a better way - scopes?
+            val token = call.request.headers["Authorization"]?.substring(7)
+            val userId = JWT.decode(token)?.getClaim(JwtKeys.USER_ID)?.asInt()
+
+//            val userId = principal?.payload?.getClaim("user_id")!!.asInt()
+
+            repository.getRoom(room.id, userId)?.let {
                 call.respond(HttpStatusCode.OK, it)
             } ?: call.respond(
                 ErrorResponse(
@@ -63,6 +74,30 @@ fun Application.roomRoute(repository: RoomRepository) {
 
                 repository.getUserRooms(userId).let {
                     call.respond(HttpStatusCode.OK, it)
+                }
+            }
+
+            post<User.Rooms> {
+
+                val principal = call.principal<JWTPrincipal>()
+
+                val userId = principal?.payload?.getClaim("user_id")?.asInt()!!
+                val roomId = call.receive<UserRoomRequest>().roomId
+
+                repository.addMembers(roomId, listOf(userId)).let {
+                    call.respond(HttpStatusCode.Created, it)
+                }
+            }
+
+            delete<User.Rooms> {
+
+                val principal = call.principal<JWTPrincipal>()
+
+                val userId = principal?.payload?.getClaim("user_id")?.asInt()!!
+                val roomId = call.receive<UserRoomRequest>().roomId
+
+                repository.removeMembers(roomId, listOf(userId)).let {
+                    call.respond(HttpStatusCode.NoContent, it)
                 }
             }
 
@@ -111,12 +146,15 @@ fun Application.roomRoute(repository: RoomRepository) {
             }
 
             post<Members> { members ->
+                //TODO check if user add himself or owner of room adding a user(probably not)
+
                 val request = call.receive<MembersRequest>()
                 repository.addMembers(members.room.id, request.members)
                 call.respond(HttpStatusCode.Created)
             }
 
             delete<Members> { members ->
+                //TODO check if user remove himself or owner of room remove users
                 val request = call.receive<MembersRequest>()
                 repository.addMembers(members.room.id, request.members)
                 call.respond(HttpStatusCode.NoContent)

@@ -4,6 +4,8 @@ CREATE TABLE IF NOT EXISTS room_member
     user_id INT NOT NULL REFERENCES user_account ON DELETE CASCADE
 );
 
+CREATE UNIQUE INDEX IF NOT EXISTS ux_room_member ON room_member (room_id, user_id);
+
 create:
 INSERT INTO room_member(room_id, user_id)
 VALUES (?, ?);

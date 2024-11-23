@@ -13,6 +13,10 @@ interface RoomNetworkSource : NetworkSource {
 
     suspend fun removeMembers(roomId: Int, memberIds: List<Int>): Result<Unit>
 
+    suspend fun joinRoom(roomId: Int): Result<Unit>
+
+    suspend fun leaveRoom(roomId: Int): Result<Unit>
+
     suspend fun getRoom(roomId: Int): Result<RoomDetails>
 
     suspend fun getUserRooms(): Result<List<Room>>

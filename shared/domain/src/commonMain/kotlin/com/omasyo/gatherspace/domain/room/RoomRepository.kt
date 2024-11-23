@@ -13,6 +13,10 @@ interface RoomRepository {
 
     fun removeMembers(roomId: Int, memberIds: List<Int>): Flow<DomainResponse<Unit>>
 
+    fun joinRoom(roomId: Int): Flow<DomainResponse<Unit>>
+
+    fun leaveRoom(roomId: Int): Flow<DomainResponse<Unit>>
+
     fun getRoom(roomId: Int): Flow<DomainResponse<RoomDetails>>
 
     fun getUserRooms(): Flow<DomainResponse<List<Room>>>

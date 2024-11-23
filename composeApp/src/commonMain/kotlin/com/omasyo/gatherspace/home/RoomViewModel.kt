@@ -72,11 +72,21 @@ class RoomViewModel(
         }
     }
 
+    fun joinRoom() {
+        viewModelScope.launch {
+            roomRepository.joinRoom(roomId).first()
+                .onSuccess {
+                    refreshRoom()
+                }
+        }
+    }
+
     fun sendMessage() {
         viewModelScope.launch {
             _sendMessageState.value = SendMessageState.Loading
             messageRepository.sendMessage(roomId, message).first()
                 .onError {
+                    //TODO find better way of doing errors different states too much
                     _sendMessageState.value = SendMessageState.Error(it)
                 }
                 .onSuccess {

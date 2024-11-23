@@ -33,5 +33,5 @@ FROM room;
 getUserRooms:
 SELECT id, name, image
 FROM room
-         JOIN room_member ON room.id = room_member.user_id
+         JOIN room_member ON room.id = room_member.room_id
 WHERE room_member.user_id = :userId;

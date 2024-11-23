@@ -98,14 +98,19 @@ fun HomeView(
             roomView = { roomId ->
                 RoomPanel(
                     roomId = roomId,
+                    isAuthenticated = isAuthenticated,
+                    onRegisterTap = onLoginTap,
+                    onJoin = onRefresh,
                     onBackTap = navigator::navigateBack,
                 )
             },
             createRoomView = {
                 CreateRoomRoute(
+                    onBackTap = { navigator.navigateBack() },
                     onRoomCreated = {
                         onRefresh()
-                        navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomRoute(it)) },
+                        navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomRoute(it))
+                    },
                     onAuthError = onAuthError,
                 )
             },

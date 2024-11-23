@@ -38,8 +38,8 @@ val domainComponent = DomainComponent(networkComponent, tokenStorage, Dispatcher
 
 val roomsFlow = domainComponent.roomRepository.getAllRooms().map {
     when(it) {
-        AuthError -> TODO()
-        is DomainError -> TODO()
+        AuthError -> emptyList()
+        is DomainError -> emptyList()
         is Success -> it.data
     }
 }

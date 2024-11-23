@@ -33,29 +33,42 @@ class HomeViewModel(
                 }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UiState.Loading)
 
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val userRooms: StateFlow<UiState<List<Room>>> =
-        combine(authRepository.isAuthenticated(), refreshRoomsEvent) { authenticated, _ ->
-            authenticated
-        }.flatMapLatest { authenticated ->
-            if (!authenticated) {
-                UiState.Error("Not Authenticated")
-                return@flatMapLatest flowOf(UiState.Loading)
-            }
+        refreshRoomsEvent.flatMapLatest {
             roomRepository.getUserRooms()
                 .map {
                     when (it) {
                         is DomainError -> UiState.Error(it.message)
-                        AuthError -> UiState.Error("Invalid State")
+                        AuthError -> UiState.Error("User not authenticated")
                         is Success -> UiState.Success(it.data)
                     }
                 }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UiState.Loading)
 
+//    @OptIn(ExperimentalCoroutinesApi::class)
+//    val userRooms: StateFlow<UiState<List<Room>>> = refreshRoomsEvent.flatMapLatest {
+//        roomRepository.getUserRooms().map { response ->
+////            if (authRepository.isAuthenticated().first()) {
+////                UiState.Error("Not Authenticated")
+////                return@map UiState.Loading
+////            }
+//
+//            when (response) {
+//                is DomainError -> UiState.Error(response.message)
+//                AuthError -> UiState.Error("Invalid State")
+//                is Success -> UiState.Success(response.data)
+//            }
+//        }
+//    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UiState.Loading)
+
+
 //    val user: StateFlow<UiState<User>> =
 //        userRepository
 
     fun refreshRooms() {
+        println("Refreshing rooms")
         viewModelScope.launch {
             refreshRoomsEvent.emit(Any())
         }

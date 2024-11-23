@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -39,6 +41,7 @@ import kotlinx.io.snapshot
 @Composable
 fun CreateRoomRoute(
     modifier: Modifier = Modifier,
+    onBackTap: () -> Unit,
     onRoomCreated: (Int) -> Unit,
     onAuthError: () -> Unit,
     viewModel: CreateRoomViewModel = dependencyProvider {
@@ -47,6 +50,7 @@ fun CreateRoomRoute(
 ) {
     CreateRoomScreen(
         modifier = modifier,
+        onBackTap = onBackTap,
         roomName = viewModel.nameField,
         onRoomNameChange = viewModel::changeName,
         description = viewModel.descriptionField,
@@ -67,6 +71,7 @@ fun CreateRoomRoute(
 @Composable
 fun CreateRoomScreen(
     modifier: Modifier = Modifier,
+    onBackTap: () -> Unit,
     roomName: TextFieldState,
     onRoomNameChange: (String) -> Unit,
     description: TextFieldState,
@@ -83,6 +88,10 @@ fun CreateRoomScreen(
     var showBottomSheet by remember { mutableStateOf(false) }
 
     Scaffold { innerPadding ->
+
+        IconButton(onClick = onBackTap, modifier = Modifier.padding(innerPadding).padding(top = 16f.dp, start = 8f.dp)) {
+            Icon(Icons.AutoMirrored.Default.ArrowBack, contentDescription = null)
+        }
         Column(
             modifier = modifier
                 .padding(innerPadding)
@@ -277,6 +286,7 @@ fun BottomSheetMenuItem(
 private fun CreateRoomScreenPreview() {
     GatherSpaceTheme(false) {
         CreateRoomScreen(
+            onBackTap = {},
             roomName = TextFieldState(""),
             onRoomNameChange = {},
             description = TextFieldState(""),

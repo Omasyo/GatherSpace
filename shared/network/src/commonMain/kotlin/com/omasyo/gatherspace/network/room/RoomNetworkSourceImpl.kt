@@ -3,6 +3,7 @@ package com.omasyo.gatherspace.network.room
 import com.omasyo.gatherspace.models.request.CreateRoomRequest
 import com.omasyo.gatherspace.models.request.CreateUserRequest
 import com.omasyo.gatherspace.models.request.MembersRequest
+import com.omasyo.gatherspace.models.request.UserRoomRequest
 import com.omasyo.gatherspace.models.response.CreateRoomResponse
 import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.models.response.RoomDetails
@@ -56,6 +57,20 @@ internal class RoomNetworkSourceImpl(
         mapResponse {
             client.delete(Members(Rooms.Id(roomId))) {
                 setBody(MembersRequest(memberIds))
+            }
+        }
+
+    override suspend fun joinRoom(roomId: Int): Result<Unit> =
+        mapResponse {
+            client.post(User.Rooms(User())) {
+                setBody(UserRoomRequest(roomId))
+            }
+        }
+
+    override suspend fun leaveRoom(roomId: Int): Result<Unit> =
+        mapResponse {
+            client.delete(User.Rooms(User())) {
+                setBody(UserRoomRequest(roomId))
             }
         }
 

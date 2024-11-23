@@ -17,7 +17,7 @@ interface RoomRepository {
 
     fun getMembers(roomId: Int): List<User>
 
-    fun getRoom(roomId: Int): RoomDetails?
+    fun getRoom(roomId: Int, userId: Int?): RoomDetails?
 
     fun getUserRooms(userId: Int): List<Room>
 

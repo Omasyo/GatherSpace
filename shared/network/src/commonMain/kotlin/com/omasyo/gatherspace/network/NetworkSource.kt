@@ -20,6 +20,7 @@ internal suspend inline fun <reified T> NetworkSource.mapResponse(
 
         Napier.i(tag = tag) { "Made request ${response.request.method} ${response.request.url}" }
         Napier.i(tag = tag) { "Received: $response ${response.status}" }
+        Napier.v("Received: ${response.bodyAsText()}", tag = tag)
         if (response.status.isSuccess()) {
             val content: T = response.body()
             Result.success(content)

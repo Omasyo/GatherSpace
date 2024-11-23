@@ -61,18 +61,19 @@ internal class RoomRepositoryImpl(
         return roomMemberQueries.getRoomMembers(roomId, ::User).executeAsList()
     }
 
-    override fun getRoom(roomId: Int): RoomDetails? {
+    override fun getRoom(roomId: Int, userId: Int?): RoomDetails? {
         return roomQueries.transactionWithResult {
             val room = roomQueries.getRoomById(roomId).executeAsOneOrNull()
                 ?: return@transactionWithResult null
 
+            val isMember = userId?.let { roomMemberQueries.contains(roomId, it).executeAsOne() } ?: false
             val members = getMembers(roomId)
             with(room) {
                 RoomDetails(
                     id = id,
                     name = name,
                     imageUrl = image, //TODO image will have relative path
-
+                    isMember = isMember,
                     members = members,
                     created = created.toKotlinLocalDateTime(),
                     modified = modified.toKotlinLocalDateTime()
