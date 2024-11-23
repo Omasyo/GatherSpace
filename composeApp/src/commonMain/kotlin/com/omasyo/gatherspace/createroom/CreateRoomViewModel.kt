@@ -48,7 +48,7 @@ class CreateRoomViewModel(
 
         _state.value = CreateRoomState.Submitting
         viewModelScope.launch {
-            roomRepository.createRoom(nameField.value, descriptionField.value).first().onError {
+            roomRepository.createRoom(nameField.value, descriptionField.value, image).first().onError {
                 _state.value = CreateRoomState.Error(it)
             }.onSuccess {
                 _state.value = CreateRoomState.Submitted(it)

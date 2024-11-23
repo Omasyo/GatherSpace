@@ -10,18 +10,19 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.io.Buffer
 
 internal class RoomRepositoryImpl(
     private val networkSource: RoomNetworkSource,
     private val dispatcher: CoroutineDispatcher
 ) : RoomRepository {
-    override fun createRoom(name: String, description: String): Flow<DomainResponse<Int>> =
+    override fun createRoom(name: String, description: String, image: Buffer?): Flow<DomainResponse<Int>> =
         flow {
             if (name.isBlank()) {
                 emit(DomainError("Room name cannot be blank"))
                 return@flow
             }
-            emit(networkSource.createRoom(name.trim(), description.trim()).mapToDomain { it.id })
+            emit(networkSource.createRoom(name.trim(), description.trim(), image).mapToDomain { it.id })
         }.flowOn(dispatcher)
 
     override fun addMembers(roomId: Int, memberIds: List<Int>): Flow<DomainResponse<Unit>> =

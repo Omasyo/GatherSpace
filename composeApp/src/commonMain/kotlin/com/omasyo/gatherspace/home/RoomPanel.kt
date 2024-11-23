@@ -227,8 +227,8 @@ private fun Preview() {
             onSendTap = {},
             room = UiState.Success(
                 RoomDetails(
-                    id = 8697, name = "Caleb Wolfe", members = listOf(), created = date, modified = date
-
+                    id = 8697, name = "Caleb Wolfe", members = listOf(), created = date, modified = date,
+                    imageUrl = ""
                 )
             ),
             oldMessages = fakeDataFlow.collectAsLazyPagingItems(),

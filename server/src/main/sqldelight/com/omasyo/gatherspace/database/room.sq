@@ -27,11 +27,11 @@ FROM room
 WHERE room.id = ?;
 
 getAll:
-SELECT id, name
+SELECT id, name, image
 FROM room;
 
 getUserRooms:
-SELECT id, name
+SELECT id, name, image
 FROM room
          JOIN room_member ON room.id = room_member.user_id
 WHERE room_member.user_id = :userId;

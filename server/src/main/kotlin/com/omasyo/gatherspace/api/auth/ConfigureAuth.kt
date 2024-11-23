@@ -4,7 +4,7 @@ import com.omasyo.gatherspace.models.request.LoginRequest
 import com.omasyo.gatherspace.models.request.RefreshTokenRequest
 import com.omasyo.gatherspace.models.response.ErrorResponse
 import com.omasyo.gatherspace.models.routes.Session
-import com.omasyo.gatherspace.utils.respondError
+import com.omasyo.gatherspace.utils.respond
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -26,7 +26,7 @@ fun Application.configureAuth(authService: AuthService) {
             }
             challenge { _, _ ->
                 val statusCode = HttpStatusCode.Unauthorized
-                call.respondError(
+                call.respond(
                     ErrorResponse(
                         statusCode = statusCode.value,
                         message = "Valid token not provided"
@@ -40,7 +40,7 @@ fun Application.configureAuth(authService: AuthService) {
             val loginRequest = call.receive<LoginRequest>()
 
             if (!authService.validateUser(loginRequest.username, loginRequest.password)) {
-                call.respondError(
+                call.respond(
                     ErrorResponse(
                         statusCode = HttpStatusCode.NotFound.value,
                         message = "Invalid username or password"
@@ -61,7 +61,7 @@ fun Application.configureAuth(authService: AuthService) {
 
             response?.let {
                 call.respond(it)
-            } ?: call.respondError(
+            } ?: call.respond(
                 ErrorResponse(
                     statusCode = HttpStatusCode.Unauthorized.value,
                     message = "Token not found"

@@ -4,9 +4,10 @@ import com.omasyo.gatherspace.models.response.CreateRoomResponse
 import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.network.NetworkSource
+import kotlinx.io.Buffer
 
 interface RoomNetworkSource : NetworkSource {
-    suspend fun createRoom(name: String, description: String): Result<CreateRoomResponse>
+    suspend fun createRoom(name: String, description: String, image: Buffer?): Result<CreateRoomResponse>
 
     suspend fun addMembers(roomId: Int, memberIds: List<Int>): Result<Unit>
 

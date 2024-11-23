@@ -25,7 +25,9 @@ fun createClient(
     tokenStorage: TokenStorage
 ) =
     HttpClient(engine) {
-        install(SSE)
+        install(SSE) {
+            this.reconnectionTime
+        }
         install(Resources)
         install(ContentNegotiation) {
             json()
@@ -50,6 +52,7 @@ fun createClient(
                         tokenStorage.saveToken(tokenResponse)
                         BearerTokens(tokenResponse.accessToken, tokenResponse.refreshToken)
                     } else {
+                        tokenStorage.clearToken()
                         null
                     }
                 }
@@ -58,7 +61,7 @@ fun createClient(
         defaultRequest {
             url {
                 protocol = URLProtocol.HTTP
-                host = "192.168.79.134"
+                host = "localhost"
                 port = 8080
             }
             contentType(ContentType.Application.Json)

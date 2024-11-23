@@ -138,5 +138,5 @@ private fun Preview() {
 }
 
 private val rooms = List(10) {
-    Room(id = it, name = "Maribel Ganes")
+    Room(id = it, name = "Maribel Ganes", imageUrl = "")
 }

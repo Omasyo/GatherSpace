@@ -23,6 +23,7 @@ fun LoginRoute(
     modifier: Modifier = Modifier,
     onSignupTap: () -> Unit,
     onAuthenticated: () -> Unit,
+    onBackTap: () -> Unit,
     viewModel: LoginViewModel = dependencyProvider { viewModel { LoginViewModel(authRepository) } }
 ) {
     LoginScreen(
@@ -34,6 +35,7 @@ fun LoginRoute(
         onPasswordChange = viewModel::changePassword,
         onSubmit = viewModel::submit,
         onAuthenticated = onAuthenticated,
+        onBackTap = onBackTap,
         state = viewModel.state.collectAsStateWithLifecycle().value,
     )
 }
@@ -48,11 +50,13 @@ fun LoginScreen(
     onSubmit: () -> Unit,
     onSignupTap: () -> Unit,
     onAuthenticated: () -> Unit,
+    onBackTap: () -> Unit,
     state: AuthState
 ) {
     AuthScreen(
         modifier = modifier,
         onAuthenticated = onAuthenticated,
+        onBackTap = onBackTap,
         state = state
     ) {
         Column(
@@ -114,6 +118,7 @@ private fun LoginScreenPreview() {
             onSubmit = {},
             onSignupTap = {},
             onAuthenticated = {},
+            onBackTap = {},
             state = AuthState.Idle
         )
     }

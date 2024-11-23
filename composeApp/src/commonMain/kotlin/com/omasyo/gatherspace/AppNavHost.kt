@@ -68,6 +68,7 @@ fun AppNavHost(
 
                     }
                 },
+                onBackTap = { navController.popBackStack() }
             )
         }
 
@@ -79,6 +80,7 @@ fun AppNavHost(
                         popUpTo(Home)
                     }
                 },
+                onBackTap = { navController.popBackStack() }
             )
         }
 

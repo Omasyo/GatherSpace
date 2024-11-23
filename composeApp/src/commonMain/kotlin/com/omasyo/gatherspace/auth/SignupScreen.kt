@@ -22,6 +22,7 @@ import com.omasyo.gatherspace.ui.components.TextFieldState
 fun SignupRoute(
     modifier: Modifier = Modifier,
     onLoginTap: () -> Unit,
+    onBackTap: () -> Unit,
     onAuthenticated: () -> Unit,
     viewModel: SignupViewModel = dependencyProvider {
         viewModel {
@@ -41,6 +42,7 @@ fun SignupRoute(
         onPasswordChange = viewModel::changePassword,
         onSubmit = viewModel::submit,
         onAuthenticated = onAuthenticated,
+        onBackTap = onBackTap,
         state = viewModel.state.collectAsStateWithLifecycle().value,
     )
 }
@@ -55,11 +57,13 @@ fun SignupScreen(
     onSubmit: () -> Unit,
     onLoginTap: () -> Unit,
     onAuthenticated: () -> Unit,
+    onBackTap: () -> Unit,
     state: AuthState
 ) {
     AuthScreen(
         modifier = modifier,
         onAuthenticated = onAuthenticated,
+        onBackTap = onBackTap,
         state = state
     ) {
         Column(

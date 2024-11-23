@@ -1,27 +1,41 @@
 package com.omasyo.gatherspace.data.room
 
+import com.omasyo.gatherspace.data.DatabaseResponse
 import com.omasyo.gatherspace.database.RoomQueries
 import com.omasyo.gatherspace.database.Room_memberQueries
 import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.models.response.User
+import com.omasyo.gatherspace.utils.ImageDirPath
+import com.omasyo.gatherspace.utils.createImageFile
+import com.omasyo.gatherspace.utils.fromDb
 import kotlinx.datetime.toKotlinLocalDateTime
+import kotlinx.io.Buffer
+import java.io.File
 
 internal class RoomRepositoryImpl(
     private val roomQueries: RoomQueries,
     private val roomMemberQueries: Room_memberQueries,
 ) : RoomRepository {
-    override fun create(name: String, description: String, image: String?): Int {
-        return roomQueries.create(name, description, image).executeAsOne()
+    override fun create(name: String, description: String, imageBuffer: Buffer?): DatabaseResponse<Int> {
+        return roomQueries.transactionWithResult {
+            val imageId = imageBuffer?.let { createImageFile(it) }
+            DatabaseResponse.Success(roomQueries.create(name, description, imageId).executeAsOne())
+        }
     }
 
-    override fun updateRoom(name: String?, description: String?, image: String?, roomId: Int) {
+    override fun updateRoom(name: String?, description: String?, imageBuffer: Buffer?, roomId: Int) {
         roomQueries.transaction {
             val room = roomQueries.getRoomById(roomId).executeAsOne()
+
+            val newImageId = imageBuffer?.let {
+                room.image?.let { File(ImageDirPath, it).delete() }
+                createImageFile(it)
+            }
             roomQueries.update(
                 name = name ?: room.name,
                 description = description ?: room.description,
-                image = image ?: room.image,
+                image = newImageId ?: room.image,
                 id = roomId
             )
         }
@@ -68,10 +82,10 @@ internal class RoomRepositoryImpl(
     }
 
     override fun getUserRooms(userId: Int): List<Room> {
-        return roomQueries.getUserRooms(userId, ::Room).executeAsList()
+        return roomQueries.getUserRooms(userId, Room::fromDb).executeAsList()
     }
 
     override fun getAllRooms(): List<Room> {
-        return roomQueries.getAll(::Room).executeAsList()
+        return roomQueries.getAll(Room::fromDb).executeAsList()
     }
 }

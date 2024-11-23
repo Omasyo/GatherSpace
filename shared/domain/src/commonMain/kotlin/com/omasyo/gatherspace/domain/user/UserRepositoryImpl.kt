@@ -7,14 +7,15 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.io.Buffer
 
 internal class UserRepositoryImpl(
     private val userNetworkSource: UserNetworkSource,
     private val dispatcher: CoroutineDispatcher
 ) : UserRepository {
-    override suspend fun createAccount(userName: String, password: String): Flow<DomainResponse<Unit>> =
+    override suspend fun createAccount(userName: String, password: String, image: Buffer?): Flow<DomainResponse<Unit>> =
         flow {
-            emit(userNetworkSource.createAccount(userName, password).mapToDomain())
+            emit(userNetworkSource.createAccount(userName, password, image).mapToDomain())
         }.flowOn(dispatcher)
 
     override suspend fun deleteAccount(): Flow<DomainResponse<Unit>> =

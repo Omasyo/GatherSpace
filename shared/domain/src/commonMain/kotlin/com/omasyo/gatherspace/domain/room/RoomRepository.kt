@@ -4,9 +4,10 @@ import com.omasyo.gatherspace.domain.DomainResponse
 import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.models.response.RoomDetails
 import kotlinx.coroutines.flow.Flow
+import kotlinx.io.Buffer
 
 interface RoomRepository {
-    fun createRoom(name: String, description: String): Flow<DomainResponse<Int>>
+    fun createRoom(name: String, description: String, image: Buffer?): Flow<DomainResponse<Int>>
 
     fun addMembers(roomId: Int, memberIds: List<Int>): Flow<DomainResponse<Unit>>
 

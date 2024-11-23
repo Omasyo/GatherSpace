@@ -66,7 +66,7 @@ private fun Room(
             .clip(MaterialTheme.shapes.medium)
     ) {
         Image(
-            imageUrl = "TODO",
+            imageUrl = room.imageUrl,
             placeholder = Res.drawable.room_placeholder,
             modifier = Modifier
                 .weight(1f)

@@ -6,14 +6,27 @@ import com.omasyo.gatherspace.network.mapResponse
 import io.ktor.client.*
 import io.ktor.client.plugins.resources.*
 import io.ktor.client.request.*
+import io.ktor.client.request.forms.*
+import kotlinx.io.Buffer
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 internal class UserNetworkSourceImpl(
     private val client: HttpClient
 ) : UserNetworkSource {
-    override suspend fun createAccount(userName: String, password: String): Result<Unit> =
+    override suspend fun createAccount(userName: String, password: String, image: Buffer?): Result<Unit> =
         mapResponse {
             client.post(Users()) {
-                setBody(CreateUserRequest(userName, password))
+                setBody(
+                    MultiPartFormDataContent(
+                        formData {
+                            append("", Json.encodeToString(CreateUserRequest(userName, password)))
+                            if (image != null) {
+                                append("", image)
+                            }
+                        }
+                    )
+                )
             }
         }
 

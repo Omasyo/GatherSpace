@@ -3,6 +3,7 @@ package com.omasyo.gatherspace
 import com.omasyo.gatherspace.api.auth.AuthService
 import com.omasyo.gatherspace.api.auth.AuthServiceImpl
 import com.omasyo.gatherspace.api.auth.configureAuth
+import com.omasyo.gatherspace.api.routes.imageRoute
 import com.omasyo.gatherspace.api.routes.messageRoute
 import com.omasyo.gatherspace.api.routes.roomRoute
 import com.omasyo.gatherspace.api.routes.userRoute
@@ -58,6 +59,7 @@ fun Application.module() {
     userRoute(userRepository)
     roomRoute(roomRepository)
     messageRoute(messageRepository)
+    imageRoute()
 }
 
 

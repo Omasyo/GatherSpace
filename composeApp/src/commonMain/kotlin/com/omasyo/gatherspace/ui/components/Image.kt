@@ -13,7 +13,7 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun Image(
-    imageUrl: String,
+    imageUrl: String?,
     placeholder: DrawableResource,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,

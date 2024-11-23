@@ -40,7 +40,7 @@ class SignupViewModel(
 
         _state.value = AuthState.Loading
         viewModelScope.launch {
-            userRepository.createAccount(usernameField.value, passwordField.value).first()
+            userRepository.createAccount(usernameField.value, passwordField.value, null).first()
                 .onError {
                     _state.value = AuthState.Error(it)
                 }
