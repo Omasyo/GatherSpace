@@ -44,6 +44,7 @@ fun SignupRoute(
         onAuthenticated = onAuthenticated,
         onBackTap = onBackTap,
         state = viewModel.state.collectAsStateWithLifecycle().value,
+        onEventReceived = { viewModel.clearEvent() }
     )
 }
 
@@ -58,13 +59,15 @@ fun SignupScreen(
     onLoginTap: () -> Unit,
     onAuthenticated: () -> Unit,
     onBackTap: () -> Unit,
-    state: AuthState
+    state: AuthState,
+    onEventReceived: (AuthEvent) -> Unit,
 ) {
     AuthScreen(
         modifier = modifier,
         onAuthenticated = onAuthenticated,
         onBackTap = onBackTap,
-        state = state
+        state = state,
+        onEventReceived = onEventReceived,
     ) {
         Column(
             Modifier

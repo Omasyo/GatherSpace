@@ -15,13 +15,13 @@ import androidx.compose.ui.unit.dp
 import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
 import com.omasyo.gatherspace.ui.theme.darkScheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthScreen(
     modifier: Modifier = Modifier,
     onAuthenticated: () -> Unit,
     onBackTap: () -> Unit,
     state: AuthState,
+    onEventReceived: (event: AuthEvent) -> Unit,
     content: @Composable () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -62,16 +62,14 @@ fun AuthScreen(
     }
 
     LaunchedEffect(state) {
-        if (state is AuthState.Success) {
-            onAuthenticated()
-        }
-        when (state) {
-            AuthState.Success -> onAuthenticated()
-            is AuthState.Error -> {
-                snackbarHostState.showSnackbar(state.message)
+        when (val event = state.event) {
+            is AuthEvent.Error -> {
+                snackbarHostState.showSnackbar(event.message)
             }
 
-            else -> Unit
+            AuthEvent.Success -> onAuthenticated()
+            AuthEvent.None -> Unit
         }
+        onEventReceived(state.event)
     }
 }

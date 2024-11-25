@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
     private val authRepository: AuthRepository
 ) : ViewModel() {
-    private val _state = MutableStateFlow<AuthState>(AuthState.Idle)
+    private val _state = MutableStateFlow(AuthState.Initial)
     val state: StateFlow<AuthState> = _state
 
     var usernameField by mutableStateOf(TextFieldState(""))
@@ -38,15 +38,20 @@ class LoginViewModel(
     fun submit() {
         if (!validate()) return
 
-        _state.value = AuthState.Loading
+        _state.value = _state.value.copy(isLoading = true)
         viewModelScope.launch {
             _state.value =
                 when (val response = authRepository.login(usernameField.value, passwordField.value).first()) {
-                    is DomainError -> AuthState.Error(response.message)
+                    is DomainError -> _state.value.copy(event = AuthEvent.Error(response.message))
                     AuthError -> throw IllegalStateException()
-                    is Success -> AuthState.Success
+                    is Success -> _state.value.copy(event = AuthEvent.Success)
                 }
+            _state.value = _state.value.copy(isLoading = false)
         }
+    }
+
+    fun clearEvent() {
+        _state.value = _state.value.copy(event = AuthEvent.None)
     }
 
     private fun validate(): Boolean {
@@ -64,7 +69,7 @@ class LoginViewModel(
         } else {
             passwordField = passwordField.copy(errorMessage = null)
         }
-        
+
         return isValid
     }
 }

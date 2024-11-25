@@ -66,6 +66,7 @@ fun Application.module() {
 val database = createDatabase("postgres", "pass")
 val userRepository: UserRepository = UserRepositoryImpl(database.user_accountQueries)
 val tokenRepository: TokenRepository = TokenRepositoryImpl(database.refresh_tokenQueries)
-val roomRepository: RoomRepository = RoomRepositoryImpl(database.roomQueries, database.room_memberQueries)
+val roomRepository: RoomRepository =
+    RoomRepositoryImpl(database.roomQueries, database.room_memberQueries, database.user_accountQueries)
 val messageRepository: MessageRepository = MessageRepositoryImpl(database.messageQueries)
 val authService: AuthService = AuthServiceImpl(userRepository, tokenRepository)

@@ -5,6 +5,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Login
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +26,7 @@ import gatherspace.composeapp.generated.resources.room_placeholder
 fun RoomsList(
     modifier: Modifier = Modifier,
     onRoomTap: (Int) -> Unit,
+    onJoinRoomTap: () -> Unit,
     onRetry: () -> Unit,
     state: UiState<List<Room>>
 ) {
@@ -31,8 +36,24 @@ fun RoomsList(
 
         is UiState.Success -> LazyColumn(
             modifier = modifier,
-            contentPadding = PaddingValues(vertical = 24f.dp),
+            contentPadding = PaddingValues(top = 8f.dp, bottom = 24f.dp),
         ) {
+            item {
+                Row(
+                    modifier = Modifier
+                        .clickable(onClick = onJoinRoomTap)
+                        .fillMaxWidth()
+                        .padding(horizontal = 16f.dp, vertical = 16f.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Join a new room",
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                    Icon(Icons.AutoMirrored.Default.Login, contentDescription = null)
+                }
+            }
             items(state.data, key = { it.id }) { room ->
                 Room(
                     room = room,

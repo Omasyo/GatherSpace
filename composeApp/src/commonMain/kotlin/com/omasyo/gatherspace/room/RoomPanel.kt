@@ -1,4 +1,4 @@
-package com.omasyo.gatherspace.home
+package com.omasyo.gatherspace.room
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
@@ -31,6 +31,7 @@ import com.omasyo.gatherspace.domain.formatTime
 import com.omasyo.gatherspace.models.response.Message
 import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.models.response.User
+import com.omasyo.gatherspace.models.response.UserDetails
 import com.omasyo.gatherspace.ui.components.Image
 import com.omasyo.gatherspace.ui.components.TextField
 import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
@@ -38,6 +39,7 @@ import gatherspace.composeapp.generated.resources.Res
 import gatherspace.composeapp.generated.resources.user_placeholder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -70,7 +72,9 @@ fun RoomPanel(
         onSendTap = viewModel::sendMessage,
         room = viewModel.room.collectAsStateWithLifecycle().value,
         oldMessages = viewModel.oldMessages.collectAsLazyPagingItems(),
-        messages = viewModel.messages
+        messages = viewModel.messages,
+        onJoin = onJoin,
+        state = viewModel.state.collectAsStateWithLifecycle().value,
     )
 }
 
@@ -86,9 +90,11 @@ fun RoomPanel(
     message: String,
     onMessageChange: (String) -> Unit,
     onSendTap: () -> Unit,
-    room: UiState<RoomDetails>,
+    room: RoomDetails?,
     oldMessages: LazyPagingItems<Message>,
     messages: List<Message>,
+    onJoin: () -> Unit,
+    state: RoomState
 ) {
     Scaffold(
         modifier = modifier,
@@ -104,11 +110,7 @@ fun RoomPanel(
                         }
                     },
                     title = {
-                        when (room) {
-                            is UiState.Error -> {}
-                            UiState.Loading -> {}
-                            is UiState.Success -> Text(room.data.name, maxLines = 1)
-                        }
+                        Text(room?.name ?: "", maxLines = 1)
                     },
                 )
                 HorizontalDivider()
@@ -149,7 +151,7 @@ fun RoomPanel(
                     MessageFieldPlaceholder("Share your thoughts", actionText = "Login", action = onRegisterTap)
                 }
 
-                !((room is UiState.Success) && room.data.isMember) -> {
+                !(room?.isMember ?: false) -> {
                     MessageFieldPlaceholder("Not a member of this room", actionText = "Join?", action = onJoinTap)
                 }
 
@@ -161,6 +163,14 @@ fun RoomPanel(
                         onSendTap = onSendTap,
                     )
                 }
+            }
+        }
+        LaunchedEffect(state) {
+            when (state.event) {
+                RoomEvent.JoinedRoom -> onJoin()
+                is RoomEvent.Error -> Unit
+                RoomEvent.MessageSent -> Unit
+                RoomEvent.None -> Unit
             }
         }
     }
@@ -288,10 +298,15 @@ private fun Preview() {
             onJoinTap = {},
             isAuthenticated = true,
             onSendTap = {},
-            room = UiState.Success(
-                RoomDetails(
-                    id = 8697, name = "Caleb Wolfe", members = listOf(), created = date, modified = date,
-                    imageUrl = "", isMember = true
+            room = RoomDetails(
+                id = 8697, name = "Caleb Wolfe", members = listOf(), created = date, modified = date,
+                imageUrl = "", isMember = true,
+                creator = UserDetails(
+                    id = 7788,
+                    username = "Allison Davis",
+                    imageUrl = null,
+                    created = LocalDateTime(1, 1, 1, 1, 1),
+                    modified = LocalDateTime(1, 1, 1, 1, 1)
                 )
             ),
             oldMessages = fakeDataFlow.collectAsLazyPagingItems(),
@@ -304,7 +319,9 @@ private fun Preview() {
                     created = date,
                     modified = date
                 )
-            }
+            },
+            onJoin = {},
+            state = RoomState.Initial
         )
     }
 }

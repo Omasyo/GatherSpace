@@ -3,6 +3,7 @@ package com.omasyo.gatherspace.home
 import com.omasyo.gatherspace.BackHandler
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
@@ -19,6 +20,8 @@ import com.omasyo.gatherspace.createroom.CreateRoomRoute
 import com.omasyo.gatherspace.home.layout.HomeLayout
 import com.omasyo.gatherspace.home.layout.calculateCustomPaneScaffoldDirective
 import com.omasyo.gatherspace.models.response.Room
+import com.omasyo.gatherspace.models.response.UserDetails
+import com.omasyo.gatherspace.room.RoomPanel
 import com.omasyo.gatherspace.ui.components.LoginPlaceholder
 import com.omasyo.gatherspace.ui.theme.*
 
@@ -39,7 +42,8 @@ fun HomeRoute(
         onAuthError = onAuthError,
         onLoginTap = onLoginTap,
         onProfileTap = onProfileTap,
-        onRefresh = homeViewModel::refreshRooms,
+        onRefresh = homeViewModel::refresh,
+        userState = homeViewModel.user.collectAsStateWithLifecycle().value,
         allRoomsState = homeViewModel.allRooms.collectAsStateWithLifecycle().value,
         userRoomsState = homeViewModel.userRooms.collectAsStateWithLifecycle().value,
     )
@@ -55,6 +59,7 @@ fun HomeView(
     onLoginTap: () -> Unit,
     onProfileTap: () -> Unit,
     onRefresh: () -> Unit,
+    userState: UiState<UserDetails>,
     allRoomsState: UiState<List<Room>>,
     userRoomsState: UiState<List<Room>>,
 
@@ -73,17 +78,22 @@ fun HomeView(
             isAuthenticated = isAuthenticated,
             topBar = { isExpanded ->
                 TopBar(
-                    modifier = Modifier.padding(horizontal = 16f.dp, vertical = 8f.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 16f.dp, vertical = 8f.dp)
+                        .heightIn(48f.dp),
                     onProfileTap = onProfileTap,
+                    onLoginTap = onLoginTap,
                     onCreateRoomTap = onCreateRoomTap,
                     isAuthenticated = isAuthenticated,
-                    isExpanded = isExpanded
+                    isExpanded = isExpanded,
+                    userState = userState,
                 )
 
             },
             roomsList = {
                 RoomsList(
                     onRoomTap = { navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomRoute(it)) },
+                    onJoinRoomTap = { navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, null) },
                     onRetry = onRefresh,
                     state = if (isAuthenticated) userRoomsState else allRoomsState,
                 )
@@ -136,6 +146,7 @@ private fun Preview() {
             isAuthenticated = true,
             onAuthError = {},
             onProfileTap = {},
+            userState = UiState.Loading,
             allRoomsState = UiState.Success(rooms),
             userRoomsState = UiState.Success(rooms)
         )

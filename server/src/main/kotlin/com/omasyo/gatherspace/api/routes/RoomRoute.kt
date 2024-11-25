@@ -102,6 +102,11 @@ fun Application.roomRoute(repository: RoomRepository) {
             }
 
             post<Rooms> { _ ->
+
+                val principal = call.principal<JWTPrincipal>()
+
+                val userId = principal?.payload?.getClaim("user_id")?.asInt()!!
+
                 val multiPartData = call.receiveMultipart()
                 var details: CreateRoomRequest? = null
                 var imageBuffer: Buffer? = null
@@ -136,7 +141,7 @@ fun Application.roomRoute(repository: RoomRepository) {
                     )
                 )
 
-                when (val result = repository.create(details!!.name, user.description, imageBuffer)) {
+                when (val result = repository.create(details!!.name, user.description, userId, imageBuffer)) {
                     is DatabaseResponse.Failure -> call.respond(result.toErrorResponse())
                     is DatabaseResponse.Success -> call.respond(
                         HttpStatusCode.Created,

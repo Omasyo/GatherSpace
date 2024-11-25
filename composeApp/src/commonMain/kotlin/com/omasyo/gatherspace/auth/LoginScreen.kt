@@ -1,21 +1,22 @@
 package com.omasyo.gatherspace.auth
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.omasyo.gatherspace.dependencyProvider
 import com.omasyo.gatherspace.ui.components.TextFieldState
-import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
-import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.KeyboardType
 
 
 @Composable
@@ -37,6 +38,7 @@ fun LoginRoute(
         onAuthenticated = onAuthenticated,
         onBackTap = onBackTap,
         state = viewModel.state.collectAsStateWithLifecycle().value,
+        onEventReceived = { viewModel.clearEvent() }
     )
 }
 
@@ -51,13 +53,15 @@ fun LoginScreen(
     onSignupTap: () -> Unit,
     onAuthenticated: () -> Unit,
     onBackTap: () -> Unit,
-    state: AuthState
+    state: AuthState,
+    onEventReceived: (AuthEvent) -> Unit
 ) {
     AuthScreen(
         modifier = modifier,
         onAuthenticated = onAuthenticated,
         onBackTap = onBackTap,
-        state = state
+        state = state,
+        onEventReceived = onEventReceived,
     ) {
         Column(
             Modifier
@@ -102,24 +106,5 @@ fun LoginScreen(
                 Text(text = "Signup")
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun LoginScreenPreview() {
-    GatherSpaceTheme {
-        LoginScreen(
-            modifier = Modifier.fillMaxSize(),
-            username = TextFieldState("", errorMessage = "Why don't have an account?"),
-            onUsernameChange = {},
-            password = TextFieldState(""),
-            onPasswordChange = {},
-            onSubmit = {},
-            onSignupTap = {},
-            onAuthenticated = {},
-            onBackTap = {},
-            state = AuthState.Idle
-        )
     }
 }

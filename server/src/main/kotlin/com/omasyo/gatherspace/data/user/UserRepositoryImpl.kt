@@ -41,18 +41,18 @@ class UserRepositoryImpl(
             password = password
         ).executeAsOneOrNull() ?: false
     }
-
-    private fun userMapper(
-        userId: Int,
-        username: String,
-        image: String?,
-        created: LocalDateTime,
-        modified: LocalDateTime
-    ) = UserDetails(
-        id = userId,
-        username = username,
-        imageUrl = image,
-        created = created.toKotlinLocalDateTime(),
-        modified = modified.toKotlinLocalDateTime()
-    )
 }
+
+fun userMapper(
+    userId: Int,
+    username: String,
+    image: String?,
+    created: LocalDateTime,
+    modified: LocalDateTime
+) = UserDetails(
+    id = userId,
+    username = username,
+    imageUrl = image,
+    created = created.toKotlinLocalDateTime(),
+    modified = modified.toKotlinLocalDateTime()
+)

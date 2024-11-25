@@ -18,7 +18,7 @@ class SignupViewModel(
     private val authRepository: AuthRepository,
     private val userRepository: UserRepository
 ) : ViewModel() {
-    private val _state = MutableStateFlow<AuthState>(AuthState.Idle)
+    private val _state = MutableStateFlow<AuthState>(AuthState.Initial)
     val state: StateFlow<AuthState> = _state
 
     var usernameField by mutableStateOf(TextFieldState(""))
@@ -38,22 +38,27 @@ class SignupViewModel(
     fun submit() {
         if (!validate()) return
 
-        _state.value = AuthState.Loading
+        _state.value = _state.value.copy(isLoading = true)
         viewModelScope.launch {
             userRepository.createAccount(usernameField.value, passwordField.value, null).first()
                 .onError {
-                    _state.value = AuthState.Error(it)
+                    _state.value = _state.value.copy(event = AuthEvent.Error(it))
                 }
                 .onSuccess {
                     _state.value =
                         when (val response = authRepository.login(usernameField.value, passwordField.value).first()) {
-                            is DomainError -> AuthState.Error(response.message)
+                            is DomainError -> _state.value.copy(event = AuthEvent.Error(response.message))
+                            is Success -> _state.value.copy(event = AuthEvent.Success)
                             AuthError -> throw IllegalStateException()
-                            is Success -> AuthState.Success
                         }
                 }
+            _state.value = _state.value.copy(isLoading = true)
 
         }
+    }
+
+    fun clearEvent() {
+        _state.value = _state.value.copy(event = AuthEvent.None)
     }
 
     private fun validate(): Boolean {

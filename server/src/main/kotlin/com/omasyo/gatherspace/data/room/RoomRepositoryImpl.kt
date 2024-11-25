@@ -1,8 +1,10 @@
 package com.omasyo.gatherspace.data.room
 
 import com.omasyo.gatherspace.data.DatabaseResponse
+import com.omasyo.gatherspace.data.user.userMapper
 import com.omasyo.gatherspace.database.RoomQueries
 import com.omasyo.gatherspace.database.Room_memberQueries
+import com.omasyo.gatherspace.database.User_accountQueries
 import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.models.response.User
@@ -16,11 +18,19 @@ import java.io.File
 internal class RoomRepositoryImpl(
     private val roomQueries: RoomQueries,
     private val roomMemberQueries: Room_memberQueries,
+    private val userAccountqueries: User_accountQueries
 ) : RoomRepository {
-    override fun create(name: String, description: String, imageBuffer: Buffer?): DatabaseResponse<Int> {
+    override fun create(
+        name: String,
+        description: String,
+        creatorId: Int,
+        imageBuffer: Buffer?
+    ): DatabaseResponse<Int> {
         return roomQueries.transactionWithResult {
             val imageId = imageBuffer?.let { createImageFile(it) }
-            DatabaseResponse.Success(roomQueries.create(name, description, imageId).executeAsOne())
+            val roomId = roomQueries.create(name, description, imageId, creatorId).executeAsOne()
+            roomMemberQueries.create(roomId, creatorId)
+            DatabaseResponse.Success(roomId)
         }
     }
 
@@ -65,6 +75,7 @@ internal class RoomRepositoryImpl(
         return roomQueries.transactionWithResult {
             val room = roomQueries.getRoomById(roomId).executeAsOneOrNull()
                 ?: return@transactionWithResult null
+            val creator = room.creator?.let { userAccountqueries.getById(it, ::userMapper).executeAsOne() }
 
             val isMember = userId?.let { roomMemberQueries.contains(roomId, it).executeAsOne() } ?: false
             val members = getMembers(roomId)
@@ -72,7 +83,8 @@ internal class RoomRepositoryImpl(
                 RoomDetails(
                     id = id,
                     name = name,
-                    imageUrl = image, //TODO image will have relative path
+                    imageUrl = image,
+                    creator = creator,
                     isMember = isMember,
                     members = members,
                     created = created.toKotlinLocalDateTime(),

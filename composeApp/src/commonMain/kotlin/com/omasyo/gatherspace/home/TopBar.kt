@@ -23,20 +23,24 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.ui.Alignment
+import com.omasyo.gatherspace.models.response.UserDetails
 import com.omasyo.gatherspace.ui.components.Image
 import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
 import gatherspace.composeapp.generated.resources.Res
 import gatherspace.composeapp.generated.resources.gatherspace
 import gatherspace.composeapp.generated.resources.user_placeholder
+import kotlinx.datetime.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
     modifier: Modifier = Modifier,
     onProfileTap: () -> Unit,
+    onLoginTap: () -> Unit,
     onCreateRoomTap: () -> Unit,
     isAuthenticated: Boolean,
     isExpanded: Boolean,
+    userState: UiState<UserDetails>
 ) {
     Row(
         modifier = modifier,
@@ -49,15 +53,48 @@ fun TopBar(
         )
         Spacer(modifier = Modifier.weight(1f))
         if (isAuthenticated) {
-            IconButton(onClick = onCreateRoomTap) {
-                Icon(Icons.Default.Add, null)
+            when (userState) {
+                is UiState.Error -> Unit
+                UiState.Loading -> UserDetailsPlaceholder(isExpanded = isExpanded)
+                is UiState.Success -> UserDetails(
+                    user = userState.data,
+                    onProfileTap = onProfileTap,
+                    onCreateRoomTap = onCreateRoomTap,
+                    isExpanded = isExpanded
+                )
             }
-            if (isExpanded) {
-                Text("Username", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(end = 4f.dp))
+        } else {
+            TextButton(onClick = onLoginTap) {
+                Text("Login")
             }
         }
+    }
+}
+
+@Composable
+private fun UserDetails(
+    modifier: Modifier = Modifier,
+    user: UserDetails,
+    onCreateRoomTap: () -> Unit,
+    onProfileTap: () -> Unit,
+    isExpanded: Boolean,
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        IconButton(onClick = onCreateRoomTap) {
+            Icon(Icons.Default.Add, null)
+        }
+        if (isExpanded) {
+            Text(
+                text = user.username,
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(end = 4f.dp)
+            )
+        }
         Image(
-            "todo",
+            user.imageUrl,
             placeholder = Res.drawable.user_placeholder,
             modifier = Modifier
                 .padding(top = 2f.dp)
@@ -68,10 +105,51 @@ fun TopBar(
     }
 }
 
+@Composable
+private fun UserDetailsPlaceholder(
+    modifier: Modifier = Modifier,
+    isExpanded: Boolean,
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (isExpanded) {
+            Box(
+                modifier = Modifier.background(MaterialTheme.colorScheme.surfaceVariant)
+                    .height(16f.dp)
+                    .width(120f.dp)
+            )
+        }
+        Box(
+            Modifier
+                .padding(top = 2f.dp, start = 8f.dp)
+                .size(40f.dp)
+                .clip(MaterialTheme.shapes.small)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+        )
+    }
+}
+
 @Preview
 @Composable
 private fun Preview() {
     GatherSpaceTheme(false) {
-        TopBar(onCreateRoomTap = {}, onProfileTap = {}, isAuthenticated = true, isExpanded = true)
+        TopBar(
+            onCreateRoomTap = {},
+            onProfileTap = {},
+            onLoginTap = {},
+            isAuthenticated = true,
+            isExpanded = true,
+            userState = UiState.Success(
+                UserDetails(
+                    id = 2310,
+                    username = "Heath Sandoval",
+                    imageUrl = null,
+                    created = LocalDateTime(1, 1, 1, 1, 1, 1),
+                    modified = LocalDateTime(1, 1, 1, 1, 1, 1)
+                )
+            )
+        )
     }
 }

@@ -7,7 +7,7 @@ import com.omasyo.gatherspace.models.response.User
 import kotlinx.io.Buffer
 
 interface RoomRepository {
-    fun create(name: String, description: String, imageBuffer: Buffer?): DatabaseResponse<Int>
+    fun create(name: String, description: String, creatorId: Int, imageBuffer: Buffer?): DatabaseResponse<Int>
 
     fun updateRoom(name: String?, description: String?, imageBuffer: Buffer?, roomId: Int)
 

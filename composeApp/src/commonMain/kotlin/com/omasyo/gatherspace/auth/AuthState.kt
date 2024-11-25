@@ -1,8 +1,16 @@
 package com.omasyo.gatherspace.auth
 
-sealed interface AuthState {
-    data object Idle : AuthState
-    data object Loading : AuthState
-    data object Success : AuthState
-    data class Error(val message: String) : AuthState
+data class AuthState(
+    val isLoading: Boolean,
+    val event: AuthEvent,
+) {
+    companion object {
+        val Initial = AuthState(isLoading = false, event = AuthEvent.None)
+    }
+}
+
+sealed interface AuthEvent {
+    data object None : AuthEvent
+    data object Success : AuthEvent
+    data class Error(val message: String) : AuthEvent
 }

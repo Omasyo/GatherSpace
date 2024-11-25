@@ -9,7 +9,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -26,16 +25,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.omasyo.gatherspace.dependencyProvider
-import com.omasyo.gatherspace.ui.components.Image
 import com.omasyo.gatherspace.ui.components.TextField
 import com.omasyo.gatherspace.ui.components.TextFieldState
 import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
-import gatherspace.composeapp.generated.resources.Res
-import gatherspace.composeapp.generated.resources.blank
-import io.ktor.utils.io.jvm.nio.*
 import kotlinx.io.Buffer
-import kotlinx.io.asByteChannel
-import kotlinx.io.asOutputStream
 import kotlinx.io.snapshot
 
 @Composable
@@ -58,9 +51,11 @@ fun CreateRoomRoute(
         image = viewModel.image,
         setImage = viewModel::updateImage,
         onSubmit = viewModel::submit,
-        onRoomCreated = {
-            viewModel.clearState()
-            onRoomCreated(it)
+        onEventReceived = { event ->
+            if (event is CreateRoomEvent.Success) {
+                onRoomCreated(event.id)
+            }
+            viewModel.onEventReceived(event)
         },
         onAuthError = onAuthError,
         state = viewModel.state.collectAsStateWithLifecycle().value
@@ -79,7 +74,7 @@ fun CreateRoomScreen(
     image: Buffer?,
     setImage: (Buffer) -> Unit,
     onSubmit: () -> Unit,
-    onRoomCreated: (Int) -> Unit,
+    onEventReceived: (CreateRoomEvent) -> Unit,
     onAuthError: () -> Unit,
     state: CreateRoomState
 ) {
@@ -89,7 +84,10 @@ fun CreateRoomScreen(
 
     Scaffold { innerPadding ->
 
-        IconButton(onClick = onBackTap, modifier = Modifier.padding(innerPadding).padding(top = 16f.dp, start = 8f.dp)) {
+        IconButton(
+            onClick = onBackTap,
+            modifier = Modifier.padding(innerPadding).padding(top = 16f.dp, start = 8f.dp)
+        ) {
             Icon(Icons.AutoMirrored.Default.ArrowBack, contentDescription = null)
         }
         Column(
@@ -173,9 +171,9 @@ fun CreateRoomScreen(
             Button(
                 onClick = onSubmit,
                 modifier = Modifier.align(Alignment.End),
-                enabled = !state.isSubmitting,
+                enabled = !state.isLoading,
             ) {
-                if (state.isSubmitting) {
+                if (state.isLoading) {
                     CircularProgressIndicator()
                 } else {
                     Text(text = "Submit")
@@ -202,11 +200,7 @@ fun CreateRoomScreen(
     }
 
     LaunchedEffect(state) {
-        when (state) {
-            is CreateRoomState.Error -> onAuthError()
-            is CreateRoomState.Submitted -> onRoomCreated(state.id)
-            else -> {}
-        }
+        onEventReceived(state.event)
     }
 }
 
@@ -294,9 +288,9 @@ private fun CreateRoomScreenPreview() {
             image = null,
             setImage = {},
             onSubmit = {},
-            onRoomCreated = {},
+            onEventReceived = {},
             onAuthError = {},
-            state = CreateRoomState.Idle
+            state = CreateRoomState.Initial
         )
     }
 }

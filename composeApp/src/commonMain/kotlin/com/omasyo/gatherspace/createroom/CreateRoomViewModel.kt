@@ -18,7 +18,7 @@ class CreateRoomViewModel(
     private val roomRepository: RoomRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<CreateRoomState>(CreateRoomState.Idle)
+    private val _state = MutableStateFlow(CreateRoomState.Initial)
     val state: StateFlow<CreateRoomState> = _state
 
     var nameField by mutableStateOf(TextFieldState(""))
@@ -46,22 +46,32 @@ class CreateRoomViewModel(
     fun submit() {
         if (!validate()) return
 
-        _state.value = CreateRoomState.Submitting
+        _state.value = _state.value.copy(isLoading = true)
         viewModelScope.launch {
             roomRepository.createRoom(nameField.value, descriptionField.value, image).first().onError {
-                _state.value = CreateRoomState.Error(it)
+                _state.value = _state.value.copy(isLoading = false)
+                _state.value = _state.value.copy(event = CreateRoomEvent.Error(it))
             }.onSuccess {
-                _state.value = CreateRoomState.Submitted(it)
+                _state.value = _state.value.copy(event = CreateRoomEvent.Success(it))
             }
         }
     }
 
-    fun clearState() {
-        _state.value = CreateRoomState.Idle
-        nameField = TextFieldState("")
-        descriptionField = TextFieldState("")
-    }
+    fun onEventReceived(event: CreateRoomEvent) {
+        when (event) {
+            is CreateRoomEvent.Error -> {
+                _state.value = _state.value.copy(event = CreateRoomEvent.None)
+            }
 
+            is CreateRoomEvent.Success -> {
+                _state.value = CreateRoomState.Initial
+                nameField = TextFieldState("")
+                descriptionField = TextFieldState("")
+            }
+
+            CreateRoomEvent.None -> Unit
+        }
+    }
 
     private fun validate(): Boolean {
         if (nameField.value.isBlank()) {

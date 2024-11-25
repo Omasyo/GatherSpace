@@ -30,7 +30,6 @@ internal class MessageNetworkSourceImpl(
         flow {
             client.sse(path = "/rooms/$roomId/messages/events") {
                 incoming.collect { events ->
-
                     when (events.event) {
                         "connect" -> {
                             Napier.i(tag = tag) { "getMessageFlow: Connected to $roomId" }
@@ -48,7 +47,6 @@ internal class MessageNetworkSourceImpl(
 
     override suspend fun sendMessage(roomId: Int, message: String): Result<Unit> =
         mapResponse {
-
             client.post(Messages(Rooms.Id(roomId))) {
                 setBody(MessageRequest(message))
             }

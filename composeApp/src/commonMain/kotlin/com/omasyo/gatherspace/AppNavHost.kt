@@ -111,3 +111,6 @@ data class RoomRoute(val id: Int) : HomeRoutes
 
 @MyParcelize
 data object CreateRoom : HomeRoutes
+
+//@MyParcelize
+//data object Discover : HomeRoutes

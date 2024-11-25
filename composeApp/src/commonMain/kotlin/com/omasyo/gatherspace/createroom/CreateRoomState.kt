@@ -1,10 +1,16 @@
 package com.omasyo.gatherspace.createroom
 
-sealed interface CreateRoomState {
-    data object Idle : CreateRoomState
-    data object Submitting : CreateRoomState
-    data class Submitted(val id: Int) : CreateRoomState
-    data class Error(val message: String) : CreateRoomState
+data class CreateRoomState(
+    val isLoading: Boolean,
+    val event: CreateRoomEvent,
+) {
+    companion object {
+        val Initial = CreateRoomState(isLoading = false, event = CreateRoomEvent.None)
+    }
 }
 
-val CreateRoomState.isSubmitting: Boolean get() = this is CreateRoomState.Submitting
+sealed interface CreateRoomEvent {
+    data object None : CreateRoomEvent
+    data class Success(val id: Int) : CreateRoomEvent
+    data class Error(val message: String) : CreateRoomEvent
+}

@@ -1,4 +1,4 @@
-package com.omasyo.gatherspace.home
+package com.omasyo.gatherspace.room
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -28,20 +28,25 @@ class RoomViewModel(
 
     private val refreshRoomEvent = MutableStateFlow(Any())
 
+    private val _state = MutableStateFlow(RoomState.Initial)
+    val state: StateFlow<RoomState> = _state
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    val room: StateFlow<UiState<RoomDetails>> = refreshRoomEvent.flatMapLatest {
+    val room: StateFlow<RoomDetails?> = refreshRoomEvent.flatMapLatest {
         roomRepository.getRoom(roomId)
             .map {
                 when (it) {
-                    is DomainError -> UiState.Error(it.message)
-                    AuthError -> UiState.Error("Invalid State")
-                    is Success -> UiState.Success(it.data)
+                    is DomainError -> {
+                        _state.value =
+                            _state.value.copy(event = RoomEvent.Error(it.message))
+                        null
+                    }
+
+                    AuthError -> throw IllegalStateException("Auth error")
+                    is Success -> it.data
                 }
             }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UiState.Loading)
-
-    val _sendMessageState = MutableStateFlow<SendMessageState>(SendMessageState.Idle)
-    val sendMessageState: StateFlow<SendMessageState> = _sendMessageState
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     val oldMessages = messageRepository.getRecentMessages(roomId).cachedIn(viewModelScope)
 
@@ -77,22 +82,26 @@ class RoomViewModel(
             roomRepository.joinRoom(roomId).first()
                 .onSuccess {
                     refreshRoom()
+                    _state.value = _state.value.copy(event = RoomEvent.JoinedRoom)
                 }
         }
     }
 
     fun sendMessage() {
         viewModelScope.launch {
-            _sendMessageState.value = SendMessageState.Loading
+            _state.value = _state.value.copy(isSending = true)
             messageRepository.sendMessage(roomId, message).first()
                 .onError {
                     //TODO find better way of doing errors different states too much
-                    _sendMessageState.value = SendMessageState.Error(it)
+//                    _sendMessageState.value = RoomState.Error(it)
+                    _state.value = _state.value.copy(event = RoomEvent.Error(it))
                 }
                 .onSuccess {
                     message = ""
-                    _sendMessageState.value = SendMessageState.Idle
+                    _state.value = _state.value.copy(event = RoomEvent.MessageSent)
                 }
+
+            _state.value = _state.value.copy(isSending = true)
         }
     }
 }

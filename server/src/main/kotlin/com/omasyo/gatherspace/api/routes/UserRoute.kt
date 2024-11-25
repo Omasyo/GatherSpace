@@ -1,5 +1,6 @@
 package com.omasyo.gatherspace.api.routes
 
+import com.omasyo.gatherspace.api.auth.AuthName
 import com.omasyo.gatherspace.data.DatabaseResponse
 import com.omasyo.gatherspace.data.user.UserRepository
 import com.omasyo.gatherspace.models.request.CreateUserRequest
@@ -10,6 +11,8 @@ import com.omasyo.gatherspace.utils.toErrorResponse
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.resources.*
 import io.ktor.server.response.*
@@ -33,6 +36,23 @@ fun Application.userRoute(repository: UserRepository) {
                     message = "User Not Found",
                 )
             )
+        }
+
+        authenticate(AuthName) {
+            get<Users.Me> {
+                val principal = call.principal<JWTPrincipal>()
+
+                val userId = principal?.payload?.getClaim("user_id")?.asInt()!!
+
+                repository.getUserById(userId)?.let {
+                    call.respond(HttpStatusCode.OK, it)
+                } ?: call.respond(
+                    ErrorResponse(
+                        statusCode = HttpStatusCode.NotFound.value,
+                        message = "User Not Found",
+                    )
+                )
+            }
         }
 
         post<Users> { _ ->

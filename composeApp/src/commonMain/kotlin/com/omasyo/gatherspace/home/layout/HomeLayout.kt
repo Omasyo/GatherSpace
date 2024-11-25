@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
@@ -22,7 +21,7 @@ import com.omasyo.gatherspace.HomeRoutes
 import com.omasyo.gatherspace.RoomRoute
 
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun HomeLayout(
     modifier: Modifier = Modifier,
@@ -45,7 +44,7 @@ fun HomeLayout(
         directive = navigator.scaffoldDirective,
         value = navigator.scaffoldValue,
         listPane = {
-            AnimatedPane(
+            Box(
                 Modifier
                     .drawBehind {
                         drawLine(
@@ -55,7 +54,7 @@ fun HomeLayout(
                             strokeWidth.toPx()
                         )
                     }) {
-                if (navigator.scaffoldValue.primary == PaneAdaptedValue.Hidden) {
+                if (scaffoldStateTransition.targetState.primary == PaneAdaptedValue.Hidden) {
                     Column(Modifier.fillMaxSize()) {
                         Box(
                             Modifier
@@ -73,7 +72,7 @@ fun HomeLayout(
                         }
                         roomsGrid()
                     }
-                } else if(!scaffoldStateTransition.isRunning) {
+                } else if (!scaffoldStateTransition.isRunning) {
                     if (isAuthenticated) {
                         roomsList()
                     } else {
@@ -83,7 +82,7 @@ fun HomeLayout(
             }
         },
         detailPane = {
-            AnimatedPane {
+            Box {
                 val route = navigator.currentDestination?.content
                 when (route) {
                     CreateRoom -> createRoomView()
@@ -105,7 +104,7 @@ fun HomeLayout(
                                             )
                                         }
                                 ) {
-                                    topBar(true)
+                                    topBar(scaffoldStateTransition.targetState.primary == PaneAdaptedValue.Hidden)
                                 }
                                 roomsGrid()
                             }

@@ -2,13 +2,12 @@ package com.omasyo.gatherspace.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.omasyo.gatherspace.domain.AuthError
-import com.omasyo.gatherspace.domain.DomainError
-import com.omasyo.gatherspace.domain.Success
+import com.omasyo.gatherspace.domain.*
 import com.omasyo.gatherspace.domain.auth.AuthRepository
 import com.omasyo.gatherspace.domain.room.RoomRepository
 import com.omasyo.gatherspace.domain.user.UserRepository
 import com.omasyo.gatherspace.models.response.Room
+import com.omasyo.gatherspace.models.response.UserDetails
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -19,6 +18,19 @@ class HomeViewModel(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
     private val refreshRoomsEvent = MutableStateFlow(Any())
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val user: StateFlow<UiState<UserDetails>> =
+        refreshRoomsEvent.flatMapLatest {
+            userRepository.getCurrentUser()
+                .map {
+                    when (it) {
+                        is DomainError -> UiState.Error(it.message)
+                        AuthError -> UiState.Error("Invalid State")
+                        is Success -> UiState.Success(it.data)
+                    }
+                }
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UiState.Loading)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val allRooms: StateFlow<UiState<List<Room>>> =
@@ -47,27 +59,7 @@ class HomeViewModel(
                 }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UiState.Loading)
 
-//    @OptIn(ExperimentalCoroutinesApi::class)
-//    val userRooms: StateFlow<UiState<List<Room>>> = refreshRoomsEvent.flatMapLatest {
-//        roomRepository.getUserRooms().map { response ->
-////            if (authRepository.isAuthenticated().first()) {
-////                UiState.Error("Not Authenticated")
-////                return@map UiState.Loading
-////            }
-//
-//            when (response) {
-//                is DomainError -> UiState.Error(response.message)
-//                AuthError -> UiState.Error("Invalid State")
-//                is Success -> UiState.Success(response.data)
-//            }
-//        }
-//    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UiState.Loading)
-
-
-//    val user: StateFlow<UiState<User>> =
-//        userRepository
-
-    fun refreshRooms() {
+    fun refresh() {
         println("Refreshing rooms")
         viewModelScope.launch {
             refreshRoomsEvent.emit(Any())

@@ -4,13 +4,14 @@ CREATE TABLE IF NOT EXISTS room
     name        TEXT      NOT NULL,
     description TEXT      NOT NULL,
     image       TEXT,
+    creator     INT       REFERENCES user_account ON DELETE SET NULL,
     created     TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     modified    TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP)
 );
 
 create:
-INSERT INTO room(name, description, image)
-VALUES (?, ?, ?)
+INSERT INTO room(name, description, image, creator)
+VALUES (?, ?, ?, ?)
 RETURNING id;
 
 update:
