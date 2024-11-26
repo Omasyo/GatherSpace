@@ -140,11 +140,6 @@ fun CreateRoomScreen(
                             .clip(MaterialTheme.shapes.extraLarge)
                             .clickable { showBottomSheet = true }
                     ) {
-//                        Image(
-//                            imageUrl = "",
-//                            placeholder = Res.drawable.blank,
-//                            modifier = Modifier.fillMaxSize(),
-//                        )
                         AsyncImage(
                             remember(image) {
                                 image?.snapshot()?.also {

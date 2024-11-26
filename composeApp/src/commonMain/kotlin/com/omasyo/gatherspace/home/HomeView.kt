@@ -19,7 +19,6 @@ import com.omasyo.gatherspace.*
 import com.omasyo.gatherspace.createroom.CreateRoomRoute
 import com.omasyo.gatherspace.home.layout.HomeLayout
 import com.omasyo.gatherspace.home.layout.HomeLayoutView
-import com.omasyo.gatherspace.home.layout.calculateCustomPaneScaffoldDirective
 import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.models.response.UserDetails
 import com.omasyo.gatherspace.room.RoomPanel
