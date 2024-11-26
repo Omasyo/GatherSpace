@@ -90,7 +90,7 @@ private fun UserDetails(
             Text(
                 text = user.username,
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(end = 4f.dp)
+                modifier = Modifier.padding(end = 16f.dp)
             )
         }
         Image(
@@ -123,7 +123,7 @@ private fun UserDetailsPlaceholder(
         }
         Box(
             Modifier
-                .padding(top = 2f.dp, start = 8f.dp)
+                .padding(top = 2f.dp, start = 16f.dp)
                 .size(40f.dp)
                 .clip(MaterialTheme.shapes.small)
                 .background(MaterialTheme.colorScheme.surfaceVariant)

@@ -1,131 +1,144 @@
 package com.omasyo.gatherspace.home.layout
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
-import androidx.compose.material3.adaptive.layout.AnimatedPane
-import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
-import androidx.compose.material3.adaptive.layout.PaneAdaptedValue
-import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldNavigator
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
+import androidx.window.core.layout.WindowSizeClass
+import androidx.window.core.layout.WindowWidthSizeClass
 import com.omasyo.gatherspace.BackHandler
-import com.omasyo.gatherspace.CreateRoom
-import com.omasyo.gatherspace.HomeRoutes
-import com.omasyo.gatherspace.RoomRoute
 
+sealed interface HomeLayoutView {
+    data object None : HomeLayoutView
+    data object Discover : HomeLayoutView
+    data class Room(val id: Int) : HomeLayoutView
+    data object CreateRoom : HomeLayoutView
+}
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun HomeLayout(
     modifier: Modifier = Modifier,
+    onBack: () -> Unit,
     isAuthenticated: Boolean,
     topBar: @Composable (Boolean) -> Unit,
     roomsList: @Composable () -> Unit,
     roomsGrid: @Composable () -> Unit,
-    roomView: @Composable (roomId: Int) -> Unit,
+    roomView: @Composable (Int) -> Unit,
     createRoomView: @Composable () -> Unit,
-    loginPlaceholder: @Composable () -> Unit,
-    navigator: ThreePaneScaffoldNavigator<HomeRoutes>,
+    selectedView: HomeLayoutView,
+    windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
+//    roomView: @Composable (roomId: Int) -> Unit,
+//    createRoomView: @Composable () -> Unit,
+//    loginPlaceholder: @Composable () -> Unit
 ) {
-    BackHandler(enabled = navigator.canNavigateBack(), onBack = { navigator.navigateBack() })
+
+    BackHandler(enabled = selectedView !is HomeLayoutView.None, onBack = onBack)
 
     val borderColor = MaterialTheme.colorScheme.onSurfaceVariant
     val strokeWidth = 1f.dp
 
-    ListDetailPaneScaffold(
-        modifier = modifier,
-        directive = navigator.scaffoldDirective,
-        value = navigator.scaffoldValue,
-        listPane = {
-            Box(
-                Modifier
-                    .drawBehind {
-                        drawLine(
-                            borderColor,
-                            Offset(size.width, 0f),
-                            Offset(size.width, size.height),
-                            strokeWidth.toPx()
-                        )
-                    }) {
-                if (scaffoldStateTransition.targetState.primary == PaneAdaptedValue.Hidden) {
-                    Column(Modifier.fillMaxSize()) {
-                        Box(
-                            Modifier
-                                .heightIn(max = 64f.dp)
-                                .drawBehind {
-                                    drawLine(
-                                        borderColor,
-                                        Offset(0f, size.height),
-                                        Offset(size.width, size.height),
-                                        strokeWidth.toPx()
-                                    )
-                                }
-                        ) {
-                            topBar(false)
-                        }
-                        roomsGrid()
-                    }
-                } else if (!scaffoldStateTransition.isRunning) {
-                    if (isAuthenticated) {
-                        roomsList()
-                    } else {
-                        loginPlaceholder()
-                    }
-                }
+    Row(modifier) {
+        Box(
+            Modifier.run {
+                if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED)
+                    width(400f.dp)
+                else this
             }
-        },
-        detailPane = {
-            Box {
-                val route = navigator.currentDestination?.content
-                when (route) {
-                    CreateRoom -> createRoomView()
+        ) {
+            if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED) {
+                roomsList()
+            } else {
+                Column {
+                    AnimatedVisibility(
+                        selectedView is HomeLayoutView.None || selectedView is HomeLayoutView.Discover,
+                        modifier = Modifier.drawBehind {
+                            drawLine(
+                                borderColor,
+                                Offset(0f, size.height),
+                                Offset(size.width, size.height),
+                                strokeWidth.toPx()
+                            )
+                        }) {
+                        topBar(false)
+                    }
+                    AnimatedContent(selectedView, label = "listPane") { selectedView ->
 
-                    is RoomRoute -> roomView(route.id)
-
-                    null -> {
-                        if (!scaffoldStateTransition.isRunning) {
-                            Column {
-                                Box(
-                                    Modifier
-                                        .heightIn(max = 64f.dp)
-                                        .drawBehind {
-                                            drawLine(
-                                                borderColor,
-                                                Offset(0f, size.height),
-                                                Offset(size.width, size.height),
-                                                strokeWidth.toPx()
-                                            )
-                                        }
-                                ) {
-                                    topBar(scaffoldStateTransition.targetState.primary == PaneAdaptedValue.Hidden)
+                        when (selectedView) {
+                            HomeLayoutView.None -> {
+                                Column {
+                                    if (isAuthenticated) roomsList() else roomsGrid()
                                 }
-                                roomsGrid()
+                            }
+
+                            HomeLayoutView.Discover -> {
+                                Column {
+                                    roomsGrid()
+                                }
+                            }
+
+                            is HomeLayoutView.Room -> {
+                                roomView(selectedView.id)
+                            }
+
+                            HomeLayoutView.CreateRoom -> {
+                                createRoomView()
                             }
                         }
                     }
                 }
             }
-        },
-        extraPane = {
-            AnimatedPane(
-                Modifier
-                    .drawBehind {
-                        drawLine(
-                            borderColor,
-                            Offset(0f, 0f),
-                            Offset(0f, size.height),
-                            strokeWidth.toPx()
-                        )
-                    }) {
-                //todo maybe we add extras like room details/user details
+
+        }
+        AnimatedVisibility(
+            windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED,
+            modifier = Modifier
+                .weight(1f)
+                .drawBehind {
+                    drawLine(
+                        borderColor,
+                        Offset(0f, 0f),
+                        Offset(0f, size.height),
+                        strokeWidth.toPx()
+                    )
+                }
+        ) {
+            val view = if (selectedView == HomeLayoutView.None) HomeLayoutView.Discover else selectedView
+            AnimatedContent(view, label = "detailsPane") { selected ->
+                when (selected) {
+                    HomeLayoutView.None, HomeLayoutView.Discover -> {
+                        Column {
+                            Box(modifier = Modifier.drawBehind {
+                                drawLine(
+                                    borderColor,
+                                    Offset(0f, size.height),
+                                    Offset(size.width, size.height),
+                                    strokeWidth.toPx()
+                                )
+                            }
+                            ) {
+                                topBar(true)
+                            }
+                            Box(Modifier.weight(1f)) {
+                                roomsGrid()
+                            }
+                        }
+                    }
+
+                    is HomeLayoutView.Room -> {
+                        roomView(selected.id)
+                    }
+
+                    HomeLayoutView.CreateRoom -> {
+                        createRoomView()
+                    }
+                }
             }
-        },
-    )
+        }
+    }
 }

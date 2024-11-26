@@ -10,7 +10,7 @@ import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -18,11 +18,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.omasyo.gatherspace.*
 import com.omasyo.gatherspace.createroom.CreateRoomRoute
 import com.omasyo.gatherspace.home.layout.HomeLayout
+import com.omasyo.gatherspace.home.layout.HomeLayoutView
 import com.omasyo.gatherspace.home.layout.calculateCustomPaneScaffoldDirective
 import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.models.response.UserDetails
 import com.omasyo.gatherspace.room.RoomPanel
-import com.omasyo.gatherspace.ui.components.LoginPlaceholder
 import com.omasyo.gatherspace.ui.theme.*
 
 @Composable
@@ -64,18 +64,22 @@ fun HomeView(
     userRoomsState: UiState<List<Room>>,
 
     ) {
-    val navigator = rememberListDetailPaneScaffoldNavigator<HomeRoutes>(
-        calculateCustomPaneScaffoldDirective(
-            currentWindowAdaptiveInfo()
-        )
-    )
-    val onCreateRoomTap = { navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, CreateRoom) }
-    BackHandler(enabled = navigator.canNavigateBack(), onBack = { navigator.navigateBack() })
+//    val navigator = rememberListDetailPaneScaffoldNavigator<HomeRoutes>(
+//        calculateCustomPaneScaffoldDirective(
+//            currentWindowAdaptiveInfo()
+//        )
+//    )
+
+    var selected by remember { mutableStateOf<HomeLayoutView>(HomeLayoutView.None) }
+//    val onCreateRoomTap = { navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, CreateRoom) }
+//    BackHandler(enabled = navigator.canNavigateBack(), onBack = { navigator.navigateBack() })
 
     Surface(modifier) {
         HomeLayout(
             modifier = Modifier.fillMaxSize(),
             isAuthenticated = isAuthenticated,
+            selectedView = selected,
+            onBack = { selected = HomeLayoutView.None },
             topBar = { isExpanded ->
                 TopBar(
                     modifier = Modifier
@@ -83,7 +87,7 @@ fun HomeView(
                         .heightIn(48f.dp),
                     onProfileTap = onProfileTap,
                     onLoginTap = onLoginTap,
-                    onCreateRoomTap = onCreateRoomTap,
+                    onCreateRoomTap = { selected =HomeLayoutView.CreateRoom },
                     isAuthenticated = isAuthenticated,
                     isExpanded = isExpanded,
                     userState = userState,
@@ -92,15 +96,15 @@ fun HomeView(
             },
             roomsList = {
                 RoomsList(
-                    onRoomTap = { navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomRoute(it)) },
-                    onJoinRoomTap = { navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, null) },
+                    onRoomTap = { selected = HomeLayoutView.Room(it) },
+                    onJoinRoomTap = { selected = HomeLayoutView.Discover },
                     onRetry = onRefresh,
                     state = if (isAuthenticated) userRoomsState else allRoomsState,
                 )
             },
             roomsGrid = {
                 RoomsGrid(
-                    onRoomTap = { navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomRoute(it)) },
+                    onRoomTap = { selected = HomeLayoutView.Room(it) },
                     onRetry = onRefresh,
                     state = allRoomsState,
                 )
@@ -111,23 +115,19 @@ fun HomeView(
                     isAuthenticated = isAuthenticated,
                     onRegisterTap = onLoginTap,
                     onJoin = onRefresh,
-                    onBackTap = navigator::navigateBack,
+                    onBackTap = {selected = HomeLayoutView.None},
                 )
             },
             createRoomView = {
                 CreateRoomRoute(
-                    onBackTap = { navigator.navigateBack() },
+                    onBackTap = {selected = HomeLayoutView.None},
                     onRoomCreated = {
                         onRefresh()
-                        navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, RoomRoute(it))
+                        selected = HomeLayoutView.Room(it)
                     },
                     onAuthError = onAuthError,
                 )
             },
-            loginPlaceholder = {
-                LoginPlaceholder(onLoginTap = onLoginTap)
-            },
-            navigator = navigator
         )
     }
 }
