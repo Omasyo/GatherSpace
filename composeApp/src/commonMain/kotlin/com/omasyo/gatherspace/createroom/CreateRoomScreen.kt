@@ -25,8 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.omasyo.gatherspace.dependencyProvider
-import com.omasyo.gatherspace.ui.components.TextField
-import com.omasyo.gatherspace.ui.components.TextFieldState
+import com.omasyo.gatherspace.ui.components.*
 import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
 import kotlinx.io.Buffer
 import kotlinx.io.snapshot
@@ -192,8 +191,20 @@ fun CreateRoomScreen(
                     setImage(imageBuffer)
                     showBottomSheet = false
                 }
-                TakePictureItem(onComplete = onComplete)
-                ChoosePictureItem(onComplete = onComplete)
+
+                PhotoTaker(onComplete = onComplete) {
+                    BottomSheetMenuItem(
+                        text = "Choose from gallery",
+                        onTap = ::takePhoto
+                    )
+                }
+                ImageChooser(onComplete = onComplete) {
+                    BottomSheetMenuItem(
+                        text = "Choose from gallery",
+                        onTap = ::chooseImage
+                    )
+                }
+
                 Spacer(Modifier.height(16f.dp))
             }
         }
@@ -203,18 +214,6 @@ fun CreateRoomScreen(
         onEventReceived(state.event)
     }
 }
-
-@Composable
-expect fun ChoosePictureItem(
-    modifier: Modifier = Modifier,
-    onComplete: (Buffer) -> Unit
-)
-
-@Composable
-expect fun TakePictureItem(
-    modifier: Modifier = Modifier,
-    onComplete: (Buffer) -> Unit
-)
 
 @Composable
 private fun CreateRoomTextField(

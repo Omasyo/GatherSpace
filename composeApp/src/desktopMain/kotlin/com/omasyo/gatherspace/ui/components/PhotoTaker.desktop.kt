@@ -1,15 +1,15 @@
-package com.omasyo.gatherspace.createroom
+package com.omasyo.gatherspace.ui.components
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.AwtWindow
 import com.github.sarxos.webcam.Webcam
-import com.github.sarxos.webcam.WebcamPanel
+import com.omasyo.gatherspace.createroom.BottomSheetMenuItem
 import kotlinx.io.Buffer
 import kotlinx.io.transferFrom
-import java.awt.*
+import java.awt.BorderLayout
+import java.awt.Font
 import java.io.File
-import java.nio.file.Files
 import javax.imageio.ImageIO
 import javax.swing.JButton
 import javax.swing.JDialog
@@ -17,21 +17,33 @@ import javax.swing.JPanel
 import javax.swing.border.EmptyBorder
 
 
-@Composable
-actual fun TakePictureItem(modifier: Modifier, onComplete: (Buffer) -> Unit) {
+class DesktopPhotoTakerScope : PhotoTakerScope {
+    var isOpen by mutableStateOf(false)
 
-    var isOpen by remember { mutableStateOf(false) }
+    override fun takePhoto() {
+        isOpen = true
+    }
+
+}
+
+@Composable
+actual fun PhotoTaker(
+    modifier: Modifier,
+    onComplete: (Buffer) -> Unit,
+    content: @Composable PhotoTakerScope.() -> Unit
+) {
+    val scope = remember { DesktopPhotoTakerScope() }
     BottomSheetMenuItem(
         text = "Take a picture",
         onTap = {
-            isOpen = true
+            scope.isOpen = true
         },
     )
 
-    if (isOpen) {
+    if (scope.isOpen) {
         WebcamPanel(
             onCloseRequest = { file ->
-                isOpen = false
+                scope.isOpen = false
                 if (file != null) {
                     onComplete(Buffer().transferFrom(file.inputStream()))
                 }
@@ -39,53 +51,6 @@ actual fun TakePictureItem(modifier: Modifier, onComplete: (Buffer) -> Unit) {
         )
     }
 }
-
-@Composable
-actual fun ChoosePictureItem(modifier: Modifier, onComplete: (Buffer) -> Unit) {
-    var isOpen by remember { mutableStateOf(false) }
-
-    BottomSheetMenuItem(
-        text = "Choose from gallery",
-        onTap = { isOpen = true }
-    )
-    if (isOpen) {
-        FileDialog(
-            onCloseRequest = { file ->
-                isOpen = false
-
-                if (file == null) return@FileDialog
-                println("Mime type ${Files.probeContentType(file.toPath())}")
-
-                val mime = Files.probeContentType(file.toPath())
-                if (mime != null && mime.contains("image/")) {
-                    onComplete(Buffer().transferFrom(file.inputStream()))
-                    println("Result ${file.absolutePath}")
-                }
-            }
-        )
-    }
-}
-
-@Composable
-private fun FileDialog(
-    onCloseRequest: (result: File?) -> Unit
-) = AwtWindow(
-    create = {
-        object : FileDialog((null as Frame?), "Choose a file", LOAD) {
-            init {
-                isMultipleMode = false
-            }
-
-            override fun setVisible(value: Boolean) {
-                super.setVisible(value)
-                if (value) {
-                    onCloseRequest(files.firstOrNull())
-                }
-            }
-        }
-    },
-    dispose = FileDialog::dispose
-)
 
 @Composable
 private fun WebcamPanel(
@@ -99,7 +64,7 @@ private fun WebcamPanel(
                 viewSize = viewSizes.last()
             }
 
-            val webcamPanel = WebcamPanel(webcam).apply {
+            val webcamPanel = com.github.sarxos.webcam.WebcamPanel(webcam).apply {
                 isFPSDisplayed = true
                 isDisplayDebugInfo = true
                 isImageSizeDisplayed = true
