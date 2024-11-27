@@ -2,6 +2,7 @@ package com.omasyo.gatherspace.network.user
 
 import com.omasyo.gatherspace.models.request.CreateUserRequest
 import com.omasyo.gatherspace.models.response.UserDetails
+import com.omasyo.gatherspace.models.response.UserSession
 import com.omasyo.gatherspace.models.routes.Users
 import com.omasyo.gatherspace.network.mapResponse
 import io.ktor.client.*
@@ -38,11 +39,16 @@ internal class UserNetworkSourceImpl(
 
     override suspend fun getCurrentUser(): Result<UserDetails> =
         mapResponse {
-            client.get(Users.Me(Users()))
+            client.get(Users.Me())
         }
 
     override suspend fun getUserById(id: Int): Result<UserDetails> =
         mapResponse {
             client.get(Users.Id(id, Users()))
+        }
+
+    override suspend fun getUserSessions(): Result<List<UserSession>> =
+        mapResponse {
+            client.get(Users.Me.Sessions())
         }
 }
