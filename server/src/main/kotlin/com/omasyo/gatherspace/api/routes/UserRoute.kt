@@ -53,6 +53,15 @@ fun Application.userRoute(repository: UserRepository) {
                     )
                 )
             }
+
+            get<Users.Me.Sessions> {
+                val principal = call.principal<JWTPrincipal>()
+
+                val userId = principal?.payload?.getClaim("user_id")?.asInt()!!
+                repository.getUserSessions(userId).let {
+                    call.respond(HttpStatusCode.OK, it)
+                }
+            }
         }
 
         post<Users> { _ ->

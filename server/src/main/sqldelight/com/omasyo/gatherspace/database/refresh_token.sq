@@ -30,7 +30,7 @@ SELECT user_id, device_id, device_name, created, last_accessed
 FROM refresh_token
 WHERE token = digest(COALESCE(:token, ''), 'sha256');
 
-getById:
+getByUserId:
 SELECT user_id, device_id, device_name, created, last_accessed
 FROM refresh_token
 WHERE user_id = ?;

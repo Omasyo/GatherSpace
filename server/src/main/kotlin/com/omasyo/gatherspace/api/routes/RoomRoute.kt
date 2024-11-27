@@ -13,7 +13,7 @@ import com.omasyo.gatherspace.data.DatabaseResponse
 import com.omasyo.gatherspace.models.request.CreateUserRequest
 import com.omasyo.gatherspace.models.request.UserRoomRequest
 import com.omasyo.gatherspace.models.response.CreateRoomResponse
-import com.omasyo.gatherspace.models.routes.User
+import com.omasyo.gatherspace.models.routes.Users
 import com.omasyo.gatherspace.utils.respond
 import com.omasyo.gatherspace.utils.toErrorResponse
 import io.ktor.http.*
@@ -66,7 +66,7 @@ fun Application.roomRoute(repository: RoomRepository) {
 
         authenticate(AuthName) {
 
-            get<User.Rooms> {
+            get<Users.Me.Rooms> {
 
                 val principal = call.principal<JWTPrincipal>()
 
@@ -77,7 +77,7 @@ fun Application.roomRoute(repository: RoomRepository) {
                 }
             }
 
-            post<User.Rooms> {
+            post<Users.Me.Rooms> {
 
                 val principal = call.principal<JWTPrincipal>()
 
@@ -89,7 +89,7 @@ fun Application.roomRoute(repository: RoomRepository) {
                 }
             }
 
-            delete<User.Rooms> {
+            delete<Users.Me.Rooms> {
 
                 val principal = call.principal<JWTPrincipal>()
 

@@ -1,8 +1,10 @@
 package com.omasyo.gatherspace.data.user
 
 import com.omasyo.gatherspace.data.DatabaseResponse
+import com.omasyo.gatherspace.database.Refresh_tokenQueries
 import com.omasyo.gatherspace.database.User_accountQueries
 import com.omasyo.gatherspace.models.response.UserDetails
+import com.omasyo.gatherspace.models.response.UserSession
 import com.omasyo.gatherspace.utils.createImageFile
 import io.ktor.http.*
 import kotlinx.datetime.toKotlinLocalDateTime
@@ -11,13 +13,14 @@ import org.postgresql.util.PSQLException
 import java.time.LocalDateTime
 
 class UserRepositoryImpl(
-    private val db: User_accountQueries
+    private val userAccountQueries: User_accountQueries,
+    private val refreshTokenQueries: Refresh_tokenQueries
 ) : UserRepository {
     override fun create(username: String, password: String, imageBuffer: Buffer?): DatabaseResponse<Unit> {
         return try {
-            db.transactionWithResult {
+            userAccountQueries.transactionWithResult {
                 val imageId = imageBuffer?.let { createImageFile(it) }
-                DatabaseResponse.Success(db.create(username, password, imageId))
+                DatabaseResponse.Success(userAccountQueries.create(username, password, imageId))
             }
         } catch (e: PSQLException) {
             when (e.sqlState) {
@@ -28,18 +31,30 @@ class UserRepositoryImpl(
     }
 
     override fun getUserById(id: Int): UserDetails? {
-        return db.getById(id, ::userMapper).executeAsOneOrNull()
+        return userAccountQueries.getById(id, ::userMapper).executeAsOneOrNull()
     }
 
     override fun getUserByUsername(username: String): UserDetails? {
-        return db.getByUsername(username, ::userMapper).executeAsOneOrNull()
+        return userAccountQueries.getByUsername(username, ::userMapper).executeAsOneOrNull()
     }
 
     override fun validateUser(username: String, password: String): Boolean {
-        return db.validateUser(
+        return userAccountQueries.validateUser(
             username = username,
             password = password
         ).executeAsOneOrNull() ?: false
+    }
+
+    override fun getUserSessions(userId: Int): List<UserSession> {
+        return refreshTokenQueries.getByUserId(userId) { _, deviceId, deviceName, created, lastAccessed ->
+            UserSession(
+                userId = userId,
+                deviceId = deviceId,
+                deviceName = deviceName,
+                created = created.toKotlinLocalDateTime(),
+                lastAccessed = lastAccessed.toKotlinLocalDateTime()
+            )
+        }.executeAsList()
     }
 }
 
