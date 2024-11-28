@@ -15,10 +15,10 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 const val ImageDirPath = "images"
-const val ImageUrlPath = "http://192.168.246.113:8080/images/" //TODO setup a common Api Stuff
+const val ImageUrlPath = "http://192.168.24.113:8080/images/" //TODO setup a common Api Stuff
 
-fun Room.Companion.fromDb(id: Int, name: String, imageId: String?): Room {
-    return Room(id, name, imageId?.let { "${ImageUrlPath}$it" })
+fun getImagePath(imageId: String?): String? {
+    return imageId?.let { "${ImageUrlPath}$it" }
 }
 
 //val url = URLBuilder(URLProtocol.HTTP, "localhost")

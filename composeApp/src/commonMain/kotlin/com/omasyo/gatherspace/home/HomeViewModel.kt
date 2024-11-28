@@ -15,7 +15,6 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val roomRepository: RoomRepository,
     private val userRepository: UserRepository,
-    private val authRepository: AuthRepository,
 ) : ViewModel() {
     private val refreshRoomsEvent = MutableStateFlow(Any())
 
@@ -60,10 +59,7 @@ class HomeViewModel(
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UiState.Loading)
 
     fun refresh() {
-        println("Refreshing rooms")
-        viewModelScope.launch {
-            refreshRoomsEvent.emit(Any())
-        }
+        refreshRoomsEvent.tryEmit(Any())
     }
 }
 

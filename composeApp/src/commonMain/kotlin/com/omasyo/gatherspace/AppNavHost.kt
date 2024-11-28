@@ -15,6 +15,7 @@ import com.omasyo.gatherspace.auth.SignupRoute
 import com.omasyo.gatherspace.home.HomeRoute
 import com.omasyo.gatherspace.parcelize.MyParcelable
 import com.omasyo.gatherspace.parcelize.MyParcelize
+import com.omasyo.gatherspace.profile.ProfileRoute
 import kotlinx.serialization.Serializable
 
 private val spec: FiniteAnimationSpec<IntOffset> =
@@ -88,8 +89,14 @@ fun AppNavHost(
             HomeRoute(
                 isAuthenticated = isAuthenticated,
                 onLoginTap = { navController.navigate(Login) },
-                onProfileTap = { navController.navigate(Login) },
+                onProfileTap = { navController.navigate(Profile) },
                 onAuthError = {}
+            )
+        }
+
+        composable<Profile> {
+            ProfileRoute(
+                onBackTap = { navController.popBackStack() }
             )
         }
     }
@@ -104,13 +111,5 @@ data object Login
 @Serializable
 data object Home
 
-sealed interface HomeRoutes : MyParcelable
-
-@MyParcelize
-data class RoomRoute(val id: Int) : HomeRoutes
-
-@MyParcelize
-data object CreateRoom : HomeRoutes
-
-//@MyParcelize
-//data object Discover : HomeRoutes
+@Serializable
+data object Profile

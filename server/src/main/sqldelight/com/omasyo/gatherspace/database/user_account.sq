@@ -14,6 +14,14 @@ create:
 INSERT INTO user_account(username, password, image)
 VALUES (:username, crypt(COALESCE(:password, ''), gen_salt('bf', 8)), :image);
 
+update:
+UPDATE user_account
+SET username = COALESCE(:username, username),
+    password = COALESCE(crypt(COALESCE(:password, ''), gen_salt('bf', 8)), :password),
+    image = COALESCE(:image, image),
+    modified = CURRENT_TIMESTAMP
+WHERE id = ?;
+
 getById:
 SELECT id, username, image, created, modified
 FROM user_account

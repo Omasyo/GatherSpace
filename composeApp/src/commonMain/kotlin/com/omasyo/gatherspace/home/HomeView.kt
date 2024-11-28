@@ -32,7 +32,7 @@ fun HomeRoute(
     onLoginTap: () -> Unit,
     onProfileTap: () -> Unit,
     homeViewModel: HomeViewModel = dependencyProvider {
-        viewModel { HomeViewModel(roomRepository, userRepository, authRepository) }
+        viewModel { HomeViewModel(roomRepository, userRepository) }
     },
 ) {
     HomeView(
@@ -49,7 +49,6 @@ fun HomeRoute(
 }
 
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeView(
     modifier: Modifier = Modifier,
@@ -86,7 +85,7 @@ fun HomeView(
                         .heightIn(48f.dp),
                     onProfileTap = onProfileTap,
                     onLoginTap = onLoginTap,
-                    onCreateRoomTap = { selected =HomeLayoutView.CreateRoom },
+                    onCreateRoomTap = { selected = HomeLayoutView.CreateRoom },
                     isAuthenticated = isAuthenticated,
                     isExpanded = isExpanded,
                     userState = userState,
@@ -114,12 +113,12 @@ fun HomeView(
                     isAuthenticated = isAuthenticated,
                     onRegisterTap = onLoginTap,
                     onJoin = onRefresh,
-                    onBackTap = {selected = HomeLayoutView.None},
+                    onBackTap = { selected = HomeLayoutView.None },
                 )
             },
             createRoomView = {
                 CreateRoomRoute(
-                    onBackTap = {selected = HomeLayoutView.None},
+                    onBackTap = { selected = HomeLayoutView.None },
                     onRoomCreated = {
                         onRefresh()
                         selected = HomeLayoutView.Room(it)

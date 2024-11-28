@@ -4,6 +4,7 @@ import com.omasyo.gatherspace.api.auth.AuthName
 import com.omasyo.gatherspace.data.DatabaseResponse
 import com.omasyo.gatherspace.data.user.UserRepository
 import com.omasyo.gatherspace.models.request.CreateUserRequest
+import com.omasyo.gatherspace.models.request.UpdateUserRequest
 import com.omasyo.gatherspace.models.response.ErrorResponse
 import com.omasyo.gatherspace.models.routes.Users
 import com.omasyo.gatherspace.utils.respond
@@ -15,8 +16,10 @@ import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.resources.*
+import io.ktor.server.resources.patch
+import io.ktor.server.resources.post
 import io.ktor.server.response.*
-import io.ktor.server.routing.routing
+import io.ktor.server.routing.*
 import io.ktor.util.cio.*
 import io.ktor.utils.io.*
 import kotlinx.io.Buffer
@@ -62,6 +65,46 @@ fun Application.userRoute(repository: UserRepository) {
                     call.respond(HttpStatusCode.OK, it)
                 }
             }
+
+
+            patch<Users.Me> { _ ->
+
+                val principal = call.principal<JWTPrincipal>()
+
+                val userId = principal?.payload?.getClaim("user_id")?.asInt()!!
+
+                val multiPartData = call.receiveMultipart()
+                var details: UpdateUserRequest? = null
+                var imageBuffer: Buffer? = null
+                var error: ErrorResponse? = null
+
+                multiPartData.forEachPart { part ->
+                    when (part) {
+                        is PartData.FormItem -> {
+                            details = Json.decodeFromString(part.value)
+                        }
+
+                        is PartData.FileItem -> {
+                            if (part.contentType?.contentType != "image") {
+                                error = ErrorResponse(
+                                    statusCode = HttpStatusCode.BadRequest.value,
+                                    message = "Invalid image type"
+                                )
+
+                            }
+                            imageBuffer = part.provider().readBuffer()
+                        }
+
+                        else -> Unit
+                    }
+                }
+                error?.let { return@patch call.respond(it) }
+
+                when (val result = repository.update(userId, details?.username, details?.password, imageBuffer)) {
+                    is DatabaseResponse.Failure -> call.respond(result.toErrorResponse())
+                    is DatabaseResponse.Success -> call.respond(HttpStatusCode.OK)
+                }
+            }
         }
 
         post<Users> { _ ->
@@ -104,5 +147,6 @@ fun Application.userRoute(repository: UserRepository) {
                 is DatabaseResponse.Success -> call.respond(HttpStatusCode.Created)
             }
         }
+
     }
 }

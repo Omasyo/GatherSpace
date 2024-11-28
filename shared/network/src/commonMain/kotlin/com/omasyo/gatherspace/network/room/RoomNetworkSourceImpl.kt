@@ -1,14 +1,13 @@
 package com.omasyo.gatherspace.network.room
 
 import com.omasyo.gatherspace.models.request.CreateRoomRequest
-import com.omasyo.gatherspace.models.request.CreateUserRequest
 import com.omasyo.gatherspace.models.request.MembersRequest
 import com.omasyo.gatherspace.models.request.UserRoomRequest
 import com.omasyo.gatherspace.models.response.CreateRoomResponse
 import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.models.response.RoomDetails
-import com.omasyo.gatherspace.models.routes.Members
 import com.omasyo.gatherspace.models.routes.Rooms
+import com.omasyo.gatherspace.models.routes.Session
 import com.omasyo.gatherspace.models.routes.Users
 import com.omasyo.gatherspace.network.mapResponse
 import io.ktor.client.*
@@ -17,7 +16,6 @@ import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import kotlinx.io.Buffer
-import kotlinx.io.readByteArray
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -48,14 +46,14 @@ internal class RoomNetworkSourceImpl(
 
     override suspend fun addMembers(roomId: Int, memberIds: List<Int>): Result<Unit> =
         mapResponse {
-            client.post(Members(Rooms.Id(roomId))) {
+            client.post(Rooms.Members(Rooms.Id(roomId))) {
                 setBody(MembersRequest(memberIds))
             }
         }
 
     override suspend fun removeMembers(roomId: Int, memberIds: List<Int>): Result<Unit> =
         mapResponse {
-            client.delete(Members(Rooms.Id(roomId))) {
+            client.delete(Rooms.Members(Rooms.Id(roomId))) {
                 setBody(MembersRequest(memberIds))
             }
         }

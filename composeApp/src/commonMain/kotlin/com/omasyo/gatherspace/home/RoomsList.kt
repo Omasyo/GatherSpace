@@ -58,6 +58,7 @@ fun RoomsList(
                 Room(
                     room = room,
                     modifier = Modifier
+                        .animateItem()
                         .clickable { onRoomTap(room.id) }
                         .padding(horizontal = 16f.dp, vertical = 8f.dp)
                 )

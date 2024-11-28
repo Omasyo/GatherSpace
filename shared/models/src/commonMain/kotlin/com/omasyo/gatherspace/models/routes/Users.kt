@@ -4,15 +4,15 @@ import io.ktor.resources.*
 
 @Resource("/users")
 class Users {
-    @Resource("/{id}")
+    @Resource("{id}")
     class Id(val id: Int, val parent: Users)
 
-    @Resource("/me")
+    @Resource("me")
     class Me(val parent: Users = Users()) {
-        @Resource("/rooms")
+        @Resource("rooms")
         class Rooms(val parent: Me = Me(Users()))
 
-        @Resource("/sessions")
+        @Resource("sessions")
         class Sessions(val parent: Me = Me(Users()))
     }
 }

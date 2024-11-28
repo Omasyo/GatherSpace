@@ -15,5 +15,9 @@ interface UserRepository {
 
     fun getUserById(userId: Int): Flow<DomainResponse<UserDetails>>
 
+    fun updateUser(username: String?, password: String?, image: Buffer?): Flow<DomainResponse<Unit>>
+
     fun getUserSessions(): Flow<DomainResponse<List<UserSession>>>
+
+    fun deleteUserSession(deviceId: Int): Flow<DomainResponse<Unit>>
 }

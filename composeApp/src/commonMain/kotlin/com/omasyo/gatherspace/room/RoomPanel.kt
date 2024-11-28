@@ -134,7 +134,7 @@ fun RoomPanel(
 
                 items(messages.asReversed(), key = { it.id }) { message ->
                     Message(
-                        modifier = Modifier.padding(vertical = 8f.dp, horizontal = 16f.dp),
+                        modifier = Modifier.padding(vertical = 8f.dp, horizontal = 16f.dp).animateItem(),
                         message = message,
                     )
                 }

@@ -10,7 +10,7 @@ import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.models.response.User
 import com.omasyo.gatherspace.utils.ImageDirPath
 import com.omasyo.gatherspace.utils.createImageFile
-import com.omasyo.gatherspace.utils.fromDb
+import com.omasyo.gatherspace.utils.getImagePath
 import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.io.Buffer
 import java.io.File
@@ -95,10 +95,14 @@ internal class RoomRepositoryImpl(
     }
 
     override fun getUserRooms(userId: Int): List<Room> {
-        return roomQueries.getUserRooms(userId, Room::fromDb).executeAsList()
+        return roomQueries.getUserRooms(userId) { id, name, image ->
+            Room(id, name, getImagePath(image))
+        }.executeAsList()
     }
 
     override fun getAllRooms(): List<Room> {
-        return roomQueries.getAll(Room::fromDb).executeAsList()
+        return roomQueries.getAll { id, name, image ->
+            Room(id, name, getImagePath(image))
+        }.executeAsList()
     }
 }

@@ -35,8 +35,18 @@ internal class UserRepositoryImpl(
             emit(userNetworkSource.getUserById(userId).mapToDomain())
         }.flowOn(dispatcher)
 
+    override fun updateUser(username: String?, password: String?, image: Buffer?): Flow<DomainResponse<Unit>> =
+        flow {
+            emit(userNetworkSource.updateUser(username, password, image).mapToDomain())
+        }.flowOn(dispatcher)
+
     override fun getUserSessions(): Flow<DomainResponse<List<UserSession>>> =
         flow {
             emit(userNetworkSource.getUserSessions().mapToDomain())
+        }.flowOn(dispatcher)
+
+    override fun deleteUserSession(deviceId: Int): Flow<DomainResponse<Unit>> =
+        flow {
+            emit(userNetworkSource.deleteUserSession(deviceId).mapToDomain())
         }.flowOn(dispatcher)
 }

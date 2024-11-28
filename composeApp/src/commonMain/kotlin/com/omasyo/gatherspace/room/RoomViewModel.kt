@@ -71,10 +71,9 @@ class RoomViewModel(
         this.message = message
     }
 
-    fun refreshRoom() {
-        viewModelScope.launch {
-            refreshRoomEvent.emit(Any())
-        }
+    private fun refreshRoom() {
+        refreshRoomEvent.tryEmit(Any())
+
     }
 
     fun joinRoom() {

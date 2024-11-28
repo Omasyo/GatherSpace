@@ -1,18 +1,16 @@
 package com.omasyo.gatherspace.api.routes
 
 import com.auth0.jwt.JWT
-import com.omasyo.gatherspace.data.room.RoomRepository
-import com.omasyo.gatherspace.models.request.MembersRequest
-import com.omasyo.gatherspace.models.request.CreateRoomRequest
-import com.omasyo.gatherspace.models.response.ErrorResponse
-import com.omasyo.gatherspace.models.routes.Members
-import com.omasyo.gatherspace.models.routes.Rooms
 import com.omasyo.gatherspace.api.auth.AuthName
 import com.omasyo.gatherspace.api.auth.JwtKeys
 import com.omasyo.gatherspace.data.DatabaseResponse
-import com.omasyo.gatherspace.models.request.CreateUserRequest
+import com.omasyo.gatherspace.data.room.RoomRepository
+import com.omasyo.gatherspace.models.request.CreateRoomRequest
+import com.omasyo.gatherspace.models.request.MembersRequest
 import com.omasyo.gatherspace.models.request.UserRoomRequest
 import com.omasyo.gatherspace.models.response.CreateRoomResponse
+import com.omasyo.gatherspace.models.response.ErrorResponse
+import com.omasyo.gatherspace.models.routes.Rooms
 import com.omasyo.gatherspace.models.routes.Users
 import com.omasyo.gatherspace.utils.respond
 import com.omasyo.gatherspace.utils.toErrorResponse
@@ -29,7 +27,6 @@ import io.ktor.server.routing.*
 import io.ktor.utils.io.*
 import kotlinx.io.Buffer
 import kotlinx.serialization.json.Json
-import java.io.File
 
 fun Application.roomRoute(repository: RoomRepository) {
     routing {
@@ -58,7 +55,7 @@ fun Application.roomRoute(repository: RoomRepository) {
             )
         }
 
-        get<Members> { members ->
+        get<Rooms.Members> { members ->
             repository.getMembers(members.room.id).let {
                 call.respond(HttpStatusCode.OK, it)
             }
@@ -150,7 +147,7 @@ fun Application.roomRoute(repository: RoomRepository) {
                 }
             }
 
-            post<Members> { members ->
+            post<Rooms.Members> { members ->
                 //TODO check if user add himself or owner of room adding a user(probably not)
 
                 val request = call.receive<MembersRequest>()
@@ -158,7 +155,7 @@ fun Application.roomRoute(repository: RoomRepository) {
                 call.respond(HttpStatusCode.Created)
             }
 
-            delete<Members> { members ->
+            delete<Rooms.Members> { members ->
                 //TODO check if user remove himself or owner of room remove users
                 val request = call.receive<MembersRequest>()
                 repository.addMembers(members.room.id, request.members)

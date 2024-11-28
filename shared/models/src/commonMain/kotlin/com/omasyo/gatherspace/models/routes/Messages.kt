@@ -12,9 +12,9 @@ class Messages(
     val before: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
     val limit: Int = 50,
 ) {
-    @Resource("/{id}")
+    @Resource("{id}")
     class Id(val id: Int, val parent: Messages)
 
-    @Resource("/events")
+    @Resource("events")
     class Events(val parent: Messages)
 }

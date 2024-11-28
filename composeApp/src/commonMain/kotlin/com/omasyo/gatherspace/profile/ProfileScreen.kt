@@ -4,19 +4,24 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.omasyo.gatherspace.domain.formatDate
-import com.omasyo.gatherspace.home.UiState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.omasyo.gatherspace.dependencyProvider
+import com.omasyo.gatherspace.domain.formatDateTime
 import com.omasyo.gatherspace.models.response.UserDetails
+import com.omasyo.gatherspace.models.response.UserSession
 import com.omasyo.gatherspace.ui.components.*
 import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
 import gatherspace.composeapp.generated.resources.Res
@@ -28,8 +33,23 @@ import kotlinx.io.Buffer
 fun ProfileRoute(
     modifier: Modifier = Modifier,
     onBackTap: () -> Unit,
+    viewModel: ProfileViewModel = dependencyProvider {
+        viewModel {
+            ProfileViewModel(authRepository, userRepository)
+        }
+    }
 ) {
-    
+    ProfileScreen(
+        modifier = modifier,
+        onBackTap = onBackTap,
+        userDetails = viewModel.userDetails.collectAsStateWithLifecycle().value,
+        sessions = viewModel.userSessions.collectAsStateWithLifecycle().value,
+        updateImage = viewModel::updateImage,
+        onLogoutTap = viewModel::logout,
+        onSessionLogoutTap = viewModel::logoutSession,
+        onEventReceived = viewModel::onEventReceived,
+        state = viewModel.state.collectAsStateWithLifecycle().value,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,16 +58,18 @@ fun ProfileScreen(
     modifier: Modifier = Modifier,
     onBackTap: () -> Unit,
     userDetails: UserDetails?,
-    sessions: List<Any>,
+    sessions: List<UserSession>,
     updateImage: (Buffer) -> Unit,
     onLogoutTap: () -> Unit,
-    onSessionLogoutTap: (Int) -> Unit,
+    onSessionLogoutTap: (UserSession) -> Unit,
+    onEventReceived: (ProfileScreenEvent) -> Unit,
+    state: ProfileScreenState
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
 
-    Scaffold { innerPadding ->
+    Scaffold(modifier) { innerPadding ->
 
         IconButton(
             onClick = onBackTap,
@@ -56,7 +78,7 @@ fun ProfileScreen(
             Icon(Icons.AutoMirrored.Default.ArrowBack, contentDescription = null)
         }
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
                 .padding(horizontal = 16f.dp, vertical = 72f.dp),
@@ -67,11 +89,26 @@ fun ProfileScreen(
             UserDetailsSection(
                 userDetails = userDetails,
                 onSetImage = { showBottomSheet = true },
-                isRefreshing = true
+                isRefreshing = false
             )
 
             HorizontalDivider()
-            //TODO put sessions here
+            Text(
+                text = "Active Sessions",
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8f.dp)
+            ) {
+                for (session in sessions) {
+                    SessionDetails(
+                        sessionDetails = session,
+                        onLogoutTap = { onSessionLogoutTap(session) },
+                    )
+                }
+            }
             HorizontalDivider()
 
             Button(
@@ -112,6 +149,31 @@ fun ProfileScreen(
         }
 
     }
+
+    LaunchedEffect(state) {
+        when (state.event) {
+            ProfileScreenEvent.AuthError -> {
+                //show snackbar logout
+            }
+
+            is ProfileScreenEvent.Error -> TODO()
+
+            ProfileScreenEvent.ImageUpdated -> {
+                //show imageupdated message
+            }
+
+            ProfileScreenEvent.Logout -> {
+                onBackTap()
+            }
+
+            is ProfileScreenEvent.SessionLogout -> {
+
+            }
+
+            ProfileScreenEvent.None -> Unit
+        }
+        onEventReceived(state.event)
+    }
 }
 
 @Composable
@@ -144,16 +206,17 @@ fun UserDetailsSection(
                         .fillMaxSize()
                         .padding(16f.dp)
                 )
-            } else {
-                Icon(
-                    Icons.Outlined.PhotoCamera, null,
-                    tint = Color.White.copy(alpha = 0.6f),
-                    modifier = Modifier
-                        .background(Color.Black.copy(alpha = 0.15f))
-                        .fillMaxSize()
-                        .padding(16f.dp)
-                )
             }
+//            else {
+//                Icon(
+//                    Icons.Outlined.PhotoCamera, null,
+//                    tint = Color.White.copy(alpha = 0.6f),
+//                    modifier = Modifier
+//                        .background(Color.Black.copy(alpha = 0.15f))
+//                        .fillMaxSize()
+//                        .padding(16f.dp)
+//                )
+//            }
         }
         Spacer(Modifier.width(16f.dp))
 
@@ -162,14 +225,46 @@ fun UserDetailsSection(
             modifier = Modifier.padding(vertical = 16.dp)
         ) {
             Text(
-                text = "User Profile",
+                text = userDetails?.username ?: "",
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.fillMaxWidth()
             )
             Text(
-                text = "Created: ${userDetails?.created?.formatDate()}"
+                text = "Created: ${userDetails?.created?.formatDateTime()}"
             )
+        }
+    }
+}
+
+@Composable
+fun SessionDetails(
+    modifier: Modifier = Modifier,
+    sessionDetails: UserSession,
+    onLogoutTap: () -> Unit,
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column(
+            modifier = Modifier.weight(1f),
+        ) {
+            Text(
+                sessionDetails.deviceName,
+                style = MaterialTheme.typography.titleMedium,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+            Text(
+                "Recently accessed: ${sessionDetails.lastAccessed.formatDateTime()}",
+                style = MaterialTheme.typography.bodyMedium,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+        }
+        TextButton(onClick = onLogoutTap) {
+            Text("Logout")
         }
     }
 }
@@ -202,10 +297,20 @@ private fun CreateRoomScreenPreview() {
                 created = LocalDateTime(1, 1, 1, 1, 1),
                 modified = LocalDateTime(1, 1, 1, 1, 1)
             ),
-            sessions = emptyList(),
+            sessions = List(5) {
+                UserSession(
+                    userId = 9225,
+                    deviceId = 1125,
+                    deviceName = "Wesley Vaughan",
+                    created = LocalDateTime(1, 1, 1, 1, 1),
+                    lastAccessed = LocalDateTime(1, 1, 1, 1, 1)
+                )
+            },
             onLogoutTap = {},
             updateImage = {},
             onSessionLogoutTap = {},
+            onEventReceived = {},
+            state = ProfileScreenState.Initial
         )
     }
 }

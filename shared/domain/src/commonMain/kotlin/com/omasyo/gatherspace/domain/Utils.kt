@@ -4,24 +4,34 @@ import com.omasyo.gatherspace.network.NetworkException
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format
 import kotlinx.datetime.format.FormatStringsInDatetimeFormats
+import kotlinx.datetime.format.MonthNames
 import kotlinx.datetime.format.byUnicodePattern
+import kotlinx.datetime.format.char
 
 expect fun getDeviceName(): String
 
-@OptIn(FormatStringsInDatetimeFormats::class)
+fun LocalDateTime.formatDateTime(): String {
+    return formatDate() + ' ' + formatTime()
+}
+
 fun LocalDateTime.formatDate(): String {
     return format(
         LocalDateTime.Format {
-            byUnicodePattern("MM dd - HH:mm")
+            dayOfMonth()
+            char(' ')
+            monthName(MonthNames.ENGLISH_ABBREVIATED)
+            char(' ')
+            year()
         }
     )
 }
 
-@OptIn(FormatStringsInDatetimeFormats::class)
 fun LocalDateTime.formatTime(): String {
     return format(
         LocalDateTime.Format {
-            byUnicodePattern("HH:mm")
+            hour()
+            char(':')
+            minute()
         }
     )
 }
