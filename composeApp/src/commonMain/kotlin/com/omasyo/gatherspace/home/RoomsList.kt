@@ -79,7 +79,7 @@ private fun Room(
         horizontalArrangement = Arrangement.spacedBy(8f.dp)
     ) {
         Image(
-            imageUrl = "TODO",
+            imageUrl = room.imageUrl,
             placeholder = Res.drawable.room_placeholder,
             modifier = Modifier.size(48f.dp)
                 .clip(MaterialTheme.shapes.small),

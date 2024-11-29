@@ -45,7 +45,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.omasyo.gatherspace.shared.models"
+    namespace = "com.omasyo.gatherspace.shared.common"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

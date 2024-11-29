@@ -1,6 +1,6 @@
 package com.omasyo.gatherspace.network
 
-import com.omasyo.gatherspace.models.TokenStorage
+import com.omasyo.gatherspace.TokenStorage
 import com.omasyo.gatherspace.models.request.RefreshTokenRequest
 import com.omasyo.gatherspace.models.response.TokenResponse
 import com.omasyo.gatherspace.models.routes.Session

@@ -26,11 +26,14 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.compose.runtime)
+            implementation(libs.compose.runtime.saveable)
+            implementation(libs.jetbrains.lifecycle.runtime.compose)
+            implementation(libs.kotlinx.io.core)
         }
 
         jsMain.dependencies {
 
-            implementation(projects.shared.models)
+            implementation(projects.shared.common)
             implementation(projects.shared.network)
             implementation(projects.shared.domain)
 

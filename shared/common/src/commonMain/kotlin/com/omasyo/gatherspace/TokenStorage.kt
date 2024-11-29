@@ -1,4 +1,4 @@
-package com.omasyo.gatherspace.models
+package com.omasyo.gatherspace
 
 import com.omasyo.gatherspace.models.response.TokenResponse
 import kotlinx.coroutines.flow.Flow

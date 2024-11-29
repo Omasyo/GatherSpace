@@ -5,6 +5,7 @@ import app.cash.sqldelight.coroutines.mapToOne
 import com.omasyo.gatherspace.database.MessageQueries
 import com.omasyo.gatherspace.models.response.Message
 import com.omasyo.gatherspace.models.response.User
+import com.omasyo.gatherspace.utils.getImagePath
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.toJavaLocalDateTime
@@ -51,7 +52,7 @@ internal class MessageRepositoryImpl(private val messageQueries: MessageQueries)
     ): Message = Message(
         id = id,
         content = content,
-        sender = senderId?.let { User(id = senderId, username = username, imageUrl = image) },
+        sender = senderId?.let { User(id = senderId, username = username, imageUrl = getImagePath(image)) },
         roomId = roomId,
         created = created.toKotlinLocalDateTime(),
         modified = modified.toKotlinLocalDateTime()

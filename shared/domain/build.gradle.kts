@@ -41,8 +41,8 @@ kotlin {
 
         commonMain.dependencies {
             // put your Multiplatform dependencies here
-            implementation(project(":shared:models"))
-            implementation(project(":shared:network"))
+            implementation(projects.shared.common)
+            implementation(projects.shared.network)
 
             implementation(libs.paging.common)
             implementation(libs.kotlinx.serialization.json)

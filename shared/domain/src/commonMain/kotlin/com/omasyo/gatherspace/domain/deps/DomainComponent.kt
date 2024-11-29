@@ -8,7 +8,7 @@ import com.omasyo.gatherspace.domain.room.RoomRepository
 import com.omasyo.gatherspace.domain.room.RoomRepositoryImpl
 import com.omasyo.gatherspace.domain.user.UserRepository
 import com.omasyo.gatherspace.domain.user.UserRepositoryImpl
-import com.omasyo.gatherspace.models.TokenStorage
+import com.omasyo.gatherspace.TokenStorage
 import com.omasyo.gatherspace.network.deps.NetworkComponent
 import kotlinx.coroutines.CoroutineDispatcher
 

@@ -1,13 +1,12 @@
 package com.omasyo.gatherspace.domain.auth
 
-import com.omasyo.gatherspace.models.TokenStorage
+import com.omasyo.gatherspace.TokenStorage
 import com.omasyo.gatherspace.models.response.TokenResponse
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.util.prefs.PreferenceChangeEvent
 import java.util.prefs.PreferenceChangeListener
 import java.util.prefs.Preferences
 

@@ -1,6 +1,6 @@
 package com.omasyo.gatherspace.network.deps
 
-import com.omasyo.gatherspace.models.TokenStorage
+import com.omasyo.gatherspace.TokenStorage
 import com.omasyo.gatherspace.network.auth.AuthNetworkSource
 import com.omasyo.gatherspace.network.auth.AuthNetworkSourceImpl
 import com.omasyo.gatherspace.network.createClient

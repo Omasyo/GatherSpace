@@ -3,7 +3,7 @@ package com.omasyo.gatherspace.domain.auth
 import com.omasyo.gatherspace.domain.DomainResponse
 import com.omasyo.gatherspace.domain.getDeviceName
 import com.omasyo.gatherspace.domain.mapToDomain
-import com.omasyo.gatherspace.models.TokenStorage
+import com.omasyo.gatherspace.TokenStorage
 import com.omasyo.gatherspace.network.auth.AuthNetworkSource
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineDispatcher

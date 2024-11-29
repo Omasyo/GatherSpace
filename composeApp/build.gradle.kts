@@ -61,7 +61,7 @@ kotlin {
 
             implementation(libs.paging.compose.common)
 
-            implementation(projects.shared.models)
+            implementation(projects.shared.common)
             implementation(projects.shared.network)
             implementation(projects.shared.domain)
         }

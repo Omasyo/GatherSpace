@@ -1,13 +1,12 @@
 package com.omasyo.gatherspace.domain.auth
 
 import android.content.Context
-import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.omasyo.gatherspace.models.TokenStorage
+import com.omasyo.gatherspace.TokenStorage
 import com.omasyo.gatherspace.models.response.TokenResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first

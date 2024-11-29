@@ -16,9 +16,8 @@ application {
 
 dependencies {
 
-    implementation(project(":shared:models"))
 
-
+    implementation(projects.shared.common)
 
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.cors)

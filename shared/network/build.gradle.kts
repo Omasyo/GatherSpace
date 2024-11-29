@@ -39,7 +39,7 @@ kotlin {
             implementation(libs.ktor.client.cio)
         }
         commonMain.dependencies {
-            implementation(project(":shared:models"))
+            implementation(projects.shared.common)
             // put your Multiplatform dependencies here
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.datetime)

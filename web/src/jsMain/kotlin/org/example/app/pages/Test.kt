@@ -4,7 +4,7 @@ import com.omasyo.gatherspace.domain.AuthError
 import com.omasyo.gatherspace.domain.DomainError
 import com.omasyo.gatherspace.domain.Success
 import com.omasyo.gatherspace.domain.deps.DomainComponent
-import com.omasyo.gatherspace.models.TokenStorage
+import com.omasyo.gatherspace.TokenStorage
 import com.omasyo.gatherspace.models.response.TokenResponse
 import com.omasyo.gatherspace.network.deps.NetworkComponent
 import kotlinx.coroutines.Dispatchers
