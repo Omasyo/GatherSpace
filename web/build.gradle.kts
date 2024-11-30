@@ -40,10 +40,7 @@ kotlin {
             implementation(libs.compose.html.core)
             implementation(libs.kobweb.core)
             implementation(libs.kobweb.silk)
-            // This default template uses built-in SVG icons, but what's available is limited.
-            // Uncomment the following if you want access to a large set of font-awesome icons:
-            // implementation(libs.silk.icons.fa)
-            implementation(libs.kobwebx.markdown)
+            implementation(libs.silk.icons.mdi)
         }
 
         // Uncomment the following if you pass `includeServer = true` into the `configAsKobwebApplication` call.

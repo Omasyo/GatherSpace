@@ -6,13 +6,7 @@ import kotlinx.io.Buffer
 import kotlinx.io.readString
 import kotlinx.io.writeString
 import org.w3c.dom.*
-import org.w3c.dom.mediacapture.MediaStream
 import org.w3c.dom.mediacapture.MediaStreamConstraints
-import org.w3c.dom.mediacapture.MediaStreamTrack
-import web.events.EventHandler
-import web.media.recorder.MediaRecorder
-import web.media.source.MediaSource
-import web.streams.ReadableStream
 
 //import web.media.recorder.MediaRecorder
 
@@ -70,19 +64,6 @@ class ImageCapture {
         window.navigator.mediaDevices
             .getUserMedia(MediaStreamConstraints(video = true, audio = false))
             .then { stream ->
-
-                val recorder = MediaRecorder(stream.asDynamic())
-
-                recorder.ondataavailable = EventHandler { event ->
-                    event.data.textAsync().then {
-                        buffer.writeString(it)
-                    }
-                }
-
-                display.src = buffer.readString()
-                recorder.start(1000)
-
-
                 video.srcObject = stream
                 video.play()
             }

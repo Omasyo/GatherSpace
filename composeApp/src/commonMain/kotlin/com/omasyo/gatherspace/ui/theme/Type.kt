@@ -4,8 +4,10 @@ import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import gatherspace.composeapp.generated.resources.*
 import gatherspace.composeapp.generated.resources.AtkinsonHyperlegible_Bold
 import gatherspace.composeapp.generated.resources.AtkinsonHyperlegible_Regular
+import gatherspace.composeapp.generated.resources.Carlito_Bold
 import gatherspace.composeapp.generated.resources.Res
 import org.jetbrains.compose.resources.Font
 
@@ -14,6 +16,12 @@ val atkinsonHyperLegibleFontFamily
     @Composable get() = FontFamily(
         Font(Res.font.AtkinsonHyperlegible_Bold, FontWeight.Bold),
         Font(Res.font.AtkinsonHyperlegible_Regular, FontWeight.Normal),
+    )
+
+val carlitoFontFamily
+    @Composable get() = FontFamily(
+        Font(Res.font.Carlito_Bold, FontWeight.Bold),
+        Font(Res.font.Carlito_Regular, FontWeight.Normal),
     )
 
 val Typography
@@ -54,14 +62,14 @@ val Typography
             titleSmall = titleSmall.copy(
                 fontFamily = atkinsonHyperLegibleFontFamily
             ),
-            bodyLarge = bodyLarge.copy(fontFamily = atkinsonHyperLegibleFontFamily),
-            bodyMedium = bodyMedium.copy(fontFamily = atkinsonHyperLegibleFontFamily),
-            bodySmall = bodySmall.copy(fontFamily = atkinsonHyperLegibleFontFamily),
+            bodyLarge = bodyLarge.copy(fontFamily = carlitoFontFamily),
+            bodyMedium = bodyMedium.copy(fontFamily = carlitoFontFamily),
+            bodySmall = bodySmall.copy(fontFamily = carlitoFontFamily),
             labelLarge = labelLarge.copy(
-                fontFamily = atkinsonHyperLegibleFontFamily,
+                fontFamily = carlitoFontFamily,
                 fontWeight = FontWeight.Bold
             ),
-            labelMedium = labelMedium.copy(fontFamily = atkinsonHyperLegibleFontFamily),
-            labelSmall = labelSmall.copy(fontFamily = atkinsonHyperLegibleFontFamily),
+            labelMedium = labelMedium.copy(fontFamily = carlitoFontFamily),
+            labelSmall = labelSmall.copy(fontFamily = carlitoFontFamily),
         )
     }
