@@ -31,7 +31,6 @@ import gatherspace.composeapp.generated.resources.gatherspace
 import gatherspace.composeapp.generated.resources.user_placeholder
 import kotlinx.datetime.LocalDateTime
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
     modifier: Modifier = Modifier,

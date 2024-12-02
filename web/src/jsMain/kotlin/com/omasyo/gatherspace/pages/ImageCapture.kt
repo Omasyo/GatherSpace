@@ -1,9 +1,8 @@
-package org.example.app.pages
+package com.omasyo.gatherspace.pages
 
 import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.io.Buffer
-import kotlinx.io.readString
 import kotlinx.io.writeString
 import org.w3c.dom.*
 import org.w3c.dom.mediacapture.MediaStreamConstraints

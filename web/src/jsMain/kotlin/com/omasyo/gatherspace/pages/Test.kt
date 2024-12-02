@@ -1,4 +1,4 @@
-package org.example.app.pages
+package com.omasyo.gatherspace.pages
 
 import com.omasyo.gatherspace.domain.AuthError
 import com.omasyo.gatherspace.domain.DomainError

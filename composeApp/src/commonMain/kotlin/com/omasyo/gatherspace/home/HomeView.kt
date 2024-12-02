@@ -1,15 +1,10 @@
 package com.omasyo.gatherspace.home
 
-import com.omasyo.gatherspace.BackHandler
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
-import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
-import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
-import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -95,7 +90,7 @@ fun HomeView(
             roomsList = {
                 RoomsList(
                     onRoomTap = { selected = HomeLayoutView.Room(it) },
-                    onJoinRoomTap = { selected = HomeLayoutView.Discover },
+                    onDiscoverRoomTap = { selected = HomeLayoutView.Discover },
                     onRetry = onRefresh,
                     state = if (isAuthenticated) userRoomsState else allRoomsState,
                 )

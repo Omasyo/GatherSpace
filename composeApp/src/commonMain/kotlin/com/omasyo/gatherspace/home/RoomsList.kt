@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Login
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +25,7 @@ import gatherspace.composeapp.generated.resources.room_placeholder
 fun RoomsList(
     modifier: Modifier = Modifier,
     onRoomTap: (Int) -> Unit,
-    onJoinRoomTap: () -> Unit,
+    onDiscoverRoomTap: () -> Unit,
     onRetry: () -> Unit,
     state: UiState<List<Room>>
 ) {
@@ -41,7 +40,7 @@ fun RoomsList(
             item {
                 Row(
                     modifier = Modifier
-                        .clickable(onClick = onJoinRoomTap)
+                        .clickable(onClick = onDiscoverRoomTap)
                         .fillMaxWidth()
                         .padding(horizontal = 16f.dp, vertical = 16f.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
