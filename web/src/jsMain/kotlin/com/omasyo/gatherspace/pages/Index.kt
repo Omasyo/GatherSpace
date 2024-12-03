@@ -1,15 +1,16 @@
 package com.omasyo.gatherspace.pages
 
 import androidx.compose.runtime.Composable
-import com.varabyte.kobweb.core.Page
-import com.omasyo.gatherspace.components.sections.Header
 import com.omasyo.gatherspace.components.layouts.HomeLayout
+import com.omasyo.gatherspace.components.sections.Header
 import com.omasyo.gatherspace.components.sections.RoomsGrid
 import com.omasyo.gatherspace.components.sections.SideBar
 import com.omasyo.gatherspace.models.response.Room
+import com.varabyte.kobweb.core.Page
 import kotlinx.datetime.LocalDateTime
 
 val date = LocalDateTime(1, 1, 1, 1, 1)
+
 
 @Page
 @Composable

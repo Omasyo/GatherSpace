@@ -2,7 +2,7 @@ package com.omasyo.gatherspace.components.layouts
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.omasyo.gatherspace.styles.LayoutStyle
+import com.omasyo.gatherspace.styles.HomeLayoutStyle
 import kotlinx.browser.document
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.Div
@@ -17,7 +17,7 @@ fun HomeLayout(
     showSideBar: Boolean = true,
     content: @Composable () -> Unit,
 ) {
-    Style(LayoutStyle)
+    Style(HomeLayoutStyle)
     LaunchedEffect(title) {
         document.title = title
     }
@@ -32,15 +32,15 @@ fun HomeLayout(
         topBar()
         Div(
             attrs = {
-                classes(LayoutStyle.contentWrapper)
+                classes(HomeLayoutStyle.contentWrapper)
             }
         ) {
             if (showSideBar) {
                 Div(
                     attrs = {
-                        classes(LayoutStyle.sidebar)
+                        classes(HomeLayoutStyle.sidebar)
                         if (isDisplayingContent) {
-                            classes(LayoutStyle.hideOnMid)
+                            classes(HomeLayoutStyle.hideOnMid)
                         }
                     }
                 ) {
@@ -49,9 +49,9 @@ fun HomeLayout(
             }
             Div(
                 attrs = {
-                    classes(LayoutStyle.content)
+                    classes(HomeLayoutStyle.content)
                     if (!isDisplayingContent) {
-                        classes(LayoutStyle.hideOnMid)
+                        classes(HomeLayoutStyle.hideOnMid)
                     }
                 }
             ) {

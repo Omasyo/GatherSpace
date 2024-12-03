@@ -6,7 +6,7 @@ import com.varabyte.kobweb.compose.css.borderBottom
 import com.varabyte.kobweb.compose.css.borderRight
 import org.jetbrains.compose.web.css.*
 
-object LayoutStyle : StyleSheet() {
+object HomeLayoutStyle : StyleSheet() {
     val homeLayout by style {
         width(100.percent)
         height(100.percent)

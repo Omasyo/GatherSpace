@@ -3,8 +3,7 @@ package com.omasyo.gatherspace.components.sections
 import androidx.compose.runtime.Composable
 import com.omasyo.gatherspace.components.widgets.Image
 import com.omasyo.gatherspace.models.response.UserDetails
-import com.omasyo.gatherspace.pages.date
-import com.omasyo.gatherspace.styles.LayoutStyle
+import com.omasyo.gatherspace.styles.HomeLayoutStyle
 import com.omasyo.gatherspace.styles.MainStyle
 import com.omasyo.gatherspace.styles.lightDark
 import com.omasyo.gatherspace.theme.primaryDark
@@ -55,7 +54,7 @@ private fun Header(
     Style(HeaderStyle)
     Header(
         attrs = {
-            classes(LayoutStyle.header)
+            classes(HomeLayoutStyle.header)
         }
     ) {
         A(
@@ -85,7 +84,7 @@ private fun Header(
                     ) {
                         Div(
                             attrs = {
-                                classes(LayoutStyle.hideOnSmall, MainStyle.center)
+                                classes(HomeLayoutStyle.hideOnSmall, MainStyle.center)
                             }
                         ) {
                             Text("Create Room")
@@ -106,7 +105,7 @@ private fun Header(
                     ) {
                         Span(
                             attrs = {
-                                classes(LayoutStyle.hideOnMid)
+                                classes(HomeLayoutStyle.hideOnMid)
                             }
                         ) {
                             Text(user.username)
@@ -114,9 +113,11 @@ private fun Header(
                         Image(
                             user.imageUrl,
                             placeholder = "/image/user_placeholder.svg",
-                            size = 40,
                             attrs = {
                                 id("user-image")
+                                style {
+                                    width(40.px)
+                                }
                             }
                         )
                     }
