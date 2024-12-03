@@ -3,43 +3,45 @@ package com.omasyo.gatherspace.auth
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.omasyo.gatherspace.TextFieldState
 import com.omasyo.gatherspace.domain.AuthError
 import com.omasyo.gatherspace.domain.DomainError
 import com.omasyo.gatherspace.domain.Success
 import com.omasyo.gatherspace.domain.auth.AuthRepository
-import com.omasyo.gatherspace.ui.components.TextFieldState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class LoginViewModel(
-    private val authRepository: AuthRepository
-) : ViewModel() {
+class LoginViewModelImpl(
+    private val authRepository: AuthRepository,
+    override val coroutineScope: CoroutineScope = MainScope()
+) : LoginViewModel {
+
     private val _state = MutableStateFlow(AuthState.Initial)
-    val state: StateFlow<AuthState> = _state
+    override val state: StateFlow<AuthState> = _state
 
-    var usernameField by mutableStateOf(TextFieldState(""))
+    override var usernameField by mutableStateOf(TextFieldState(""))
         private set
 
-    var passwordField by mutableStateOf(TextFieldState(""))
+    override var passwordField by mutableStateOf(TextFieldState(""))
         private set
 
-    fun changeUsername(value: String) {
+    override fun changeUsername(value: String) {
         usernameField = usernameField.copy(value = value)
     }
 
-    fun changePassword(value: String) {
+    override fun changePassword(value: String) {
         passwordField = passwordField.copy(value = value)
     }
 
-    fun submit() {
+    override fun submit() {
         if (!validate()) return
 
         _state.value = _state.value.copy(isLoading = true)
-        viewModelScope.launch {
+        coroutineScope.launch {
             _state.value =
                 when (val response = authRepository.login(usernameField.value, passwordField.value).first()) {
                     is DomainError -> _state.value.copy(event = AuthEvent.Error(response.message))
@@ -50,7 +52,7 @@ class LoginViewModel(
         }
     }
 
-    fun clearEvent() {
+    override fun clearEvent() {
         _state.value = _state.value.copy(event = AuthEvent.None)
     }
 

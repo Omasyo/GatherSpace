@@ -15,8 +15,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.omasyo.gatherspace.TextFieldState
 import com.omasyo.gatherspace.dependencyProvider
-import com.omasyo.gatherspace.ui.components.TextFieldState
 
 
 @Composable
@@ -25,7 +25,7 @@ fun LoginRoute(
     onSignupTap: () -> Unit,
     onAuthenticated: () -> Unit,
     onBackTap: () -> Unit,
-    viewModel: LoginViewModel = dependencyProvider { viewModel { LoginViewModel(authRepository) } }
+    viewModel: LoginViewModel = dependencyProvider { viewModel { AndroidLoginViewModel(authRepository) } }
 ) {
     LoginScreen(
         modifier = modifier,

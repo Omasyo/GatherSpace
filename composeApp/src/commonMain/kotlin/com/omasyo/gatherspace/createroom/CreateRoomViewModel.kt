@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.omasyo.gatherspace.TextFieldState
 import com.omasyo.gatherspace.domain.*
 import com.omasyo.gatherspace.domain.room.RoomRepository
-import com.omasyo.gatherspace.ui.components.TextFieldState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first

@@ -1,9 +1,5 @@
 package com.omasyo.gatherspace.auth
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-
 data class AuthState(
     val isLoading: Boolean,
     val event: AuthEvent,

@@ -63,13 +63,14 @@ kotlin {
 
             implementation(projects.shared.common)
             implementation(projects.shared.network)
+            implementation(projects.shared.presentation)
             implementation(projects.shared.domain)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.logback)
-            implementation("com.github.sarxos:webcam-capture:0.3.12")
+            implementation(libs.webcam.capture)
         }
     }
 }

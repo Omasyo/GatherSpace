@@ -12,8 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.omasyo.gatherspace.TextFieldState
 import com.omasyo.gatherspace.ui.components.TextField
-import com.omasyo.gatherspace.ui.components.TextFieldState
 
 @Composable
 fun AuthTextField(

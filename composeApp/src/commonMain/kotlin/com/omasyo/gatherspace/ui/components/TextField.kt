@@ -15,13 +15,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 
-data class TextFieldState(
-    val value: String,
-    val errorMessage: String? = null,
-) {
-    val isError get() = errorMessage != null
-}
-
 @Composable
 fun TextField(
     value: String,

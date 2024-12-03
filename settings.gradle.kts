@@ -33,11 +33,12 @@ dependencyResolutionManagement {
     }
 }
 
+include(":android")
+include("composeApp")
 include(":server")
 include(":web")
-include(":android")
-include("shared:domain")
 include("shared:common")
+include("shared:domain")
+include("shared:presentation")
 include("shared:network")
 include("shared:ui")
-include("composeApp")
