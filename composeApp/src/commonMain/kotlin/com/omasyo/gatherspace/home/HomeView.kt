@@ -26,8 +26,8 @@ fun HomeRoute(
     onAuthError: () -> Unit,
     onLoginTap: () -> Unit,
     onProfileTap: () -> Unit,
-    homeViewModel: HomeViewModel = dependencyProvider {
-        viewModel { HomeViewModel(roomRepository, userRepository) }
+    homeViewModel: ComposeHomeViewModel = dependencyProvider {
+        viewModel { ComposeHomeViewModel(roomRepository, userRepository) }
     },
 ) {
     HomeView(
@@ -57,15 +57,7 @@ fun HomeView(
     userRoomsState: UiState<List<Room>>,
 
     ) {
-//    val navigator = rememberListDetailPaneScaffoldNavigator<HomeRoutes>(
-//        calculateCustomPaneScaffoldDirective(
-//            currentWindowAdaptiveInfo()
-//        )
-//    )
-
     var selected by remember { mutableStateOf<HomeLayoutView>(HomeLayoutView.None) }
-//    val onCreateRoomTap = { navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, CreateRoom) }
-//    BackHandler(enabled = navigator.canNavigateBack(), onBack = { navigator.navigateBack() })
 
     Surface(modifier) {
         HomeLayout(

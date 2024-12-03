@@ -13,4 +13,5 @@ sealed interface CreateRoomEvent {
     data object None : CreateRoomEvent
     data class Success(val id: Int) : CreateRoomEvent
     data class Error(val message: String) : CreateRoomEvent
+    data object AuthError : CreateRoomEvent
 }

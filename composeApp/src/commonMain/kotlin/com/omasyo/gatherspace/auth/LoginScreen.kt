@@ -25,7 +25,7 @@ fun LoginRoute(
     onSignupTap: () -> Unit,
     onAuthenticated: () -> Unit,
     onBackTap: () -> Unit,
-    viewModel: LoginViewModel = dependencyProvider { viewModel { AndroidLoginViewModel(authRepository) } }
+    viewModel: LoginViewModel = dependencyProvider { viewModel { ComposeLoginViewModel(authRepository) } }
 ) {
     LoginScreen(
         modifier = modifier,

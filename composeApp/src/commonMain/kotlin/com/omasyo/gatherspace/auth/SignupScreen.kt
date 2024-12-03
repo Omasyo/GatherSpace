@@ -26,7 +26,7 @@ fun SignupRoute(
     onAuthenticated: () -> Unit,
     viewModel: SignupViewModel = dependencyProvider {
         viewModel {
-            SignupViewModel(
+            ComposeSignupViewModel(
                 authRepository,
                 userRepository
             )

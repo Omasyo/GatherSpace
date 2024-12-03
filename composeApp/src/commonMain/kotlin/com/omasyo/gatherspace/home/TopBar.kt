@@ -2,34 +2,21 @@ package com.omasyo.gatherspace.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.ui.Alignment
+import com.omasyo.gatherspace.UiState
 import com.omasyo.gatherspace.models.response.UserDetails
 import com.omasyo.gatherspace.ui.components.Image
-import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
 import gatherspace.composeapp.generated.resources.Res
 import gatherspace.composeapp.generated.resources.gatherspace
 import gatherspace.composeapp.generated.resources.user_placeholder
-import kotlinx.datetime.LocalDateTime
 
 @Composable
 fun TopBar(
@@ -126,29 +113,6 @@ private fun UserDetailsPlaceholder(
                 .size(40f.dp)
                 .clip(MaterialTheme.shapes.small)
                 .background(MaterialTheme.colorScheme.surfaceVariant)
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun Preview() {
-    GatherSpaceTheme(false) {
-        TopBar(
-            onCreateRoomTap = {},
-            onProfileTap = {},
-            onLoginTap = {},
-            isAuthenticated = true,
-            isExpanded = true,
-            userState = UiState.Success(
-                UserDetails(
-                    id = 2310,
-                    username = "Heath Sandoval",
-                    imageUrl = null,
-                    created = LocalDateTime(1, 1, 1, 1, 1, 1),
-                    modified = LocalDateTime(1, 1, 1, 1, 1, 1)
-                )
-            )
         )
     }
 }

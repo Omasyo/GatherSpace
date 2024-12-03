@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.omasyo.gatherspace.UiState
 import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.ui.components.ErrorPlaceholder
 import com.omasyo.gatherspace.ui.components.Image

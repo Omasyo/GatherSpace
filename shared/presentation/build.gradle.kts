@@ -40,7 +40,9 @@ kotlin {
 //            implementation(libs.kotlinx.datetime)
 
             implementation(projects.shared.domain)
+            implementation(projects.shared.common)
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.io.core)
             implementation(libs.compose.runtime)
         }
     }

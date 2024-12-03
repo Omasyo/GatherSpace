@@ -1,6 +1,5 @@
 package com.omasyo.gatherspace.createroom
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -38,7 +37,7 @@ fun CreateRoomRoute(
     onRoomCreated: (Int) -> Unit,
     onAuthError: () -> Unit,
     viewModel: CreateRoomViewModel = dependencyProvider {
-        viewModel { CreateRoomViewModel(roomRepository) }
+        viewModel { ComposeCreateRoomViewModel(roomRepository) }
     },
 ) {
     CreateRoomScreen(
@@ -268,24 +267,4 @@ fun BottomSheetMenuItem(
             .fillMaxWidth()
             .padding(horizontal = 16f.dp, vertical = 16f.dp),
     )
-}
-
-@Preview
-@Composable
-private fun CreateRoomScreenPreview() {
-    GatherSpaceTheme(false) {
-        CreateRoomScreen(
-            onBackTap = {},
-            roomName = TextFieldState(""),
-            onRoomNameChange = {},
-            description = TextFieldState(""),
-            onDescriptionChange = {},
-            image = null,
-            setImage = {},
-            onSubmit = {},
-            onEventReceived = {},
-            onAuthError = {},
-            state = CreateRoomState.Initial
-        )
-    }
 }

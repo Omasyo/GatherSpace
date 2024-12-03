@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.omasyo.gatherspace.UiState
 import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.ui.components.ErrorPlaceholder
 import com.omasyo.gatherspace.ui.components.Image

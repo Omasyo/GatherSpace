@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.omasyo.gatherspace.domain.auth.AuthRepository
 import kotlinx.coroutines.CoroutineScope
 
-class AndroidLoginViewModel(
+class ComposeLoginViewModel(
     private val authRepository: AuthRepository
 ) : ViewModel(), LoginViewModel by LoginViewModelImpl(authRepository) {
     override val coroutineScope: CoroutineScope

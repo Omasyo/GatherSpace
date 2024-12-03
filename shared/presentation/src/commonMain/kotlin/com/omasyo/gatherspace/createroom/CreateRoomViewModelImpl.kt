@@ -3,51 +3,54 @@ package com.omasyo.gatherspace.createroom
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.omasyo.gatherspace.TextFieldState
 import com.omasyo.gatherspace.domain.*
 import com.omasyo.gatherspace.domain.room.RoomRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.io.Buffer
 
-class CreateRoomViewModel(
-    private val roomRepository: RoomRepository
-) : ViewModel() {
+//TODO image still showing after creating room
+
+class CreateRoomViewModelImpl(
+    private val roomRepository: RoomRepository,
+    override val coroutineScope: CoroutineScope = MainScope()
+) : CreateRoomViewModel {
 
     private val _state = MutableStateFlow(CreateRoomState.Initial)
-    val state: StateFlow<CreateRoomState> = _state
+    override val state: StateFlow<CreateRoomState> = _state
 
-    var nameField by mutableStateOf(TextFieldState(""))
+    override var nameField by mutableStateOf(TextFieldState(""))
         private set
 
-    var descriptionField by mutableStateOf(TextFieldState(""))
+    override var descriptionField by mutableStateOf(TextFieldState(""))
         private set
 
-    var image by mutableStateOf<Buffer?>(null)
+    override var image by mutableStateOf<Buffer?>(null)
         private set
 
-    fun changeName(value: String) {
+    override fun changeName(value: String) {
         nameField = nameField.copy(value = value)
     }
 
-    fun changeDescription(value: String) {
+    override fun changeDescription(value: String) {
         descriptionField = descriptionField.copy(value = value)
     }
 
-    fun updateImage(image: Buffer) {
+    override fun updateImage(image: Buffer) {
         println("Setting image $image")
         this.image = image
     }
 
-    fun submit() {
+    override fun submit() {
         if (!validate()) return
 
         _state.value = _state.value.copy(isLoading = true)
-        viewModelScope.launch {
+        coroutineScope.launch {
             roomRepository.createRoom(nameField.value, descriptionField.value, image).first().onError {
                 _state.value = _state.value.copy(isLoading = false)
                 _state.value = _state.value.copy(event = CreateRoomEvent.Error(it))
@@ -57,9 +60,9 @@ class CreateRoomViewModel(
         }
     }
 
-    fun onEventReceived(event: CreateRoomEvent) {
+    override fun onEventReceived(event: CreateRoomEvent) {
         when (event) {
-            is CreateRoomEvent.Error -> {
+            is CreateRoomEvent.Error, CreateRoomEvent.AuthError -> {
                 _state.value = _state.value.copy(event = CreateRoomEvent.None)
             }
 
