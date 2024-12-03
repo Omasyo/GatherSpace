@@ -14,6 +14,7 @@ fun HomeLayout(
     topBar: @Composable () -> Unit,
     sideBar: @Composable () -> Unit,
     isDisplayingContent: Boolean,
+    showSideBar: Boolean = true,
     content: @Composable () -> Unit,
 ) {
     Style(LayoutStyle)
@@ -34,15 +35,17 @@ fun HomeLayout(
                 classes(LayoutStyle.contentWrapper)
             }
         ) {
-            Div(
-                attrs = {
-                    classes(LayoutStyle.sidebar)
-                    if (isDisplayingContent) {
-                        classes(LayoutStyle.hideOnMid)
+            if (showSideBar) {
+                Div(
+                    attrs = {
+                        classes(LayoutStyle.sidebar)
+                        if (isDisplayingContent) {
+                            classes(LayoutStyle.hideOnMid)
+                        }
                     }
+                ) {
+                    sideBar()
                 }
-            ) {
-                sideBar()
             }
             Div(
                 attrs = {

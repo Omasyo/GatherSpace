@@ -104,3 +104,31 @@ fun MessageFieldPlaceholder(
         }
     }
 }
+
+
+@Composable
+fun MessageFieldPlaceholder(
+    message: String,
+    actionText: String,
+    href: String
+) {
+    Style(MessageBarStyle)
+    Div(
+        attrs = { id("message-bar-placeholder") },
+    ) {
+        H4 {
+            Text("$message ")
+            A(
+                href = href,
+            ) {
+                Span(
+                    attrs = {
+                        id("action")
+                    }
+                ) {
+                    Text(actionText)
+                }
+            }
+        }
+    }
+}

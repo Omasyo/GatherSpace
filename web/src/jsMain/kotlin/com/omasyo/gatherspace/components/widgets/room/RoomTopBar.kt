@@ -3,22 +3,13 @@ package com.omasyo.gatherspace.components.widgets.room
 import androidx.compose.runtime.Composable
 import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.styles.MainStyle
-import com.omasyo.gatherspace.styles.lightDark
-import com.omasyo.gatherspace.theme.onSurfaceVariantDark
-import com.omasyo.gatherspace.theme.onSurfaceVariantLight
-import com.omasyo.gatherspace.theme.surfaceDark
-import com.omasyo.gatherspace.theme.surfaceLight
-import com.varabyte.kobweb.compose.css.background
-import com.varabyte.kobweb.compose.css.borderBottom
 import com.varabyte.kobweb.compose.foundation.layout.Box
-import com.varabyte.kobweb.compose.foundation.layout.Row
-import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.attrsModifier
 import com.varabyte.kobweb.compose.ui.modifiers.margin
-import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.silk.components.icons.mdi.MdiArrowBack
+import kotlinx.browser.window
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.A
 import org.jetbrains.compose.web.dom.Div
@@ -48,7 +39,10 @@ fun RoomTopBar(
             id("room-topBar")
         }
     ) {
-        MdiArrowBack(Modifier.attrsModifier { classes(MainStyle.clickable) })
+        MdiArrowBack(Modifier.attrsModifier {
+            onClick { window.history.back() }
+            classes(MainStyle.clickable)
+        })
         if (roomDetails != null) {
             Box(
                 modifier = Modifier.attrsModifier {

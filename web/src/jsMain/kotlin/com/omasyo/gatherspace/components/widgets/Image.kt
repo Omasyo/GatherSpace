@@ -11,6 +11,7 @@ import org.jetbrains.compose.web.dom.AttrBuilderContext
 import org.jetbrains.compose.web.dom.Img
 import org.w3c.dom.HTMLImageElement
 
+@Deprecated("Get rid of this shit")
 @Composable
 fun Image(
     imageUrl: String?,
@@ -26,6 +27,23 @@ fun Image(
             classes(MainStyle.image)
             width(size)
             height(size)
+            attrs?.invoke(this)
+        }
+    )
+}
+
+@Composable
+fun Image(
+    imageUrl: String?,
+    placeholder: String,
+    contentDescription: String? = null,
+    attrs: AttrBuilderContext<HTMLImageElement>? = null,
+) {
+    Img(
+        src = imageUrl ?: placeholder,
+        alt = contentDescription ?: "",
+        attrs = {
+            classes(MainStyle.image)
             attrs?.invoke(this)
         }
     )

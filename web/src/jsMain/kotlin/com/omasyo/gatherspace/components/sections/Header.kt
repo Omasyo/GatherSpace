@@ -3,17 +3,17 @@ package com.omasyo.gatherspace.components.sections
 import androidx.compose.runtime.Composable
 import com.omasyo.gatherspace.components.widgets.Image
 import com.omasyo.gatherspace.models.response.UserDetails
+import com.omasyo.gatherspace.pages.date
 import com.omasyo.gatherspace.styles.LayoutStyle
 import com.omasyo.gatherspace.styles.MainStyle
-import com.varabyte.kobweb.compose.css.VerticalAlign
-import com.varabyte.kobweb.compose.css.height
-import com.varabyte.kobweb.compose.css.verticalAlign
-import com.varabyte.kobweb.compose.ui.Modifier
+import com.omasyo.gatherspace.styles.lightDark
+import com.omasyo.gatherspace.theme.primaryDark
+import com.omasyo.gatherspace.theme.primaryLight
 import com.varabyte.kobweb.silk.components.icons.mdi.MdiAdd
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 
-object TopBarStyle : StyleSheet() {
+object HeaderStyle : StyleSheet() {
     init {
         type("header") style {
             display(DisplayStyle.Flex)
@@ -42,11 +42,17 @@ object TopBarStyle : StyleSheet() {
 }
 
 @Composable
-fun TopBar(
-    modifier: Modifier = Modifier,
+fun Header() {
+    Header(
+        user = null
+    )
+}
+
+@Composable
+private fun Header(
     user: UserDetails?,
 ) {
-    Style(TopBarStyle)
+    Style(HeaderStyle)
     Header(
         attrs = {
             classes(LayoutStyle.header)
@@ -55,7 +61,7 @@ fun TopBar(
         A(
             href = "/",
         ) {
-            Img(src = "image/GatherSpace.svg", attrs = {
+            Img(src = "/image/GatherSpace.svg", attrs = {
                 id("logo")
             })
         }
@@ -107,7 +113,7 @@ fun TopBar(
                         }
                         Image(
                             user.imageUrl,
-                            placeholder = "image/user_placeholder.svg",
+                            placeholder = "/image/user_placeholder.svg",
                             size = 40,
                             attrs = {
                                 id("user-image")
@@ -116,12 +122,34 @@ fun TopBar(
                     }
                 }
             } else {
-                Button(
+
+                H3(
                     attrs = {
-                        classes(MainStyle.filledButton)
+                        classes(MainStyle.customLink)
                     }
                 ) {
-                    Text("Login")
+                    A(
+                        href = "/login",
+                    ) {
+                        Span(
+                            attrs = {
+                                style {
+                                    color(lightDark(primaryLight, primaryDark))
+                                    paddingRight(8f.px)
+                                }
+                            }
+                        ) {
+                            Text("Login")
+                        }
+
+                    }
+                    A(
+                        href = "/signup",
+                    ) {
+                        Span {
+                            Text("Register")
+                        }
+                    }
                 }
             }
         }

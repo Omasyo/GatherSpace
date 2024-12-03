@@ -1,6 +1,8 @@
 package com.omasyo.gatherspace.components.widgets.room
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import app.cash.paging.compose.LazyPagingItems
 import com.omasyo.gatherspace.models.response.Message
 import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.pages.date
@@ -30,10 +32,12 @@ private object RoomStyle : StyleSheet() {
             height(100.percent)
             width(100.percent)
             padding(56.px, 0.px)
+            maxWidth(1200.px)
+            position(Position.Relative)
         }
         id("messages-view") style {
             display(DisplayStyle.Flex)
-            flexDirection(FlexDirection.Column)
+            flexDirection(FlexDirection.ColumnReverse)
             overflowY("scroll")
             width(100.percent)
             height(100.percent)
@@ -53,7 +57,18 @@ private object RoomStyle : StyleSheet() {
 
 @Composable
 fun RoomContent(
-    roomDetails: RoomDetails?
+    roomDetails: RoomDetails?,
+    onRegisterTap: () -> Unit,
+    onJoinTap: () -> Unit,
+    isAuthenticated: Boolean,
+    message: String,
+    onMessageChange: (String) -> Unit,
+    onSendTap: () -> Unit,
+    room: RoomDetails?,
+    oldMessages: LazyPagingItems<Message>,
+    messages: List<Message>,
+    onJoin: () -> Unit,
+//    state: RoomState
 ) {
     Style(RoomStyle)
     RoomTopBar(
@@ -69,33 +84,37 @@ fun RoomContent(
                 id("messages-view")
             }
         ) {
-            repeat(500) {
-                Message(
-                    message = Message(
-                        id = 1113,
-                        content = "Styling is an essential part of your app development. With that, you can improve the user experience and make your app look better.\n" +
-                                "\n" +
-                                "For Web applications, the styling part is mainly done with CSS. CSS stands for Cascading Style Sheets, a language used to describe the presentation of a document. As Compose for Web still uses HTML for rendering the components, we will use CSS as the styling language.",
-                        sender = null,
-                        roomId = 2398,
-                        created = date,
-                        modified = date
-                    )
+            for (receivedMessage in messages) {
+                Message(message = receivedMessage)
+            }
+            for(index in 0..<oldMessages.itemCount) {
+                oldMessages[index]?.let { Message(message = it) }
+            }
+        }
+        when {
+            !isAuthenticated -> {
+                MessageFieldPlaceholder("Share your thoughts", actionText = "Login", href = "/login")
+            }
+
+            !(room?.isMember ?: false) -> {
+                MessageFieldPlaceholder("Not a member of this room", actionText = "Join?", action = onJoinTap)
+            }
+
+            else -> {
+                MessageBar(
+                    message = message,
+                    onMessageChange = onMessageChange,
+                    onSendClick = onSendTap
                 )
             }
         }
-        if (false) {
-            MessageBar(
-                message = "",
-                onMessageChange = {},
-                onSendClick = {}
-            )
-        } else {
-            MessageFieldPlaceholder(
-                message = "This is an Error",
-                actionText = "Retry",
-                action = {},
-            )
-        }
     }
+//    LaunchedEffect(state) {
+//        when (state.event) {
+//            RoomEvent.JoinedRoom -> onJoin()
+//            is RoomEvent.Error -> Unit
+//            RoomEvent.MessageSent -> Unit
+//            RoomEvent.None -> Unit
+//        }
+//    }
 }

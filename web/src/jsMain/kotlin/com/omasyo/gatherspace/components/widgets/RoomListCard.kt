@@ -1,20 +1,8 @@
-package com.omasyo.gatherspace.components.widgets.room
+package com.omasyo.gatherspace.components.widgets
 
 import androidx.compose.runtime.Composable
-import com.omasyo.gatherspace.components.widgets.Image
 import com.omasyo.gatherspace.models.response.Room
-import com.omasyo.gatherspace.styles.LayoutStyle
 import com.omasyo.gatherspace.styles.MainStyle
-import com.varabyte.kobweb.compose.foundation.layout.Arrangement
-import com.varabyte.kobweb.compose.foundation.layout.Box
-import com.varabyte.kobweb.compose.foundation.layout.Row
-import com.varabyte.kobweb.compose.ui.Alignment
-import com.varabyte.kobweb.compose.ui.Modifier
-import com.varabyte.kobweb.compose.ui.attrsModifier
-import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
-import com.varabyte.kobweb.compose.ui.modifiers.padding
-import com.varabyte.kobweb.compose.ui.modifiers.size
-import com.varabyte.kobweb.compose.ui.toAttrs
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.A
 import org.jetbrains.compose.web.dom.Div
@@ -37,7 +25,6 @@ object RoomListCardStyle : StyleSheet() {
 
 @Composable
 fun RoomListCard(
-    modifier: Modifier = Modifier,
     room: Room
 ) {
     Style(RoomListCardStyle)
@@ -52,7 +39,7 @@ fun RoomListCard(
         ) {
             Image(
                 imageUrl = room.imageUrl,
-                placeholder = "image/room_placeholder.svg",
+                placeholder = "/image/room_placeholder.svg",
                 size = 48
             )
             H3 {

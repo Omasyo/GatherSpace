@@ -5,6 +5,7 @@ import androidx.compose.runtime.remember
 import com.omasyo.gatherspace.components.widgets.Image
 import com.omasyo.gatherspace.domain.formatTime
 import com.omasyo.gatherspace.models.response.Message
+import com.omasyo.gatherspace.styles.MainStyle
 import com.omasyo.gatherspace.styles.lightDark
 import com.omasyo.gatherspace.theme.onSurfaceDark
 import com.omasyo.gatherspace.theme.onSurfaceLight
@@ -44,7 +45,7 @@ fun Message(
     ) {
         Image(
             imageUrl = message.sender?.imageUrl,
-            placeholder = "image/user_placeholder.svg",
+            placeholder = "/image/user_placeholder.svg",
             size = 40,
         )
         val lines = remember(message) {
@@ -56,8 +57,13 @@ fun Message(
             }
         ) {
             H4 {
-                Span {
-                    Text(message.sender?.username ?: "[deleted]")
+                A(
+                    href = message.sender?.id?.let { "/users/$it" },
+                    attrs = { classes(MainStyle.customLink) }
+                ) {
+                    Span {
+                        Text(message.sender?.username ?: "[deleted]")
+                    }
                 }
                 Span(
                     attrs = {

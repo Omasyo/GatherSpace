@@ -40,6 +40,7 @@ kotlin {
             implementation(libs.jetbrains.lifecycle.runtime.compose)
             implementation(libs.kotlinx.io.core)
             implementation(libs.kotlinx.datetime)
+            implementation(libs.paging.compose.common)
         }
 
         jsMain.dependencies {
