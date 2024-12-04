@@ -3,6 +3,7 @@ package com.omasyo.gatherspace.utils
 import com.omasyo.gatherspace.data.DatabaseResponse
 import com.omasyo.gatherspace.models.response.ErrorResponse
 import com.omasyo.gatherspace.models.response.Room
+import com.omasyo.gatherspace.network.Api.ImageUrlPath
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -15,7 +16,6 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 const val ImageDirPath = "images"
-const val ImageUrlPath = "http://192.168.24.113:8080/images/" //TODO setup a common Api Stuff
 
 fun getImagePath(imageId: String?): String? {
     return imageId?.let { "${ImageUrlPath}$it" }

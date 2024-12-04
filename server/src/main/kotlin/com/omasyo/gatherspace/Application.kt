@@ -16,6 +16,7 @@ import com.omasyo.gatherspace.data.token.TokenRepository
 import com.omasyo.gatherspace.data.token.TokenRepositoryImpl
 import com.omasyo.gatherspace.data.user.UserRepository
 import com.omasyo.gatherspace.data.user.UserRepositoryImpl
+import com.omasyo.gatherspace.network.Api
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.*
 import io.ktor.serialization.kotlinx.json.*
@@ -31,7 +32,7 @@ import kotlinx.serialization.json.Json
 import kotlin.time.Duration.Companion.seconds
 
 fun main() {
-    embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)
+    embeddedServer(Netty, port = Api.Port, host = "0.0.0.0", module = Application::module)
         .start(wait = true)
 }
 
