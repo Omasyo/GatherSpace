@@ -50,13 +50,9 @@ fun CreateRoomRoute(
         image = viewModel.image,
         setImage = viewModel::updateImage,
         onSubmit = viewModel::submit,
-        onEventReceived = { event ->
-            if (event is CreateRoomEvent.Success) {
-                onRoomCreated(event.id)
-            }
-            viewModel.onEventReceived(event)
-        },
         onAuthError = onAuthError,
+        onRoomCreated = onRoomCreated,
+        onEventReceived = viewModel::onEventReceived,
         state = viewModel.state.collectAsStateWithLifecycle().value
     )
 }
@@ -73,15 +69,20 @@ fun CreateRoomScreen(
     image: Buffer?,
     setImage: (Buffer) -> Unit,
     onSubmit: () -> Unit,
-    onEventReceived: (CreateRoomEvent) -> Unit,
     onAuthError: () -> Unit,
+    onRoomCreated: (Int) -> Unit,
+    onEventReceived: (CreateRoomEvent) -> Unit,
     state: CreateRoomState
 ) {
     val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    Scaffold { innerPadding ->
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }
+    ) { innerPadding ->
 
         IconButton(
             onClick = onBackTap,
@@ -206,6 +207,23 @@ fun CreateRoomScreen(
     }
 
     LaunchedEffect(state) {
+        when (val event = state.event) {
+            CreateRoomEvent.AuthError -> {
+                snackbarHostState.showSnackbar("Token expired")
+                onAuthError()
+            }
+
+            is CreateRoomEvent.Error -> {
+                snackbarHostState.showSnackbar(event.message)
+            }
+
+            is CreateRoomEvent.Success -> {
+                onRoomCreated(event.id)
+            }
+
+            CreateRoomEvent.None -> Unit
+        }
+
         onEventReceived(state.event)
     }
 }
