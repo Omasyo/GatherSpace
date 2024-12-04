@@ -66,9 +66,15 @@ fun ProfileScreen(
     state: ProfileScreenState
 ) {
     val sheetState = rememberModalBottomSheetState()
+    val snackbarHostState = remember { SnackbarHostState() }
     var showBottomSheet by remember { mutableStateOf(false) }
 
-    Scaffold(modifier) { innerPadding ->
+    Scaffold(
+        modifier = modifier,
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }
+    ) { innerPadding ->
 
         IconButton(
             onClick = onBackTap,
@@ -150,17 +156,17 @@ fun ProfileScreen(
     }
 
     LaunchedEffect(state) {
-        when (state.event) {
+        when (val event = state.event) {
             ProfileScreenEvent.AuthError -> {
-                //show snackbar logout
+                snackbarHostState.showSnackbar("Auth error")
             }
 
             is ProfileScreenEvent.Error -> {
-
+                snackbarHostState.showSnackbar(event.message)
             }
 
             ProfileScreenEvent.ImageUpdated -> {
-                //show imageupdated message
+                snackbarHostState.showSnackbar("Image updated")
             }
 
             ProfileScreenEvent.Logout -> {
@@ -168,7 +174,7 @@ fun ProfileScreen(
             }
 
             is ProfileScreenEvent.SessionLogout -> {
-
+                snackbarHostState.showSnackbar("Logout of device successful")
             }
 
             ProfileScreenEvent.None -> Unit

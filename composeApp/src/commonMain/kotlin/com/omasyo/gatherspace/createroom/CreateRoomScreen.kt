@@ -209,7 +209,7 @@ fun CreateRoomScreen(
     LaunchedEffect(state) {
         when (val event = state.event) {
             CreateRoomEvent.AuthError -> {
-                snackbarHostState.showSnackbar("Token expired")
+                snackbarHostState.showSnackbar("Authentication Error")
                 onAuthError()
             }
 
