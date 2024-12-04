@@ -1,7 +1,6 @@
 package com.omasyo.gatherspace.room
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,7 +10,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -56,7 +54,7 @@ fun RoomPanel(
     onJoin: () -> Unit,
     viewModel: RoomViewModel = dependencyProvider {
         viewModel(key = "room$roomId") {
-            RoomViewModel(
+            ComposeRoomViewModel(
                 roomId,
                 messageRepository,
                 roomRepository

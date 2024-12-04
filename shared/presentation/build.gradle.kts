@@ -44,6 +44,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.io.core)
             implementation(libs.compose.runtime)
+            implementation(libs.paging.common)
         }
     }
 }
