@@ -1,6 +1,7 @@
 package com.omasyo.gatherspace.room
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,9 +15,11 @@ import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -74,6 +77,7 @@ fun RoomPanel(
         oldMessages = viewModel.oldMessages.collectAsLazyPagingItems(),
         messages = viewModel.messages,
         onJoin = onJoin,
+        onEventReceived = viewModel::onEventReceived,
         state = viewModel.state.collectAsStateWithLifecycle().value,
     )
 }
@@ -94,10 +98,17 @@ fun RoomPanel(
     oldMessages: LazyPagingItems<Message>,
     messages: List<Message>,
     onJoin: () -> Unit,
+    onEventReceived: (RoomEvent) -> Unit,
     state: RoomState
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val listState = rememberLazyListState()
+
     Scaffold(
         modifier = modifier,
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
         topBar = {
             Column {
                 TopAppBar(
@@ -120,11 +131,6 @@ fun RoomPanel(
         Column(
             modifier = Modifier.padding(innerPadding),
         ) {
-            val listState = rememberLazyListState()
-
-            LaunchedEffect(messages) {
-                listState.scrollToItem(0)
-            }
 
             LazyColumn(
                 modifier = Modifier.weight(1f),
@@ -165,14 +171,25 @@ fun RoomPanel(
                 }
             }
         }
-        LaunchedEffect(state) {
-            when (state.event) {
-                RoomEvent.JoinedRoom -> onJoin()
-                is RoomEvent.Error -> Unit
-                RoomEvent.MessageSent -> Unit
-                RoomEvent.None -> Unit
+    }
+
+    LaunchedEffect(state.event) {
+        when (val event = state.event) {
+
+            RoomEvent.JoinedRoom -> onJoin()
+            is RoomEvent.Error -> {
+                snackbarHostState.showSnackbar(event.message)
             }
+
+            RoomEvent.MessageReceived -> {
+                if (listState.firstVisibleItemIndex <= 1) {
+                    listState.animateScrollToItem(0)
+                }
+            }
+
+            else -> Unit
         }
+        onEventReceived(state.event)
     }
 }
 
@@ -187,13 +204,14 @@ private fun MessageField(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        IconButton(onClick = { }) {
-            Icon(Icons.Outlined.Image, contentDescription = null)
-        }
+//        IconButton(onClick = { }) {
+//            Icon(Icons.Outlined.Image, contentDescription = null)
+//        }
         TextField(
             message,
             onValueChange = onMessageChange,
             placeholder = "Message",
+            singleLine = true,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
             ),
@@ -202,7 +220,17 @@ private fun MessageField(
             ),
             modifier = Modifier
                 .weight(1f)
-                .padding(horizontal = 8f.dp),
+                .padding(horizontal = 8f.dp)
+                .onKeyEvent {
+                    when {
+                        (it.isCtrlPressed && it.key == Key.Enter && it.type == KeyEventType.KeyUp) -> {
+                            onSendTap()
+                            true
+                        }
+
+                        else -> false
+                    }
+                },
         )
         IconButton(onClick = onSendTap) {
             Icon(Icons.AutoMirrored.Default.Send, contentDescription = null)
@@ -321,6 +349,7 @@ private fun Preview() {
                 )
             },
             onJoin = {},
+            onEventReceived = {},
             state = RoomState.Initial
         )
     }

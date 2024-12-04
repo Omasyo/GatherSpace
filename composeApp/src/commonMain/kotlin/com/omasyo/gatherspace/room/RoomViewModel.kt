@@ -7,12 +7,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.cash.paging.cachedIn
-import com.omasyo.gatherspace.domain.AuthError
-import com.omasyo.gatherspace.domain.DomainError
-import com.omasyo.gatherspace.domain.Success
+import com.omasyo.gatherspace.domain.*
 import com.omasyo.gatherspace.domain.message.MessageRepository
-import com.omasyo.gatherspace.domain.onError
-import com.omasyo.gatherspace.domain.onSuccess
 import com.omasyo.gatherspace.domain.room.RoomRepository
 import com.omasyo.gatherspace.models.response.Message
 import com.omasyo.gatherspace.models.response.RoomDetails
@@ -42,7 +38,7 @@ class RoomViewModel(
                         null
                     }
 
-                    AuthError -> throw IllegalStateException("Auth error")
+                    AuthError -> throw IllegalStateException("Authentication not required")
                     is Success -> it.data
                 }
             }
@@ -59,10 +55,11 @@ class RoomViewModel(
         viewModelScope.launch {
             messageRepository.getMessageFlow(roomId)
                 .catch {
-                    //TODO do error stuffs here
+                    _state.value = _state.value.copy(event = RoomEvent.Error("An Error occurred"))
                 }
                 .collect {
                     messages.add(it)
+                    _state.value = _state.value.copy(event = RoomEvent.MessageReceived)
                 }
         }
     }
@@ -91,16 +88,18 @@ class RoomViewModel(
             _state.value = _state.value.copy(isSending = true)
             messageRepository.sendMessage(roomId, message).first()
                 .onError {
-                    //TODO find better way of doing errors different states too much
-//                    _sendMessageState.value = RoomState.Error(it)
                     _state.value = _state.value.copy(event = RoomEvent.Error(it))
                 }
                 .onSuccess {
                     message = ""
-                    _state.value = _state.value.copy(event = RoomEvent.MessageSent)
+//                    _state.value = _state.value.copy(event = RoomEvent.MessageSent)
                 }
 
-            _state.value = _state.value.copy(isSending = true)
+            _state.value = _state.value.copy(isSending = false)
         }
+    }
+
+    fun onEventReceived(event: RoomEvent) {
+        _state.value = _state.value.copy(event = RoomEvent.None)
     }
 }

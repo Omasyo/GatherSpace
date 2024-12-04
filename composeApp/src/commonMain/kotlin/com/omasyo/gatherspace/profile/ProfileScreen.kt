@@ -13,6 +13,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -39,17 +41,38 @@ fun ProfileRoute(
         }
     }
 ) {
-    ProfileScreen(
-        modifier = modifier,
-        onBackTap = onBackTap,
-        userDetails = viewModel.userDetails.collectAsStateWithLifecycle().value,
-        sessions = viewModel.userSessions.collectAsStateWithLifecycle().value,
-        updateImage = viewModel::updateImage,
-        onLogoutTap = viewModel::logout,
-        onSessionLogoutTap = viewModel::logoutSession,
-        onEventReceived = viewModel::onEventReceived,
-        state = viewModel.state.collectAsStateWithLifecycle().value,
-    )
+
+    val borderColor = MaterialTheme.colorScheme.onSurfaceVariant
+    val strokeWidth = 0.5f.dp
+    Box(
+        modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+        contentAlignment = Alignment.Center,
+    ) {
+        ProfileScreen(
+            modifier = Modifier.widthIn(max = 800.dp).drawBehind {
+                drawLine(
+                    borderColor,
+                    Offset(0f, 0f),
+                    Offset(0f, size.height),
+                    strokeWidth.toPx()
+                )
+                drawLine(
+                    borderColor,
+                    Offset(size.width, 0f),
+                    Offset(size.width, size.height),
+                    strokeWidth.toPx()
+                )
+            },
+            onBackTap = onBackTap,
+            userDetails = viewModel.userDetails.collectAsStateWithLifecycle().value,
+            sessions = viewModel.userSessions.collectAsStateWithLifecycle().value,
+            updateImage = viewModel::updateImage,
+            onLogoutTap = viewModel::logout,
+            onSessionLogoutTap = viewModel::logoutSession,
+            onEventReceived = viewModel::onEventReceived,
+            state = viewModel.state.collectAsStateWithLifecycle().value,
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,17 +96,25 @@ fun ProfileScreen(
         modifier = modifier,
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
+        },
+        topBar = {
+            TopAppBar(
+                navigationIcon = {
+                    IconButton(
+                        onClick = onBackTap
+                    ) {
+                        Icon(Icons.AutoMirrored.Default.ArrowBack, contentDescription = null)
+                    }
+                },
+                title = {
+                    Text("Profile")
+                }
+            )
         }
     ) { innerPadding ->
-
-        IconButton(
-            onClick = onBackTap,
-            modifier = Modifier.padding(innerPadding).padding(top = 16f.dp, start = 8f.dp)
-        ) {
-            Icon(Icons.AutoMirrored.Default.ArrowBack, contentDescription = null)
-        }
         Column(
             modifier = Modifier
+                .verticalScroll(state = rememberScrollState())
                 .padding(innerPadding)
                 .fillMaxSize()
                 .padding(horizontal = 16f.dp, vertical = 72f.dp),
@@ -104,7 +135,6 @@ fun ProfileScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Column(
-                modifier = Modifier.verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(8f.dp)
             ) {
                 for (session in sessions) {

@@ -41,7 +41,7 @@ fun Application.roomRoute(repository: RoomRepository) {
 //            val principal = call.principal<JWTPrincipal>()
             //todo find a better way - scopes?
             val token = call.request.headers["Authorization"]?.substring(7)
-            val userId = JWT.decode(token)?.getClaim(JwtKeys.USER_ID)?.asInt()
+            val userId = token?.let { JWT.decode(it)?.getClaim(JwtKeys.USER_ID)?.asInt() }
 
 //            val userId = principal?.payload?.getClaim("user_id")!!.asInt()
 
