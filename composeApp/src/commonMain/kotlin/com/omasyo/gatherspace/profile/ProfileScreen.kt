@@ -35,7 +35,7 @@ fun ProfileRoute(
     onBackTap: () -> Unit,
     viewModel: ProfileViewModel = dependencyProvider {
         viewModel {
-            ProfileViewModel(authRepository, userRepository)
+            ComposeProfileViewModel(authRepository, userRepository)
         }
     }
 ) {
@@ -66,7 +66,6 @@ fun ProfileScreen(
     state: ProfileScreenState
 ) {
     val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
 
     Scaffold(modifier) { innerPadding ->
@@ -156,7 +155,9 @@ fun ProfileScreen(
                 //show snackbar logout
             }
 
-            is ProfileScreenEvent.Error -> TODO()
+            is ProfileScreenEvent.Error -> {
+
+            }
 
             ProfileScreenEvent.ImageUpdated -> {
                 //show imageupdated message

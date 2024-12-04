@@ -1,8 +1,5 @@
 package com.omasyo.gatherspace.profile
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.omasyo.gatherspace.domain.AuthError
 import com.omasyo.gatherspace.domain.DomainError
 import com.omasyo.gatherspace.domain.Success
@@ -10,20 +7,23 @@ import com.omasyo.gatherspace.domain.auth.AuthRepository
 import com.omasyo.gatherspace.domain.user.UserRepository
 import com.omasyo.gatherspace.models.response.UserDetails
 import com.omasyo.gatherspace.models.response.UserSession
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.io.Buffer
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class ProfileViewModel(
+class ProfileViewModelImpl(
     private val authRepository: AuthRepository,
     private val userRepository: UserRepository,
-) : ViewModel() {
+    override val coroutineScope: CoroutineScope = MainScope()
+) : ProfileViewModel {
 
     private val refreshEvent = MutableStateFlow(Any())
 
-    val userDetails: StateFlow<UserDetails?> = refreshEvent.flatMapLatest {
+    override val userDetails: StateFlow<UserDetails?> = refreshEvent.flatMapLatest {
         userRepository.getCurrentUser()
             .map {
                 when (it) {
@@ -40,9 +40,9 @@ class ProfileViewModel(
                     is Success -> it.data
                 }
             }
-    }.stateIn(viewModelScope, SharingStarted.Lazily, null)
+    }.stateIn(coroutineScope, SharingStarted.Lazily, null)
 
-    val userSessions: StateFlow<List<UserSession>> = refreshEvent.flatMapLatest {
+    override val userSessions: StateFlow<List<UserSession>> = refreshEvent.flatMapLatest {
         userRepository.getUserSessions()
             .map {
                 when (it) {
@@ -59,13 +59,13 @@ class ProfileViewModel(
                     is Success -> it.data
                 }
             }
-    }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+    }.stateIn(coroutineScope, SharingStarted.Lazily, emptyList())
 
     private val _state = MutableStateFlow(ProfileScreenState.Initial)
-    val state = _state.asStateFlow()
+    override val state = _state.asStateFlow()
 
-    fun updateImage(buffer: Buffer) {
-        viewModelScope.launch {
+    override fun updateImage(buffer: Buffer) {
+        coroutineScope.launch {
             val response = userRepository.updateUser(
                 username = null,
                 password = null,
@@ -81,9 +81,9 @@ class ProfileViewModel(
         }
     }
 
-    fun logout() {
-        viewModelScope.launch {
-            when (val response = authRepository.logout().first()) {
+    override fun logout() {
+        coroutineScope.launch {
+            when (authRepository.logout().first()) {
                 AuthError -> _state.value = _state.value.copy(event = ProfileScreenEvent.AuthError)
                 is DomainError -> _state.value = _state.value.copy(event = ProfileScreenEvent.Error("Logout failed"))
                 is Success -> _state.value = _state.value.copy(event = ProfileScreenEvent.Logout)
@@ -91,9 +91,9 @@ class ProfileViewModel(
         }
     }
 
-    fun logoutSession(session: UserSession) {
-        viewModelScope.launch {
-            when (val response = userRepository.deleteUserSession(session.deviceId).first()) {
+    override fun logoutSession(session: UserSession) {
+        coroutineScope.launch {
+            when (userRepository.deleteUserSession(session.deviceId).first()) {
                 AuthError -> _state.value = _state.value.copy(event = ProfileScreenEvent.AuthError)
                 is DomainError -> _state.value =
                     _state.value.copy(event = ProfileScreenEvent.Error("Couldn't delete session"))
@@ -104,7 +104,7 @@ class ProfileViewModel(
         }
     }
 
-    fun onEventReceived(event: ProfileScreenEvent) {
+    override fun onEventReceived(event: ProfileScreenEvent) {
         when (event) {
             ProfileScreenEvent.ImageUpdated,
             is ProfileScreenEvent.SessionLogout,
