@@ -57,8 +57,6 @@ private object RoomStyle : StyleSheet() {
 
 @Composable
 fun RoomContent(
-    roomDetails: RoomDetails?,
-    onRegisterTap: () -> Unit,
     onJoinTap: () -> Unit,
     isAuthenticated: Boolean,
     message: String,
@@ -72,7 +70,7 @@ fun RoomContent(
 ) {
     Style(RoomStyle)
     RoomTopBar(
-        roomDetails = roomDetails
+        roomDetails = room
     )
     Div(
         attrs = {

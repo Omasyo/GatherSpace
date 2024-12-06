@@ -79,8 +79,9 @@ fun RoomListCardPlaceholder() {
         Div(
             attrs = {
                 style {
-                    width(24.px)
-                    height(80.px)
+                    marginLeft(16.px)
+                    width(144.px)
+                    height(20.px)
                     background(lightDark(surfaceVariantLight, surfaceVariantDark))
                 }
             }
