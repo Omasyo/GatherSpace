@@ -36,6 +36,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.shared.presentation)
+            implementation(libs.napier)
 
             implementation(libs.compose.runtime)
             implementation(libs.compose.runtime.saveable)

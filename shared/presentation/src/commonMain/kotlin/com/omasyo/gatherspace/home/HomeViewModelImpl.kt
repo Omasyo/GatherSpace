@@ -4,6 +4,7 @@ import com.omasyo.gatherspace.UiState
 import com.omasyo.gatherspace.domain.AuthError
 import com.omasyo.gatherspace.domain.DomainError
 import com.omasyo.gatherspace.domain.Success
+import com.omasyo.gatherspace.domain.auth.AuthRepository
 import com.omasyo.gatherspace.domain.room.RoomRepository
 import com.omasyo.gatherspace.domain.user.UserRepository
 import com.omasyo.gatherspace.models.response.Room
@@ -16,9 +17,13 @@ import kotlinx.coroutines.flow.*
 class HomeViewModelImpl(
     private val roomRepository: RoomRepository,
     private val userRepository: UserRepository,
+    authRepository: AuthRepository,
     override val coroutineScope: CoroutineScope = MainScope()
 ) : HomeViewModel {
     private val refreshRoomsEvent = MutableStateFlow(Any())
+
+    override val isAuthenticated: StateFlow<Boolean> = authRepository.isAuthenticated()
+        .stateIn(coroutineScope, SharingStarted.WhileSubscribed(), false)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override val user: StateFlow<UiState<UserDetails>> =

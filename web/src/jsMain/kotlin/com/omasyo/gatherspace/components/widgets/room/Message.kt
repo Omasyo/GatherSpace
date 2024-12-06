@@ -37,6 +37,7 @@ private object MessageStyle : StyleSheet() {
 fun Message(
     message: Message
 ) {
+    println("Rendering $message")
     Style(MessageStyle)
     Div(
         attrs = {

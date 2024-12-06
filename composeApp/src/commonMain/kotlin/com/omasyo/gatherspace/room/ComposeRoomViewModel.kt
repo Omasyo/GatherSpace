@@ -7,9 +7,9 @@ import com.omasyo.gatherspace.domain.room.RoomRepository
 import kotlinx.coroutines.CoroutineScope
 
 class ComposeRoomViewModel(
-    private val roomId: Int,
-    private val messageRepository: MessageRepository,
-    private val roomRepository: RoomRepository
+    roomId: Int,
+    messageRepository: MessageRepository,
+    roomRepository: RoomRepository
 ) : ViewModel(), RoomViewModel by RoomViewModelImpl(roomId, messageRepository, roomRepository) {
     override val coroutineScope: CoroutineScope
         get() = viewModelScope

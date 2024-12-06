@@ -15,6 +15,7 @@ import com.omasyo.gatherspace.pages.date
 import com.omasyo.gatherspace.room.RoomViewModel
 import com.omasyo.gatherspace.room.RoomViewModelImpl
 import com.omasyo.gatherspace.viewmodels.domainComponent
+import com.omasyo.gatherspace.viewmodels.homeViewModel
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.rememberPageContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,17 +28,19 @@ fun RoomPage() {
     val roomId = context.route.params["room"]?.toInt()
     with(domainComponent) {
         RoomPage(
-            roomViewModel = RoomViewModelImpl(roomId!!, messageRepository, roomRepository)
+            roomViewModel = RoomViewModelImpl(roomId!!, messageRepository, roomRepository),
+            homeViewModel = homeViewModel
         )
     }
 }
 
 @Composable
 fun RoomPage(
-    roomViewModel: RoomViewModel
+    roomViewModel: RoomViewModel,
+    homeViewModel: HomeViewModel,
 ) {
     HomeLayout(
-        title = "Room Name",
+        title = roomViewModel.room.collectAsState().value?.name ?: "",
         topBar = {
             Header()
         },
@@ -45,18 +48,21 @@ fun RoomPage(
             SideBar()
         },
         isDisplayingContent = true,
-//        showSideBar = false,
     ) {
         RoomContent(
             onJoinTap = roomViewModel::joinRoom,
-            isAuthenticated = true,
+            isAuthenticated = homeViewModel.isAuthenticated.collectAsState().value,
             message = roomViewModel.message,
             onMessageChange = roomViewModel::changeMessage,
             onSendTap = roomViewModel::sendMessage,
             room = roomViewModel.room.collectAsState().value,
             oldMessages = roomViewModel.oldMessages.collectAsLazyPagingItems(),
             messages = roomViewModel.messages,
-            onJoin = {},
+            onJoin = {
+                homeViewModel.refresh()
+            },
+            onEventReceived = roomViewModel::onEventReceived,
+            state = roomViewModel.state.collectAsState().value,
         )
     }
 }

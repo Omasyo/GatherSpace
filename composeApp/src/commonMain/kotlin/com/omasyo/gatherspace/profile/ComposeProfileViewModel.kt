@@ -8,8 +8,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class ComposeProfileViewModel(
-    private val authRepository: AuthRepository,
-    private val userRepository: UserRepository,
+    authRepository: AuthRepository,
+    userRepository: UserRepository,
 ) : ViewModel(), ProfileViewModel by ProfileViewModelImpl(authRepository, userRepository) {
     override val coroutineScope: CoroutineScope
         get() = viewModelScope

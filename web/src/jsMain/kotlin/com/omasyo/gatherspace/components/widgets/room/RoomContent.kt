@@ -6,6 +6,8 @@ import app.cash.paging.compose.LazyPagingItems
 import com.omasyo.gatherspace.models.response.Message
 import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.pages.date
+import com.omasyo.gatherspace.room.RoomEvent
+import com.omasyo.gatherspace.room.RoomState
 import com.omasyo.gatherspace.styles.lightDark
 import com.omasyo.gatherspace.theme.onSurfaceVariantDark
 import com.omasyo.gatherspace.theme.onSurfaceVariantLight
@@ -66,7 +68,8 @@ fun RoomContent(
     oldMessages: LazyPagingItems<Message>,
     messages: List<Message>,
     onJoin: () -> Unit,
-//    state: RoomState
+    onEventReceived: (RoomEvent) -> Unit,
+    state: RoomState
 ) {
     Style(RoomStyle)
     RoomTopBar(
@@ -85,8 +88,8 @@ fun RoomContent(
             for (receivedMessage in messages) {
                 Message(message = receivedMessage)
             }
-            for(index in 0..<oldMessages.itemCount) {
-                oldMessages[index]?.let { Message(message = it) }
+            for (index in 0..<oldMessages.itemCount) {
+                oldMessages[index]?.let { Message(message = it) } // TODO: Loads the full data, you know why - Find solution
             }
         }
         when {
@@ -107,12 +110,24 @@ fun RoomContent(
             }
         }
     }
-//    LaunchedEffect(state) {
-//        when (state.event) {
-//            RoomEvent.JoinedRoom -> onJoin()
-//            is RoomEvent.Error -> Unit
-//            RoomEvent.MessageSent -> Unit
-//            RoomEvent.None -> Unit
-//        }
-//    }
+
+    LaunchedEffect(state.event) {
+        when (val event = state.event) {
+
+            RoomEvent.JoinedRoom -> onJoin()
+            is RoomEvent.Error -> {
+
+//                snackbarHostState.showSnackbar(event.message)
+            }
+
+            RoomEvent.MessageReceived -> {
+//                if (listState.firstVisibleItemIndex <= 1) {
+//                    listState.animateScrollToItem(0)
+//                }
+            }
+
+            else -> Unit
+        }
+        onEventReceived(state.event)
+    }
 }

@@ -24,8 +24,6 @@ private val spec: FiniteAnimationSpec<IntOffset> =
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
-    isAuthenticated: Boolean,
-    logout: () -> Unit,
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(
@@ -87,7 +85,6 @@ fun AppNavHost(
 
         composable<Home> {
             HomeRoute(
-                isAuthenticated = isAuthenticated,
                 onLoginTap = { navController.navigate(Login) },
                 onProfileTap = { navController.navigate(Profile) },
                 onAuthError = {}

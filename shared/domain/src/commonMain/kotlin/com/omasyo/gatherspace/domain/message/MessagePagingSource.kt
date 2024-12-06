@@ -25,7 +25,7 @@ internal class MessagePagingSource(
     override suspend fun load(params: PagingSourceLoadParams<LocalDateTime>): PagingSourceLoadResult<LocalDateTime, Message> {
         return try {
             val date = params.key ?: Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-            val response = networkSource.getRecentMessages(roomId, date, 50)
+            val response = networkSource.getRecentMessages(roomId, date, 5)
             response.getOrNull()?.let { messages ->
                 PagingSourceLoadResultPage(
                     data = messages,

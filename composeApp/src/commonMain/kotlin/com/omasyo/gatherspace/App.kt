@@ -22,10 +22,7 @@ fun App(
         Napier.i { "Starting Napier" }
     }
     GatherSpaceTheme {
-        AppNavHost(
-            isAuthenticated = appViewModel.isAuthenticated.collectAsStateWithLifecycle().value,
-            logout = appViewModel::logout,
-        )
+        AppNavHost()
     }
 }
 

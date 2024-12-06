@@ -18,7 +18,7 @@ internal class MessageRepositoryImpl(
 ) : MessageRepository {
     override fun getRecentMessages(
         roomId: Int
-    ): Flow<PagingData<Message>> = Pager(PagingConfig(pageSize = 50)) {
+    ): Flow<PagingData<Message>> = Pager(PagingConfig(pageSize = 5)) {
         MessagePagingSource(
             roomId,
             networkSource

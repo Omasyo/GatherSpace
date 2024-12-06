@@ -22,17 +22,16 @@ import com.omasyo.gatherspace.ui.theme.*
 @Composable
 fun HomeRoute(
     modifier: Modifier = Modifier,
-    isAuthenticated: Boolean,
     onAuthError: () -> Unit,
     onLoginTap: () -> Unit,
     onProfileTap: () -> Unit,
-    homeViewModel: ComposeHomeViewModel = dependencyProvider {
-        viewModel { ComposeHomeViewModel(roomRepository, userRepository) }
+    homeViewModel: HomeViewModel = dependencyProvider {
+        viewModel { ComposeHomeViewModel(roomRepository, userRepository, authRepository) }
     },
 ) {
     HomeView(
         modifier = modifier,
-        isAuthenticated = isAuthenticated,
+        isAuthenticated = true,
         onAuthError = onAuthError,
         onLoginTap = onLoginTap,
         onProfileTap = onProfileTap,
