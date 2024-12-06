@@ -1,6 +1,7 @@
 package com.omasyo.gatherspace.pages
 
 import androidx.compose.runtime.Composable
+import com.omasyo.gatherspace.UiState
 import com.omasyo.gatherspace.components.layouts.HomeLayout
 import com.omasyo.gatherspace.components.sections.RoomsGrid
 import com.omasyo.gatherspace.components.sections.SideBar
@@ -24,9 +25,9 @@ fun JoinRoomPage(
         isDisplayingContent = true,
     ) {
         RoomsGrid(
-            rooms = List(54) {
+            state = UiState.Success(List(54) {
                 Room(id = 2737, name = "Kim Merritt", imageUrl = null)
-            }
+            })
         )
     }
 }

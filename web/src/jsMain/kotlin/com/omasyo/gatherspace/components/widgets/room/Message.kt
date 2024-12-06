@@ -46,7 +46,12 @@ fun Message(
         Image(
             imageUrl = message.sender?.imageUrl,
             placeholder = "/image/user_placeholder.svg",
-            size = 40,
+            attrs = {
+                style {
+                    width(40.px)
+                    height(40.px)
+                }
+            }
         )
         val lines = remember(message) {
             message.content.split("\n")

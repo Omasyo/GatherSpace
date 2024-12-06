@@ -78,19 +78,6 @@ object MainStyle : StyleSheet() {
         }
     }
 
-
-//    val clickable by style {
-//        borderRadius(32.px)
-//        padding(8.px, 8.px)
-//
-//        hover {
-//            background(lightDark(onSurfaceLight, onSurfaceDark, 0.2f))
-//        }
-//        active {
-//            background(lightDark(onSurfaceLight, onSurfaceDark, 0.4f))
-//        }
-//    }
-
     val filledButton by style {
         borderRadius(32.px)
         background(lightDark(primaryContainerLight, primaryContainerDark))
@@ -102,6 +89,7 @@ object MainStyle : StyleSheet() {
     val image by style {
         display(DisplayStyle.Block)
         borderRadius(8.px)
+        objectFit(ObjectFit.Cover)
     }
 }
 

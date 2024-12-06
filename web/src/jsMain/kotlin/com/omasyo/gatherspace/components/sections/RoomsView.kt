@@ -1,7 +1,9 @@
 package com.omasyo.gatherspace.components.sections
 
 import androidx.compose.runtime.Composable
+import com.omasyo.gatherspace.UiState
 import com.omasyo.gatherspace.components.widgets.RoomListCard
+import com.omasyo.gatherspace.components.widgets.RoomListCardPlaceholder
 import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.styles.MainStyle
 import com.omasyo.gatherspace.styles.lightDark
@@ -18,44 +20,65 @@ import org.jetbrains.compose.web.dom.Text
 
 @Composable
 fun RoomsView(
-    rooms: List<Room>,
+    state: UiState<List<Room>>
 ) {
+    when (state) {
+        is UiState.Error -> {}
+        UiState.Loading -> Placeholder()
+        is UiState.Success -> {
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth()
+                    .padding(topBottom = 8f.px)
+                    .overflow {
+                        y(Overflow.Scroll)
+                    },
+            ) {
+                A(
+                    href = "/join-room",
+                    attrs = {
+
+                        classes(MainStyle.customLink)
+                    }) {
+                    H4(
+                        attrs = {
+                            style {
+                                width(100.percent)
+                                textAlign("center")
+                                padding(8.px, 0.px)
+                                borderBottom {
+                                    width(1.px)
+                                    style(LineStyle.Solid)
+                                    color(lightDark(onSurfaceVariantDark, onSurfaceVariantLight))
+                                }
+                            }
+                        }
+                    ) {
+                        Text("Join A Room")
+                    }
+                }
+                for (room in state.data) {
+                    RoomListCard(room = room)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun Placeholder() {
     Column(
         modifier = Modifier
             .fillMaxHeight()
             .fillMaxWidth()
             .padding(topBottom = 8f.px)
             .overflow {
-                y(Overflow.Scroll)
+                y(Overflow.Clip)
             },
     ) {
-        A(
-            href = "/join-room",
-            attrs = {
-
-                classes(MainStyle.customLink)
-            }) {
-            H4(
-                attrs = {
-                    style {
-//                        top(0.px)
-//                        position(Position.Sticky)
-                        width(100.percent)
-                        textAlign("center")
-                        padding(8.px, 0.px)
-                        borderBottom {
-                            width(1.px)
-                            style(LineStyle.Solid)
-                            color(lightDark(onSurfaceVariantDark, onSurfaceVariantLight))
-                        }
-                    }
-                }
-            ) {
-                Text("Join A Room")
-            }
-        }
-        for (room in rooms) {
-            RoomListCard(room = room)
+        repeat(20) {
+            RoomListCardPlaceholder()
         }
     }
 }

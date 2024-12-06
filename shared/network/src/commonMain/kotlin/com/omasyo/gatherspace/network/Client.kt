@@ -60,8 +60,9 @@ fun createClient(
         }
         defaultRequest {
             url {
-                protocol = URLProtocol(Api.Protocol, Api.Port)
-                host = Api.Host
+                protocol = URLProtocol(Api.PROTOCOL, 80)
+                host = Api.HOST
+                port = Api.PORT
             }
             contentType(ContentType.Application.Json)
         }

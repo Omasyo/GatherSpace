@@ -1,16 +1,21 @@
 package com.omasyo.gatherspace.pages
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import com.omasyo.gatherspace.UiState
 import com.omasyo.gatherspace.components.layouts.HomeLayout
 import com.omasyo.gatherspace.components.sections.Header
 import com.omasyo.gatherspace.components.sections.RoomsGrid
 import com.omasyo.gatherspace.components.sections.SideBar
+import com.omasyo.gatherspace.createroom.CreateRoomEvent
+import com.omasyo.gatherspace.home.HomeViewModel
+import com.omasyo.gatherspace.home.HomeViewModelImpl
 import com.omasyo.gatherspace.models.response.Room
+import com.omasyo.gatherspace.viewmodels.homeViewModel
 import com.varabyte.kobweb.core.Page
 import kotlinx.datetime.LocalDateTime
 
 val date = LocalDateTime(1, 1, 1, 1, 1)
-
 
 @Page
 @Composable
@@ -27,13 +32,7 @@ fun HomePage(
         isDisplayingContent = false,
     ) {
         RoomsGrid(
-            rooms = List(54) {
-                Room(id = 2737, name = "Kim Merritt", imageUrl = null)
-            }
+            state = homeViewModel.allRooms.collectAsState().value,
         )
     }
 }
-
-val text =
-    "It is a Kotlin class returned from a classloader*. At this point, I am assuming something is rotten in the way I am loading the class. (One of my big gripes about Kotlin is the lack of classloader that accepts native Kotlin semantics.)\n\n" +
-            "A URLClassLoader based on the standard parent classloader (which searches a “fat jar” containing the classes in my app plus the standard Kotlin runtime plus the Kotlin reflection runtime), plus an additional directory where the class being loaded resides in."

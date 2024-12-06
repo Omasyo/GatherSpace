@@ -32,7 +32,7 @@ import kotlinx.serialization.json.Json
 import kotlin.time.Duration.Companion.seconds
 
 fun main() {
-    embeddedServer(Netty, port = Api.Port, host = "0.0.0.0", module = Application::module)
+    embeddedServer(Netty, port = Api.PORT, host = "0.0.0.0", module = Application::module)
         .start(wait = true)
 }
 

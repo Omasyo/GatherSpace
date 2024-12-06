@@ -3,6 +3,10 @@ package com.omasyo.gatherspace.components.widgets
 import androidx.compose.runtime.Composable
 import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.styles.MainStyle
+import com.omasyo.gatherspace.styles.lightDark
+import com.omasyo.gatherspace.theme.surfaceVariantDark
+import com.omasyo.gatherspace.theme.surfaceVariantLight
+import com.varabyte.kobweb.compose.css.background
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.A
 import org.jetbrains.compose.web.dom.Div
@@ -40,11 +44,46 @@ fun RoomListCard(
             Image(
                 imageUrl = room.imageUrl,
                 placeholder = "/image/room_placeholder.svg",
-                size = 48
+                attrs = {
+                    style {
+                        width(48.px)
+                        height(48.px)
+                    }
+                }
             )
             H3 {
                 Text(room.name)
             }
         }
+    }
+}
+
+@Composable
+fun RoomListCardPlaceholder() {
+    Style(RoomListCardStyle)
+    Div(
+        attrs = {
+            id("room-list-card")
+            classes(MainStyle.customLink)
+        }
+    ) {
+        Div(
+            attrs = {
+                style {
+                    width(48.px)
+                    height(48.px)
+                    background(lightDark(surfaceVariantLight, surfaceVariantDark))
+                }
+            }
+        )
+        Div(
+            attrs = {
+                style {
+                    width(24.px)
+                    height(80.px)
+                    background(lightDark(surfaceVariantLight, surfaceVariantDark))
+                }
+            }
+        )
     }
 }
