@@ -13,26 +13,19 @@ class ImageCapture {
     var width: Int = 320
     var height: Int = 320
 
-    val test: Number = 400
-
     var streaming = false
 
     lateinit var video: HTMLVideoElement
-    lateinit var photo: HTMLImageElement
     lateinit var canvas: HTMLCanvasElement
-    lateinit var display: HTMLVideoElement
     lateinit var startButton: HTMLButtonElement
 
-    val buffer = Buffer()
-//    val outputBuffer
-
-    fun clearPhoto() {
+    private fun clearPhoto() {
         val context = canvas.getContext("2d") as CanvasRenderingContext2D
         context.fillStyle = "#AAA"
         context.fillRect(0.0, 0.0, canvas.width.toDouble(), canvas.height.toDouble())
 
         val data = canvas.toDataURL("image/png")
-        photo.setAttribute("src", data)
+//        photo.setAttribute("src", data)
     }
 
     fun takePicture() {
@@ -47,7 +40,6 @@ class ImageCapture {
             val buffer = Buffer()
             buffer.writeString(data)
             println(buffer)
-            photo.setAttribute("src", data)
         } else {
             clearPhoto()
         }
@@ -55,8 +47,6 @@ class ImageCapture {
 
     fun startup() {
         video = document.getElementById("video") as HTMLVideoElement
-        photo = document.getElementById("photo") as HTMLImageElement
-        display = document.getElementById("stream") as HTMLVideoElement
         canvas = document.getElementById("canvas") as HTMLCanvasElement
         startButton = document.getElementById("startbutton") as HTMLButtonElement
 
