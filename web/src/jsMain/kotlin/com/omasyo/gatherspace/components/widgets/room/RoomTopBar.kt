@@ -21,7 +21,7 @@ private object RoomTopBarStyle : StyleSheet() {
         id("room-topBar") style {
             display(DisplayStyle.Flex)
             flexDirection(FlexDirection.Row)
-            position(Position.Absolute)
+//            position(Position.Absolute)
             alignItems(AlignItems.Center)
             padding(0.px, 8.px)
             height(56.px)

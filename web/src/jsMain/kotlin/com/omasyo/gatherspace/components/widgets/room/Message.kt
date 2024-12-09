@@ -6,12 +6,16 @@ import com.omasyo.gatherspace.components.widgets.Image
 import com.omasyo.gatherspace.domain.formatTime
 import com.omasyo.gatherspace.models.response.Message
 import com.omasyo.gatherspace.styles.MainStyle
+import com.omasyo.gatherspace.styles.MainStyle.style
 import com.omasyo.gatherspace.styles.lightDark
 import com.omasyo.gatherspace.theme.onSurfaceDark
 import com.omasyo.gatherspace.theme.onSurfaceLight
+import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.color
+import com.varabyte.kobweb.compose.css.fontWeight
 import com.varabyte.kobweb.compose.foundation.layout.Row
 import com.varabyte.kobweb.compose.ui.Modifier
+import com.varabyte.kobweb.compose.ui.graphics.Colors
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 
@@ -29,7 +33,6 @@ private object MessageStyle : StyleSheet() {
         type("p") + firstChild style {
             marginTop(4f.px)
         }
-
     }
 }
 
@@ -37,7 +40,6 @@ private object MessageStyle : StyleSheet() {
 fun Message(
     message: Message
 ) {
-    println("Rendering $message")
     Style(MessageStyle)
     Div(
         attrs = {
@@ -62,7 +64,13 @@ fun Message(
                 id("message-details")
             }
         ) {
-            H4 {
+            H3(
+                attrs = {
+                    style {
+                        padding(0.px)
+                    }
+                }
+            ) {
                 A(
                     href = message.sender?.id?.let { "/users/$it" },
                     attrs = { classes(MainStyle.customLink) }
@@ -74,6 +82,8 @@ fun Message(
                 Span(
                     attrs = {
                         style {
+                            fontSize(0.9.cssRem)
+                            fontWeight(FontWeight.Normal)
                             paddingLeft(4f.px)
                             color(lightDark(onSurfaceLight, onSurfaceDark))
                         }

@@ -3,7 +3,6 @@ package com.omasyo.gatherspace.components.layouts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.omasyo.gatherspace.styles.FormLayoutStyle
-import com.omasyo.gatherspace.styles.HomeLayoutStyle
 import kotlinx.browser.document
 import org.jetbrains.compose.web.css.Style
 import org.jetbrains.compose.web.dom.Div
@@ -13,13 +12,19 @@ fun FormLayout(
     title: String,
     content: @Composable () -> Unit
 ) {
-    Style(HomeLayoutStyle)
+    Style(FormLayoutStyle)
     LaunchedEffect(title) {
         document.title = "GatherSpace - $title"
     }
     Div(attrs = {
-        classes(FormLayoutStyle.form)
+        classes(FormLayoutStyle.formPage)
     }) {
-        content()
+        Div(
+            attrs = {
+                classes(FormLayoutStyle.formContent)
+            }
+        ) {
+            content()
+        }
     }
 }

@@ -6,6 +6,7 @@ import androidx.compose.runtime.collectAsState
 import com.omasyo.gatherspace.TextFieldState
 import com.omasyo.gatherspace.auth.AuthEvent
 import com.omasyo.gatherspace.auth.AuthState
+import com.omasyo.gatherspace.auth.LoginViewModelImpl
 import com.omasyo.gatherspace.auth.SignupViewModelImpl
 import com.omasyo.gatherspace.components.layouts.FormLayout
 import com.omasyo.gatherspace.components.widgets.TextField
@@ -19,26 +20,26 @@ import org.jetbrains.compose.web.attributes.rows
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 
-val signupViewModel = with(domainComponent) {
-    SignupViewModelImpl(authRepository, userRepository)
+val loginViewModel = with(domainComponent) {
+    LoginViewModelImpl(authRepository)
 }
 
 @Page
 @Composable
-fun SignupPage() {
-    SignupPage(
-        username = signupViewModel.usernameField,
-        onUsernameChange = signupViewModel::changeUsername,
-        password = signupViewModel.passwordField,
-        onPasswordChange = signupViewModel::changePassword,
-        onSubmit = signupViewModel::submit,
-        state = signupViewModel.state.collectAsState().value,
-        onEventReceived = { signupViewModel.clearEvent() },
+fun LoginPage() {
+    LoginPage(
+        username = loginViewModel.usernameField,
+        onUsernameChange = loginViewModel::changeUsername,
+        password = loginViewModel.passwordField,
+        onPasswordChange = loginViewModel::changePassword,
+        onSubmit = loginViewModel::submit,
+        state = loginViewModel.state.collectAsState().value,
+        onEventReceived = { loginViewModel.clearEvent() },
     )
 }
 
 @Composable
-fun SignupPage(
+fun LoginPage(
     username: TextFieldState,
     onUsernameChange: (String) -> Unit,
     password: TextFieldState,
@@ -47,9 +48,9 @@ fun SignupPage(
     state: AuthState,
     onEventReceived: (AuthEvent) -> Unit,
 ) {
-    FormLayout("Register") {
+    FormLayout("Login") {
         H1 {
-            Text("Create an account")
+            Text("Login to your account")
         }
         TextField(
             value = username.value,
@@ -67,7 +68,7 @@ fun SignupPage(
                 onClick { onSubmit() }
             }
         ) {
-            Text("Register")
+            Text("Login")
         }
         H5(
             attrs = {
@@ -76,16 +77,16 @@ fun SignupPage(
                 }
             }
         ) {
-            Text("Already have an account? ")
+            Text("Don't have an account? ")
             A(
-                href = "/login",
+                href = "/signup",
                 attrs = {
                     style {
                         color(lightDark(primaryLight, primaryDark))
                     }
                 }
             ) {
-                Text("Login")
+                Text("Register")
             }
         }
     }

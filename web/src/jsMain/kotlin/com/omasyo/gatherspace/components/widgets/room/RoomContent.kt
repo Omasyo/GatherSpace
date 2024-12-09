@@ -34,7 +34,7 @@ private object RoomStyle : StyleSheet() {
         id("room-wrapper") style {
             height(100.percent)
             width(100.percent)
-            padding(56.px, 0.px)
+            paddingBottom(112.px)
             maxWidth(1200.px)
             position(Position.Relative)
         }
@@ -73,20 +73,20 @@ fun RoomContent(
     state: RoomState
 ) {
     Style(RoomStyle)
-    RoomTopBar(
-        roomDetails = room
-    )
     Div(
         attrs = {
             id("room-wrapper")
         }
     ) {
+        RoomTopBar(
+            roomDetails = room
+        )
         Div(
             attrs = {
                 id("messages-view")
             }
         ) {
-            for (receivedMessage in messages) {
+            for (receivedMessage in messages.asReversed()) {
                 Message(message = receivedMessage)
             }
             for (index in 0..<oldMessages.itemCount) {

@@ -30,10 +30,8 @@ private object MessageBarStyle : StyleSheet() {
         id("message-bar") style {
             display(DisplayStyle.Flex)
             flexDirection(FlexDirection.Row)
-//            position(Position.Absolute)
             alignItems(AlignItems.Center)
             padding(0.px, 8.px)
-//            width(100.percent)
             height(56.px)
         }
         type("input") style {
