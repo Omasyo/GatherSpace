@@ -16,7 +16,7 @@ import org.w3c.dom.mediacapture.MediaStreamConstraints
 @Page
 @Composable
 fun Test(
-    width: Int = 600,
+    width: Int = 400,
 ) {
     var toss by remember { mutableStateOf<Buffer?>(null) }
     Div(

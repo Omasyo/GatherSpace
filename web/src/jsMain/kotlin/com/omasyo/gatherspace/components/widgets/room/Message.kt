@@ -56,9 +56,6 @@ fun Message(
                 }
             }
         )
-        val lines = remember(message) {
-            message.content.split("\n")
-        }
         Div(
             attrs = {
                 id("message-details")
@@ -97,6 +94,9 @@ fun Message(
                     id("message_content")
                 }
             ) {
+                val lines = remember(message) {
+                    message.content.split("\n")
+                }
                 for (line in lines) {
                     P {
                         Text(line)

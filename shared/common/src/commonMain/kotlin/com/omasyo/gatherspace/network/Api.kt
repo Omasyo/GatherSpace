@@ -2,7 +2,7 @@ package com.omasyo.gatherspace.network
 
 object Api {
     const val PROTOCOL = "http"
-    const val HOST = "192.168.1.22"
+    const val HOST = "192.168.1.42"
     const val PORT = 8080
 
 

@@ -3,6 +3,7 @@ package com.omasyo.gatherspace.components.widgets
 import androidx.compose.runtime.Composable
 import org.jetbrains.compose.web.attributes.*
 import org.jetbrains.compose.web.dom.*
+import org.w3c.dom.Element
 
 @Composable
 fun TextField(
@@ -15,6 +16,7 @@ fun TextField(
     isPassword: Boolean = false,
     singleLine: Boolean = true,
     rows: Int = 1,
+    attrs: AttrBuilderContext<Element> = {}
 ) {
     if (singleLine) {
         if (isPassword) {
@@ -26,11 +28,12 @@ fun TextField(
             }
         } else {
             TextInput(
-                value = value
+                value = value,
             ) {
                 onInput { onValueChange(it.value) }
                 placeholder?.let { placeholder(it) }
                 attr("autocapitalize", autoCapitalize)
+                attrs()
             }
         }
     } else {
@@ -41,6 +44,7 @@ fun TextField(
             placeholder?.let { placeholder(it) }
             attr("autocapitalize", autoCapitalize)
             rows(rows)
+            attrs()
         }
     }
 }
