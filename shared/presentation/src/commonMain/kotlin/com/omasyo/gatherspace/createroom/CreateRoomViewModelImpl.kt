@@ -4,7 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.omasyo.gatherspace.TextFieldState
-import com.omasyo.gatherspace.domain.*
+import com.omasyo.gatherspace.domain.onError
+import com.omasyo.gatherspace.domain.onSuccess
 import com.omasyo.gatherspace.domain.room.RoomRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -42,7 +43,6 @@ class CreateRoomViewModelImpl(
     }
 
     override fun updateImage(image: Buffer) {
-        println("Setting image $image")
         this.image = image
     }
 

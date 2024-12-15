@@ -17,16 +17,16 @@ import java.io.File
 
 
 class AndroidPhotoTakerScope(
-    private val cameraLauncher: ManagedActivityResultLauncher<Uri, Boolean>
+    private val cameraLauncher: ManagedActivityResultLauncher<Uri, Boolean>,
+    private val fileUri: Uri
 ) : PhotoTakerScope {
     override fun takePhoto() {
-        cameraLauncher.launch(fileUri!!)
+        cameraLauncher.launch(fileUri)
     }
 }
 
 @Composable
 actual fun PhotoTaker(
-    modifier: Modifier,
     onComplete: (Buffer) -> Unit,
     content: @Composable PhotoTakerScope.() -> Unit
 ) {
@@ -40,17 +40,14 @@ actual fun PhotoTaker(
             onComplete(buffer)
         }
     }
-    val scope = remember { AndroidPhotoTakerScope(launcher) }
-
-    BottomSheetMenuItem(
-        text = "Take a picture",
-        onTap = {
-            if (fileUri == null) {
-                fileUri = createTempFile(context)
-            }
-            launcher.launch(fileUri!!)
+    val scope = remember {
+        if (fileUri == null) {
+            fileUri = createTempFile(context)
         }
-    )
+        AndroidPhotoTakerScope(launcher, fileUri!!)
+    }
+
+    scope.content()
 }
 
 private var fileUri: Uri? = null

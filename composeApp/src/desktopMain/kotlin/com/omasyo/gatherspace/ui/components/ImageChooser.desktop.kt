@@ -22,7 +22,6 @@ class DesktopChooserScope : ImageChooserScope {
 
 @Composable
 actual fun ImageChooser(
-    modifier: Modifier,
     onComplete: (Buffer) -> Unit,
     content: @Composable ImageChooserScope.() -> Unit
 ) {

@@ -28,17 +28,11 @@ class DesktopPhotoTakerScope : PhotoTakerScope {
 
 @Composable
 actual fun PhotoTaker(
-    modifier: Modifier,
     onComplete: (Buffer) -> Unit,
     content: @Composable PhotoTakerScope.() -> Unit
 ) {
     val scope = remember { DesktopPhotoTakerScope() }
-    BottomSheetMenuItem(
-        text = "Take a picture",
-        onTap = {
-            scope.isOpen = true
-        },
-    )
+    scope.content()
 
     if (scope.isOpen) {
         WebcamPanel(

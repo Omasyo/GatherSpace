@@ -31,7 +31,7 @@ fun HomeRoute(
 ) {
     HomeView(
         modifier = modifier,
-        isAuthenticated = true,
+        isAuthenticated = homeViewModel.isAuthenticated.collectAsStateWithLifecycle().value,
         onAuthError = onAuthError,
         onLoginTap = onLoginTap,
         onProfileTap = onProfileTap,

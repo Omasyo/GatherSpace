@@ -10,7 +10,6 @@ interface PhotoTakerScope {
 
 @Composable
 expect fun PhotoTaker(
-    modifier: Modifier = Modifier,
     onComplete: (Buffer) -> Unit,
     content: @Composable PhotoTakerScope.() -> Unit
 )

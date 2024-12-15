@@ -44,11 +44,13 @@ fun Application.module() {
     install(CORS) {
 //        allowHost("localhost:8081")
 //        allowHeader(HttpHeaders.AccessControlAllowOrigin)
+//        allowHeader(HttpHeaders.AccessControlAllowHeaders)
         allowHeader(HttpHeaders.ContentType)
         allowHeader(HttpHeaders.Authorization)
         allowHeader(HttpHeaders.CacheControl)
-//        allowHeader(HttpHeaders.Connection)
-//        anyMethod()
+        allowHeader(HttpHeaders.Connection)
+        anyMethod()
+//        allowMethod(HttpMethod.Patch)
         anyHost()
     }
     install(WebSockets) {

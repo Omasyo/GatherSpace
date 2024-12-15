@@ -26,7 +26,6 @@ class AndroidChooserScope(
 
 @Composable
 actual fun ImageChooser(
-    modifier: Modifier,
     onComplete: (Buffer) -> Unit,
     content: @Composable ImageChooserScope.() -> Unit
 ) {

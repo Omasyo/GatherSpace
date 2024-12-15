@@ -1,13 +1,11 @@
 package com.omasyo.gatherspace.pages
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import com.omasyo.gatherspace.TextFieldState
 import com.omasyo.gatherspace.components.layouts.HomeLayout
 import com.omasyo.gatherspace.components.sections.Header
 import com.omasyo.gatherspace.components.sections.SideBar
+import com.omasyo.gatherspace.components.widgets.ImageCapture
 import com.omasyo.gatherspace.components.widgets.TextField
 import com.omasyo.gatherspace.createroom.CreateRoomEvent
 import com.omasyo.gatherspace.createroom.CreateRoomState
@@ -18,13 +16,16 @@ import com.omasyo.gatherspace.theme.surfaceVariantLight
 import com.omasyo.gatherspace.viewmodels.domainComponent
 import com.varabyte.kobweb.browser.file.readBytes
 import com.varabyte.kobweb.compose.css.*
-import com.varabyte.kobweb.compose.css.AlignSelf
 import com.varabyte.kobweb.core.Page
 import kotlinx.browser.document
+import kotlinx.browser.window
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.io.Buffer
 import kotlinx.io.readByteArray
+import kotlinx.io.writeString
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.AlignSelf.Companion.Center
 import org.jetbrains.compose.web.dom.Button
 import org.jetbrains.compose.web.dom.Div
@@ -66,6 +67,7 @@ fun CreateRoomPage(
     onEventReceived: (CreateRoomEvent) -> Unit,
     state: CreateRoomState
 ) {
+    val scope = rememberCoroutineScope()
     HomeLayout(
         title = "GatherSpace",
         topBar = {
@@ -79,9 +81,11 @@ fun CreateRoomPage(
         Div(
             attrs = {
                 style {
-                    display(DisplayStyle.Flex)
+//                    display(DisplayStyle.Flex)
                     justifyContent(com.varabyte.kobweb.compose.css.JustifyContent.Center)
                     alignContent(org.jetbrains.compose.web.css.AlignContent.Center)
+                    alignItems(AlignItems.Center)
+                    justifyItems(JustifyItems.Center)
                 }
             }
         ) {
@@ -90,9 +94,11 @@ fun CreateRoomPage(
                     style {
                         display(DisplayStyle.Flex)
                         flexDirection(FlexDirection.Column)
-                        justifyContent(com.varabyte.kobweb.compose.css.JustifyContent.Center)
-                        alignContent(org.jetbrains.compose.web.css.AlignContent.Center)
-                        maxWidth(400.px)
+                        gap(8.px)
+
+                        width(100.percent)
+                        padding(16.px)
+                        maxWidth(540.px)
                     }
                 }
             ) {
@@ -107,71 +113,115 @@ fun CreateRoomPage(
                     onValueChange = onDescriptionChange,
                     placeholder = "Enter description",
                     singleLine = false,
+                    rows = 3
                 )
-                Div(attrs = {
-                    style {
-                        backgroundColor(lightDark(surfaceVariantLight, surfaceVariantDark))
-                        width(320.px)
-                        height(320.px)
 
-                        alignSelf(Center)
-
+                Div(
+                    attrs = {
+                        style {
+                            display(DisplayStyle.Flex)
+                            flexDirection(FlexDirection.Column)
+                            gap(8.px)
+                        }
                     }
-                }) {
+                ) {
+                    Div(attrs = {
+                        style {
+                            backgroundColor(lightDark(surfaceVariantLight, surfaceVariantDark))
+                            width(280.px)
+                            height(280.px)
 
-                    if (image != null) {
-                        Img(
-                            src = remember(image) {
-                                "data:image/png;base64," + Base64.encode(image.readByteArray()).apply {
-                                    println("data is $this")
+                            alignSelf(Center)
+
+                        }
+                    }) {
+                        if (image != null) {
+                            Img(
+                                src = remember(image) {
+                                    "data:image/png;base64," + Base64.encode(image.copy().readByteArray())
+                                },
+                                attrs = {
+                                    style {
+                                        width(100.percent)
+                                        height(100.percent)
+                                        objectFit(ObjectFit.Cover)
+                                    }
+                                })
+                        }
+                    }
+
+                    Div(
+                        attrs = {
+                            style {
+                                display(DisplayStyle.Flex)
+                                gap(8.px)
+                                justifyContent(com.varabyte.kobweb.compose.css.JustifyContent.Center)
+                            }
+                        }
+                    ) {
+                        Button(attrs = {
+                            onClick {
+                                val input = document.createElement("input") as HTMLInputElement
+                                input.type = "file"
+                                input.accept = "image/*"
+
+                                input.onchange = {
+                                    scope.launch {
+                                        (it.target as HTMLInputElement).files?.asList()?.get(0)?.let {
+                                            val buffer = Buffer()
+                                            buffer.write(it.readBytes())
+                                            setImage(buffer)
+                                        }
+                                    }
                                 }
-                            },
-                            attrs = {
-                                style {
-                                    width(320.px)
-                                    height(320.px)
-                                    objectFit(ObjectFit.Cover)
+
+                                input.click()
+                            }
+                        }) {
+                            Text("Choose Picture")
+                        }
+                        ImageCapture(
+                            onComplete = setImage
+                        ) {
+                            Button(attrs = {
+                                onClick {
+                                    openCamera()
                                 }
-                            })
+                            }) {
+                                Text("Open Camera")
+                            }
+                        }
                     }
                 }
 
-                val scope = rememberCoroutineScope()
                 Button(attrs = {
                     onClick {
-                        val input = document.createElement("input") as HTMLInputElement
-                        input.type = "file"
-                        input.accept = "image/*"
-
-                        input.onchange = {
-                            scope.launch {
-                                (it.target as HTMLInputElement).files?.asList()?.get(0)?.let {
-                                    val buffer = Buffer()
-                                    buffer.write(it.readBytes())
-                                    setImage(buffer)
-                                }
-                            }
-                        }
-
-                        input.click()
+                        onSubmit()
                     }
                 }) {
                     Text("Submit")
                 }
             }
-
-            Div(
-                attrs = {
-                    style {
-                        backgroundColor(Color.red)
-                        width(400.px)
-                        height(400.px)
-                        placeSelf(AlignSelf.Center, JustifySelf.Center)
-                    }
-                }
-            ) {
-
-            }
         }
+    }
+
+
+
+    LaunchedEffect(state) {
+        when (val event = state.event) {
+            CreateRoomEvent.AuthError -> {
+            }
+
+            is CreateRoomEvent.Error -> {
+            }
+
+            is CreateRoomEvent.Success -> {
+                window.location.href = "/rooms/${event.id}"
+            }
+
+            CreateRoomEvent.None -> Unit
+        }
+
+        onEventReceived(state.event)
     }
 }

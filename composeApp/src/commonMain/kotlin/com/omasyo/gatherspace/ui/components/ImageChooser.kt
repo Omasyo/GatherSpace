@@ -10,7 +10,6 @@ interface ImageChooserScope {
 
 @Composable
 expect fun ImageChooser(
-    modifier: Modifier = Modifier,
     onComplete: (Buffer) -> Unit,
     content: @Composable ImageChooserScope.() -> Unit
 )
