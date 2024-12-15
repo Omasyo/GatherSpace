@@ -38,6 +38,45 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 
 val createRoomViewModel = CreateRoomViewModelImpl(domainComponent.roomRepository)
 
+object CreateRoomStyle : StyleSheet() {
+    val createRoomPage by style {
+        justifyContent(com.varabyte.kobweb.compose.css.JustifyContent.Center)
+        alignContent(org.jetbrains.compose.web.css.AlignContent.Center)
+        alignItems(AlignItems.Center)
+        justifyItems(JustifyItems.Center)
+    }
+
+    val createRoomForm by style {
+        display(DisplayStyle.Flex)
+        flexDirection(FlexDirection.Column)
+        gap(8.px)
+
+        width(100.percent)
+        padding(16.px)
+        maxWidth(540.px)
+    }
+
+    val imagePicker by style {
+        display(DisplayStyle.Flex)
+        flexDirection(FlexDirection.Column)
+        gap(8.px)
+    }
+
+    val image by style {
+        backgroundColor(lightDark(surfaceVariantLight, surfaceVariantDark))
+        width(280.px)
+        height(280.px)
+
+        alignSelf(Center)
+    }
+
+    val imagePickerButtons by style {
+        display(DisplayStyle.Flex)
+        gap(8.px)
+        justifyContent(com.varabyte.kobweb.compose.css.JustifyContent.Center)
+    }
+}
+
 @Page
 @Composable
 fun CreateRoomPage() {
@@ -67,6 +106,7 @@ fun CreateRoomPage(
     onEventReceived: (CreateRoomEvent) -> Unit,
     state: CreateRoomState
 ) {
+    Style(CreateRoomStyle)
     val scope = rememberCoroutineScope()
     HomeLayout(
         title = "GatherSpace",
@@ -80,26 +120,12 @@ fun CreateRoomPage(
     ) {
         Div(
             attrs = {
-                style {
-//                    display(DisplayStyle.Flex)
-                    justifyContent(com.varabyte.kobweb.compose.css.JustifyContent.Center)
-                    alignContent(org.jetbrains.compose.web.css.AlignContent.Center)
-                    alignItems(AlignItems.Center)
-                    justifyItems(JustifyItems.Center)
-                }
+                classes(CreateRoomStyle.createRoomPage)
             }
         ) {
             Div(
                 attrs = {
-                    style {
-                        display(DisplayStyle.Flex)
-                        flexDirection(FlexDirection.Column)
-                        gap(8.px)
-
-                        width(100.percent)
-                        padding(16.px)
-                        maxWidth(540.px)
-                    }
+                    classes(CreateRoomStyle.createRoomForm)
                 }
             ) {
                 TextField(
@@ -118,22 +144,11 @@ fun CreateRoomPage(
 
                 Div(
                     attrs = {
-                        style {
-                            display(DisplayStyle.Flex)
-                            flexDirection(FlexDirection.Column)
-                            gap(8.px)
-                        }
+                        classes(CreateRoomStyle.imagePicker)
                     }
                 ) {
                     Div(attrs = {
-                        style {
-                            backgroundColor(lightDark(surfaceVariantLight, surfaceVariantDark))
-                            width(280.px)
-                            height(280.px)
-
-                            alignSelf(Center)
-
-                        }
+                        classes(CreateRoomStyle.image)
                     }) {
                         if (image != null) {
                             Img(
@@ -152,11 +167,7 @@ fun CreateRoomPage(
 
                     Div(
                         attrs = {
-                            style {
-                                display(DisplayStyle.Flex)
-                                gap(8.px)
-                                justifyContent(com.varabyte.kobweb.compose.css.JustifyContent.Center)
-                            }
+                            classes(CreateRoomStyle.imagePickerButtons)
                         }
                     ) {
                         Button(attrs = {
