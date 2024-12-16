@@ -6,6 +6,7 @@ import com.omasyo.gatherspace.components.layouts.HomeLayout
 import com.omasyo.gatherspace.components.sections.Header
 import com.omasyo.gatherspace.components.sections.SideBar
 import com.omasyo.gatherspace.components.widgets.ImageCapture
+import com.omasyo.gatherspace.components.widgets.ImageChooser
 import com.omasyo.gatherspace.components.widgets.TextField
 import com.omasyo.gatherspace.createroom.CreateRoomEvent
 import com.omasyo.gatherspace.createroom.CreateRoomState
@@ -19,18 +20,13 @@ import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.core.Page
 import kotlinx.browser.document
 import kotlinx.browser.window
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.io.Buffer
 import kotlinx.io.readByteArray
-import kotlinx.io.writeString
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.AlignSelf.Companion.Center
-import org.jetbrains.compose.web.dom.Button
-import org.jetbrains.compose.web.dom.Div
-import org.jetbrains.compose.web.dom.Img
-import org.jetbrains.compose.web.dom.Text
+import org.jetbrains.compose.web.dom.*
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.asList
 import kotlin.io.encoding.Base64
@@ -109,7 +105,7 @@ fun CreateRoomPage(
     Style(CreateRoomStyle)
     val scope = rememberCoroutineScope()
     HomeLayout(
-        title = "GatherSpace",
+        title = "GatherSpace - Create Room",
         topBar = {
             Header()
         },
@@ -128,6 +124,9 @@ fun CreateRoomPage(
                     classes(CreateRoomStyle.createRoomForm)
                 }
             ) {
+                H1 {
+                    Text("Create Room")
+                }
                 TextField(
                     value = roomName.value,
                     onValueChange = onRoomNameChange,
@@ -170,26 +169,14 @@ fun CreateRoomPage(
                             classes(CreateRoomStyle.imagePickerButtons)
                         }
                     ) {
-                        Button(attrs = {
-                            onClick {
-                                val input = document.createElement("input") as HTMLInputElement
-                                input.type = "file"
-                                input.accept = "image/*"
-
-                                input.onchange = {
-                                    scope.launch {
-                                        (it.target as HTMLInputElement).files?.asList()?.get(0)?.let {
-                                            val buffer = Buffer()
-                                            buffer.write(it.readBytes())
-                                            setImage(buffer)
-                                        }
-                                    }
+                        ImageChooser(onComplete = setImage) {
+                            Button(attrs = {
+                                onClick {
+                                    chooseImage()
                                 }
-
-                                input.click()
+                            }) {
+                                Text("Choose Picture")
                             }
-                        }) {
-                            Text("Choose Picture")
                         }
                         ImageCapture(
                             onComplete = setImage
