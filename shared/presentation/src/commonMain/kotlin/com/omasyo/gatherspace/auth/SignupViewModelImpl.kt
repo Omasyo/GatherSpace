@@ -19,7 +19,7 @@ class SignupViewModelImpl(
     private val userRepository: UserRepository,
     override val coroutineScope: CoroutineScope = MainScope()
 ) : SignupViewModel {
-    private val _state = MutableStateFlow<AuthState>(AuthState.Initial)
+    private val _state = MutableStateFlow(AuthState.Initial)
     override val state: StateFlow<AuthState> = _state
 
     override var usernameField by mutableStateOf(TextFieldState(""))

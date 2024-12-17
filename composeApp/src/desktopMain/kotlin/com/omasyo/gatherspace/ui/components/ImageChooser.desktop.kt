@@ -1,9 +1,7 @@
 package com.omasyo.gatherspace.ui.components
 
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.AwtWindow
-import com.omasyo.gatherspace.createroom.BottomSheetMenuItem
 import kotlinx.io.Buffer
 import kotlinx.io.transferFrom
 import java.awt.FileDialog

@@ -37,13 +37,8 @@ fun Application.roomRoute(repository: RoomRepository) {
         }
 
         get<Rooms.Id> { room ->
-
-//            val principal = call.principal<JWTPrincipal>()
-            //todo find a better way - scopes?
             val token = call.request.headers["Authorization"]?.substring(7)
             val userId = token?.let { JWT.decode(it)?.getClaim(JwtKeys.USER_ID)?.asInt() }
-
-//            val userId = principal?.payload?.getClaim("user_id")!!.asInt()
 
             repository.getRoom(room.id, userId)?.let {
                 call.respond(HttpStatusCode.OK, it)
@@ -148,15 +143,12 @@ fun Application.roomRoute(repository: RoomRepository) {
             }
 
             post<Rooms.Members> { members ->
-                //TODO check if user add himself or owner of room adding a user(probably not)
-
                 val request = call.receive<MembersRequest>()
                 repository.addMembers(members.room.id, request.members)
                 call.respond(HttpStatusCode.Created)
             }
 
             delete<Rooms.Members> { members ->
-                //TODO check if user remove himself or owner of room remove users
                 val request = call.receive<MembersRequest>()
                 repository.addMembers(members.room.id, request.members)
                 call.respond(HttpStatusCode.NoContent)

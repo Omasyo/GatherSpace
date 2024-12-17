@@ -3,7 +3,6 @@ package com.omasyo.gatherspace
 import com.omasyo.gatherspace.models.response.TokenResponse
 import kotlinx.coroutines.flow.Flow
 
-
 interface TokenStorage {
     fun observeToken(): Flow<TokenResponse?>
 

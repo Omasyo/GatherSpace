@@ -25,8 +25,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.omasyo.gatherspace.TextFieldState
 import com.omasyo.gatherspace.dependencyProvider
-import com.omasyo.gatherspace.ui.components.*
-import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
+import com.omasyo.gatherspace.ui.components.ImageChooser
+import com.omasyo.gatherspace.ui.components.PhotoTaker
+import com.omasyo.gatherspace.ui.components.TextField
 import kotlinx.io.Buffer
 import kotlinx.io.snapshot
 

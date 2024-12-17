@@ -6,9 +6,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
-import androidx.compose.ui.graphics.Color
-
 
 val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -86,14 +83,6 @@ val darkScheme = darkColorScheme(
     surfaceContainerHighest = surfaceContainerHighestDark,
 )
 
-@Immutable
-data class ColorFamily(
-    val color: Color,
-    val onColor: Color,
-    val colorContainer: Color,
-    val onColorContainer: Color
-)
-
 @Composable
 expect fun getColorScheme(darkTheme: Boolean): ColorScheme
 
@@ -107,10 +96,7 @@ fun GatherSpaceTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        shapes = MaterialTheme.shapes.copy(
-//            medium = RoundedCornerShape(16f.dp),
-//            large = RoundedCornerShape(24f.dp)
-        ),
+        shapes = MaterialTheme.shapes,
         content = content
     )
 }

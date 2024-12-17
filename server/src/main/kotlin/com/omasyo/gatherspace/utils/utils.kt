@@ -20,8 +20,6 @@ fun getImagePath(imageId: String?): String? {
     return imageId?.let { "${IMAGE_URL_PATH}$it" }
 }
 
-//val url = URLBuilder(URLProtocol.HTTP, "localhost")
-
 suspend inline fun ApplicationCall.respond(error: ErrorResponse) {
     respond(
         status = HttpStatusCode.fromValue(error.statusCode),

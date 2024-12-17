@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "token")
 
 @Suppress("unused")

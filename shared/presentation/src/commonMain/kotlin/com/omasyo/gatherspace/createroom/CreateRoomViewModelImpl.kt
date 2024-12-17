@@ -15,8 +15,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.io.Buffer
 
-//TODO image still showing after creating room
-
 class CreateRoomViewModelImpl(
     private val roomRepository: RoomRepository,
     override val coroutineScope: CoroutineScope = MainScope()
@@ -70,6 +68,7 @@ class CreateRoomViewModelImpl(
                 _state.value = CreateRoomState.Initial
                 nameField = TextFieldState("")
                 descriptionField = TextFieldState("")
+                image = null
             }
 
             CreateRoomEvent.None -> Unit

@@ -1,8 +1,6 @@
 package com.omasyo.gatherspace.network
 
-import io.github.aakira.napier.LogLevel
 import io.github.aakira.napier.Napier
-import io.github.aakira.napier.Napier.log
 import io.ktor.client.call.*
 import io.ktor.client.statement.*
 import io.ktor.http.*

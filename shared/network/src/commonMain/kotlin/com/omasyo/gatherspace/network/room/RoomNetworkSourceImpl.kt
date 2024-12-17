@@ -7,7 +7,6 @@ import com.omasyo.gatherspace.models.response.CreateRoomResponse
 import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.models.routes.Rooms
-import com.omasyo.gatherspace.models.routes.Session
 import com.omasyo.gatherspace.models.routes.Users
 import com.omasyo.gatherspace.network.mapResponse
 import io.ktor.client.*

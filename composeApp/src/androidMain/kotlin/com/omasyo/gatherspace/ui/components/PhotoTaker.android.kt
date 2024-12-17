@@ -7,14 +7,11 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
-import com.omasyo.gatherspace.createroom.BottomSheetMenuItem
 import kotlinx.io.Buffer
 import kotlinx.io.transferFrom
 import java.io.File
-
 
 class AndroidPhotoTakerScope(
     private val cameraLauncher: ManagedActivityResultLauncher<Uri, Boolean>,

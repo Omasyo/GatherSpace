@@ -2,13 +2,11 @@ package com.omasyo.gatherspace.room
 
 data class RoomState(
     val isSending: Boolean,
-//    val unreadMessagesCount: Int,
     val event: RoomEvent
 ) {
     companion object {
         val Initial = RoomState(
             isSending = false,
-//            unreadMessagesCount = 0,
             event = RoomEvent.None
         )
     }

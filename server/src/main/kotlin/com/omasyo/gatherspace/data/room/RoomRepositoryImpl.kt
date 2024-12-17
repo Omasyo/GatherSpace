@@ -18,7 +18,7 @@ import java.io.File
 internal class RoomRepositoryImpl(
     private val roomQueries: RoomQueries,
     private val roomMemberQueries: Room_memberQueries,
-    private val userAccountqueries: User_accountQueries
+    private val userAccountQueries: User_accountQueries
 ) : RoomRepository {
     override fun create(
         name: String,
@@ -39,7 +39,7 @@ internal class RoomRepositoryImpl(
             val room = roomQueries.getRoomById(roomId).executeAsOne()
 
             val newImageId = imageBuffer?.let {
-                room.image?.let { File(ImageDirPath, it).delete() }
+                room.image?.let { id -> File(ImageDirPath, id).delete() }
                 createImageFile(it)
             }
             roomQueries.update(
@@ -75,7 +75,7 @@ internal class RoomRepositoryImpl(
         return roomQueries.transactionWithResult {
             val room = roomQueries.getRoomById(roomId).executeAsOneOrNull()
                 ?: return@transactionWithResult null
-            val creator = room.creator?.let { userAccountqueries.getById(it, ::userMapper).executeAsOne() }
+            val creator = room.creator?.let { userAccountQueries.getById(it, ::userMapper).executeAsOne() }
 
             val isMember = userId?.let { roomMemberQueries.contains(roomId, it).executeAsOne() } ?: false
             val members = getMembers(roomId)

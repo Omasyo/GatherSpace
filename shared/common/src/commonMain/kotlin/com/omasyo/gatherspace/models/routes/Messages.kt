@@ -11,10 +11,4 @@ class Messages(
     val room: Rooms.Id,
     val before: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
     val limit: Int = 50,
-) {
-    @Resource("{id}")
-    class Id(val id: Int, val parent: Messages)
-
-    @Resource("events")
-    class Events(val parent: Messages)
-}
+)

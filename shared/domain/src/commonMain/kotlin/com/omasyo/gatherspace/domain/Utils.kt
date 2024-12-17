@@ -3,9 +3,7 @@ package com.omasyo.gatherspace.domain
 import com.omasyo.gatherspace.network.NetworkException
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format
-import kotlinx.datetime.format.FormatStringsInDatetimeFormats
 import kotlinx.datetime.format.MonthNames
-import kotlinx.datetime.format.byUnicodePattern
 import kotlinx.datetime.format.char
 
 expect fun getDeviceName(): String

@@ -5,19 +5,16 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import com.omasyo.gatherspace.createroom.BottomSheetMenuItem
 import io.github.aakira.napier.Napier
 import kotlinx.io.Buffer
 import kotlinx.io.transferFrom
 
-
 class AndroidChooserScope(
     private val pickMedia: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>
 ) : ImageChooserScope {
-
 
     override fun chooseImage() {
         pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))

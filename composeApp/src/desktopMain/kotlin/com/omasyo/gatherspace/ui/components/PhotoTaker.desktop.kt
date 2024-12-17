@@ -1,10 +1,8 @@
 package com.omasyo.gatherspace.ui.components
 
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.AwtWindow
 import com.github.sarxos.webcam.Webcam
-import com.omasyo.gatherspace.createroom.BottomSheetMenuItem
 import kotlinx.io.Buffer
 import kotlinx.io.transferFrom
 import java.awt.BorderLayout
@@ -15,7 +13,6 @@ import javax.swing.JButton
 import javax.swing.JDialog
 import javax.swing.JPanel
 import javax.swing.border.EmptyBorder
-
 
 class DesktopPhotoTakerScope : PhotoTakerScope {
     var isOpen by mutableStateOf(false)

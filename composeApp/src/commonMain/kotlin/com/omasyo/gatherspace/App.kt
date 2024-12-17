@@ -1,10 +1,8 @@
 package com.omasyo.gatherspace
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.omasyo.gatherspace.domain.deps.DomainComponent
 import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme

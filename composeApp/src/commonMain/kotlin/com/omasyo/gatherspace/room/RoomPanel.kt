@@ -1,6 +1,5 @@
 package com.omasyo.gatherspace.room
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -43,6 +42,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun RoomPanel(
@@ -308,8 +308,6 @@ private fun Message(
     }
 }
 
-//@RequiresApi(Build.VERSION_CODES.O)
-val date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 
 @Preview
 @Composable
@@ -353,8 +351,9 @@ private fun Preview() {
     }
 }
 
+private val date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 
-val fakeData = List(10) {
+private val fakeData = List(10) {
     Message(
         id = it + 3, content = "molestie", sender = User(
             id = 9558,
@@ -364,6 +363,6 @@ val fakeData = List(10) {
     )
 }
 
-val pagingData = PagingData.from(fakeData)
+private val pagingData = PagingData.from(fakeData)
 
-val fakeDataFlow = MutableStateFlow(pagingData)
+private val fakeDataFlow = MutableStateFlow(pagingData)

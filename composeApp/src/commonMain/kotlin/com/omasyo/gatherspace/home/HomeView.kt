@@ -1,6 +1,5 @@
 package com.omasyo.gatherspace.home
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -17,7 +16,9 @@ import com.omasyo.gatherspace.home.layout.HomeLayoutView
 import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.models.response.UserDetails
 import com.omasyo.gatherspace.room.RoomPanel
+import com.omasyo.gatherspace.ui.components.LoginPlaceholder
 import com.omasyo.gatherspace.ui.theme.*
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun HomeRoute(
@@ -79,12 +80,16 @@ fun HomeView(
 
             },
             roomsList = {
-                RoomsList(
-                    onRoomTap = { selected = HomeLayoutView.Room(it) },
-                    onDiscoverRoomTap = { selected = HomeLayoutView.Discover },
-                    onRetry = onRefresh,
-                    state = if (isAuthenticated) userRoomsState else allRoomsState,
-                )
+                if (isAuthenticated) {
+                    RoomsList(
+                        onRoomTap = { selected = HomeLayoutView.Room(it) },
+                        onDiscoverRoomTap = { selected = HomeLayoutView.Discover },
+                        onRetry = onRefresh,
+                        state = userRoomsState,
+                    )
+                } else {
+                    LoginPlaceholder(onLoginTap = onLoginTap)
+                }
             },
             roomsGrid = {
                 RoomsGrid(
@@ -116,12 +121,15 @@ fun HomeView(
     }
 }
 
+
+private val rooms = List(10) {
+    Room(id = it, name = "Maribel Gaines", imageUrl = "")
+}
+
 @Preview
 @Composable
 private fun Preview() {
-    GatherSpaceTheme(
-//        colorScheme = lightScheme
-    ) {
+    GatherSpaceTheme {
 
         HomeView(
             modifier = Modifier.fillMaxSize(),
@@ -135,8 +143,4 @@ private fun Preview() {
             userRoomsState = UiState.Success(rooms)
         )
     }
-}
-
-private val rooms = List(10) {
-    Room(id = it, name = "Maribel Ganes", imageUrl = "")
 }

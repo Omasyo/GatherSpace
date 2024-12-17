@@ -1,11 +1,9 @@
 package com.omasyo.gatherspace
 
-import androidx.compose.animation.core.FiniteAnimationSpec
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,13 +11,8 @@ import androidx.navigation.compose.rememberNavController
 import com.omasyo.gatherspace.auth.LoginRoute
 import com.omasyo.gatherspace.auth.SignupRoute
 import com.omasyo.gatherspace.home.HomeRoute
-import com.omasyo.gatherspace.parcelize.MyParcelable
-import com.omasyo.gatherspace.parcelize.MyParcelize
 import com.omasyo.gatherspace.profile.ProfileRoute
 import kotlinx.serialization.Serializable
-
-private val spec: FiniteAnimationSpec<IntOffset> =
-    spring(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessLow)
 
 @Composable
 fun AppNavHost(
@@ -30,30 +23,26 @@ fun AppNavHost(
         navController,
         startDestination = Home,
         modifier = modifier,
-//        enterTransition = {
-//            slideInHorizontally(
-//                spec,
-//                initialOffsetX = { it }
-//            )
-//        },
-//        exitTransition = {
-//            slideOutHorizontally(
-//                spec,
-//                targetOffsetX = { -it }
-//            )
-//        },
-//        popEnterTransition = {
-//            slideInHorizontally(
-//                spec,
-//                initialOffsetX = { -it }
-//            )
-//        },
-//        popExitTransition = {
-//            slideOutHorizontally(
-//                spec,
-//                targetOffsetX = { it }
-//            )
-//        }
+        enterTransition = {
+            slideInHorizontally(
+                initialOffsetX = { it }
+            )
+        },
+        exitTransition = {
+            slideOutHorizontally(
+                targetOffsetX = { -it }
+            )
+        },
+        popEnterTransition = {
+            slideInHorizontally(
+                initialOffsetX = { -it }
+            )
+        },
+        popExitTransition = {
+            slideOutHorizontally(
+                targetOffsetX = { it }
+            )
+        }
     ) {
         composable<Signup> {
             SignupRoute(

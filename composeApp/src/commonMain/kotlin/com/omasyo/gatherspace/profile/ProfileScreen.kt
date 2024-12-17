@@ -1,6 +1,5 @@
 package com.omasyo.gatherspace.profile
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -30,6 +29,7 @@ import gatherspace.composeapp.generated.resources.Res
 import gatherspace.composeapp.generated.resources.user_placeholder
 import kotlinx.datetime.LocalDateTime
 import kotlinx.io.Buffer
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun ProfileRoute(
@@ -244,16 +244,6 @@ fun UserDetailsSection(
                         .padding(16f.dp)
                 )
             }
-//            else {
-//                Icon(
-//                    Icons.Outlined.PhotoCamera, null,
-//                    tint = Color.White.copy(alpha = 0.6f),
-//                    modifier = Modifier
-//                        .background(Color.Black.copy(alpha = 0.15f))
-//                        .fillMaxSize()
-//                        .padding(16f.dp)
-//                )
-//            }
         }
         Spacer(Modifier.width(16f.dp))
 

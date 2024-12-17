@@ -20,13 +20,9 @@ import io.ktor.server.resources.patch
 import io.ktor.server.resources.post
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.util.cio.*
 import io.ktor.utils.io.*
 import kotlinx.io.Buffer
-import kotlinx.io.asByteChannel
-import kotlinx.io.transferFrom
 import kotlinx.serialization.json.Json
-import java.io.File
 
 fun Application.userRoute(repository: UserRepository) {
     routing {

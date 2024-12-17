@@ -48,7 +48,7 @@ fun RoomsList(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Join a new room",
+                        text = "Browse rooms",
                         style = MaterialTheme.typography.titleMedium,
                     )
                     Icon(Icons.AutoMirrored.Default.Login, contentDescription = null)
