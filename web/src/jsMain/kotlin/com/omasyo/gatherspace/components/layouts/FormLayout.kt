@@ -13,18 +13,17 @@ fun FormLayout(
     content: @Composable () -> Unit
 ) {
     Style(FormLayoutStyle)
-    LaunchedEffect(title) {
-        document.title = "GatherSpace - $title"
-    }
-    Div(attrs = {
-        classes(FormLayoutStyle.formPage)
-    }) {
-        Div(
-            attrs = {
-                classes(FormLayoutStyle.formContent)
+    BaseLayout("GatherSpace - $title") {
+        Div(attrs = {
+            classes(FormLayoutStyle.formPage)
+        }) {
+            Div(
+                attrs = {
+                    classes(FormLayoutStyle.formContent)
+                }
+            ) {
+                content()
             }
-        ) {
-            content()
         }
     }
 }

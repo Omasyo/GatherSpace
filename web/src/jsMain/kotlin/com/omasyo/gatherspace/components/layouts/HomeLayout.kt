@@ -18,44 +18,43 @@ fun HomeLayout(
     content: @Composable () -> Unit,
 ) {
     Style(HomeLayoutStyle)
-    LaunchedEffect(title) {
-        document.title = title
-    }
-    Div(
-        attrs = {
-            style {
-                width(100.percent)
-                height(100.vh)
-            }
-        }
-    ) {
-        topBar()
+    BaseLayout(title) {
         Div(
             attrs = {
-                classes(HomeLayoutStyle.contentWrapper)
+                style {
+                    width(100.percent)
+                    height(100.vh)
+                }
             }
         ) {
-            if (showSideBar) {
+            topBar()
+            Div(
+                attrs = {
+                    classes(HomeLayoutStyle.contentWrapper)
+                }
+            ) {
+                if (showSideBar) {
+                    Div(
+                        attrs = {
+                            classes(HomeLayoutStyle.sidebar)
+                            if (isDisplayingContent) {
+                                classes(HomeLayoutStyle.hideOnMid)
+                            }
+                        }
+                    ) {
+                        sideBar()
+                    }
+                }
                 Div(
                     attrs = {
-                        classes(HomeLayoutStyle.sidebar)
-                        if (isDisplayingContent) {
+                        classes(HomeLayoutStyle.content)
+                        if (!isDisplayingContent) {
                             classes(HomeLayoutStyle.hideOnMid)
                         }
                     }
                 ) {
-                    sideBar()
+                    content()
                 }
-            }
-            Div(
-                attrs = {
-                    classes(HomeLayoutStyle.content)
-                    if (!isDisplayingContent) {
-                        classes(HomeLayoutStyle.hideOnMid)
-                    }
-                }
-            ) {
-                content()
             }
         }
     }

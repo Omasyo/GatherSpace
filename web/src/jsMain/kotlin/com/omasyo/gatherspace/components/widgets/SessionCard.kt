@@ -37,8 +37,7 @@ fun SessionCard(
         }
         Button(
             attrs = {
-                style {
-                }
+                onClick { onLogoutTap() }
             }
         ) {
             Text("Logout")
