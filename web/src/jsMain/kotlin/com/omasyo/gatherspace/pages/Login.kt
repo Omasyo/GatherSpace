@@ -11,6 +11,7 @@ import com.omasyo.gatherspace.auth.SignupViewModelImpl
 import com.omasyo.gatherspace.components.layouts.FormLayout
 import com.omasyo.gatherspace.components.layouts.showSnackbar
 import com.omasyo.gatherspace.components.widgets.TextField
+import com.omasyo.gatherspace.styles.MainStyle
 import com.omasyo.gatherspace.styles.lightDark
 import com.omasyo.gatherspace.theme.primaryDark
 import com.omasyo.gatherspace.theme.primaryLight
@@ -66,6 +67,7 @@ fun LoginPage(
         )
         Button(
             attrs = {
+                classes(MainStyle.filledButton)
                 onClick { onSubmit() }
             }
         ) {

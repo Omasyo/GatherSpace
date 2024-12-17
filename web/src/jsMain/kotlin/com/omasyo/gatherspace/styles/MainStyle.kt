@@ -52,6 +52,23 @@ object MainStyle : StyleSheet() {
                 fontSize(1.6.cssRem)
             }
         }
+        type("input") style {
+//            width(100.percent)
+            padding(12.px, 20.px)
+//            margin(8.px, 0.px)
+            display(DisplayStyle.InlineBlock)
+            borderRadius(4.px)
+            boxSizing("border-box")
+        }
+
+        type("textarea") style {
+//            width(100.percent)
+            padding(12.px, 20.px)
+//            margin(8.px, 0.px)
+            display(DisplayStyle.InlineBlock)
+            borderRadius(4.px)
+            boxSizing("border-box")
+        }
     }
 
     val center by style {
@@ -79,11 +96,7 @@ object MainStyle : StyleSheet() {
     }
 
     val filledButton by style {
-        borderRadius(32.px)
-        background(lightDark(primaryContainerLight, primaryContainerDark))
-        color(lightDark(onPrimaryContainerLight, onPrimaryContainerDark))
-        border(style = LineStyle.None)
-        padding(12.px, 8.px)
+        padding(8.px, 4.px)
     }
 
     val image by style {

@@ -18,6 +18,7 @@ import com.omasyo.gatherspace.models.response.UserSession
 import com.omasyo.gatherspace.profile.ProfileScreenEvent
 import com.omasyo.gatherspace.profile.ProfileScreenState
 import com.omasyo.gatherspace.profile.ProfileViewModelImpl
+import com.omasyo.gatherspace.styles.MainStyle
 import com.omasyo.gatherspace.styles.lightDark
 import com.omasyo.gatherspace.theme.onSurfaceVariantDark
 import com.omasyo.gatherspace.theme.onSurfaceVariantLight
@@ -201,6 +202,7 @@ fun ProfilePage(
 
                 Button(attrs = {
                     onClick { onLogoutTap() }
+                    classes(MainStyle.filledButton)
                     style {
                         marginTop(20.px)
                         width(100.percent)

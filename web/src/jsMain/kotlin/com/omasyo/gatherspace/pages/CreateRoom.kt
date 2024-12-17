@@ -12,6 +12,7 @@ import com.omasyo.gatherspace.components.widgets.TextField
 import com.omasyo.gatherspace.createroom.CreateRoomEvent
 import com.omasyo.gatherspace.createroom.CreateRoomState
 import com.omasyo.gatherspace.createroom.CreateRoomViewModelImpl
+import com.omasyo.gatherspace.styles.MainStyle
 import com.omasyo.gatherspace.styles.lightDark
 import com.omasyo.gatherspace.theme.surfaceVariantDark
 import com.omasyo.gatherspace.theme.surfaceVariantLight
@@ -196,6 +197,7 @@ fun CreateRoomPage(
                 }
 
                 Button(attrs = {
+                    classes(MainStyle.filledButton)
                     onClick {
                         onSubmit()
                     }

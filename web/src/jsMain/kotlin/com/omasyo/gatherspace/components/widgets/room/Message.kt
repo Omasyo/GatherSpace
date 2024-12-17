@@ -95,7 +95,9 @@ fun Message(
                 }
             ) {
                 val lines = remember(message) {
-                    message.content.split("\n")
+                    message.content.split("\n").map {
+                        it.replace(" ","\uFFa0")
+                    }
                 }
                 for (line in lines) {
                     P {

@@ -22,6 +22,7 @@ import com.varabyte.kobweb.compose.ui.graphics.Colors
 import com.varabyte.kobweb.compose.ui.modifiers.onClick
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.silk.components.icons.mdi.MdiSend
+import org.jetbrains.compose.web.attributes.placeholder
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 
@@ -31,8 +32,10 @@ private object MessageBarStyle : StyleSheet() {
             display(DisplayStyle.Flex)
             flexDirection(FlexDirection.Row)
             alignItems(AlignItems.Center)
-            padding(0.px, 8.px)
+            padding(12.px, 8.px)
             height(56.px)
+
+
         }
         type("input") style {
             padding(0.px, 8.px)
@@ -67,6 +70,10 @@ fun MessageBar(
         attrs = { id("message-bar") },
     ) {
         TextInput(message) {
+            placeholder("Message")
+            style {
+                height(100.percent)
+            }
             onInput {
                 onMessageChange(it.value)
             }
