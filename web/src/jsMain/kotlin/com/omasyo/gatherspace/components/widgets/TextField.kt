@@ -11,8 +11,6 @@ fun TextField(
     onValueChange: (String) -> Unit,
     placeholder: String? = null,
     autoCapitalize: String = "off",
-//    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-//    keyboardActions: KeyboardActions = KeyboardActions.Default,
     isPassword: Boolean = false,
     singleLine: Boolean = true,
     rows: Int = 1,
@@ -48,26 +46,3 @@ fun TextField(
         }
     }
 }
-
-//@Composable
-//fun FormTextField(
-//    title: String,
-//    value: String,
-//    onValueChange: (String) -> Unit,
-//    placeholder: String? = null,
-//    autoCapitalize: String = "off",
-//    singleLine: Boolean = true,
-//    rows: Int = 1,
-//) {
-//    Div(attrs = {}) {
-//        Text(title)
-//        TextField(
-//            value = value,
-//            onValueChange = onValueChange,
-//            placeholder = placeholder,
-//            autoCapitalize = autoCapitalize,
-//            singleLine = singleLine,
-//            rows = rows
-//        )
-//    }
-//}

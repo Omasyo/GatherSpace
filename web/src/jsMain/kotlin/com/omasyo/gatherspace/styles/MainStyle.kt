@@ -53,18 +53,14 @@ object MainStyle : StyleSheet() {
             }
         }
         type("input") style {
-//            width(100.percent)
             padding(12.px, 20.px)
-//            margin(8.px, 0.px)
             display(DisplayStyle.InlineBlock)
             borderRadius(4.px)
             boxSizing("border-box")
         }
 
         type("textarea") style {
-//            width(100.percent)
             padding(12.px, 20.px)
-//            margin(8.px, 0.px)
             display(DisplayStyle.InlineBlock)
             borderRadius(4.px)
             boxSizing("border-box")

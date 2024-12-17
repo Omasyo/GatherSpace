@@ -10,25 +10,13 @@ object FormLayoutStyle : StyleSheet() {
         height(100.vh)
 
         display(DisplayStyle.Flex)
-//        alignItems(AlignItems.Center)
         alignContent(AlignContent.Center)
         justifyContent(JustifyContent.Center)
-//        borderLeft {
-//            width = 1.px
-//            style = LineStyle.Solid
-//            color = lightDark(onSurfaceVariantDark, onSurfaceVariantLight)
-//        }
-//        borderRight {
-//            width = 1.px
-//            style = LineStyle.Solid
-//            color = lightDark(onSurfaceVariantDark, onSurfaceVariantLight)
-//        }
     }
 
     val formContent by style {
         display(DisplayStyle.Flex)
         flexDirection(FlexDirection.Column)
-//        alignItems(AlignItems.Center)
         alignContent(AlignContent.Center)
         justifyContent(JustifyContent.Center)
         gap(16.px)

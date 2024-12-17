@@ -9,7 +9,6 @@ import org.jetbrains.compose.web.css.*
 object HomeLayoutStyle : StyleSheet() {
 
     val header by style {
-//        alignSelf(AlignSelf.Center)
         padding(8.px, 16.px)
         width(100.percent)
         borderBottom {

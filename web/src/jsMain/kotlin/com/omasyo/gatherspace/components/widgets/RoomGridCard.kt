@@ -16,12 +16,7 @@ import org.jetbrains.compose.web.dom.Text
 
 object RoomGridCardStyle : StyleSheet() {
     init {
-        id("room-grid-card") style {
-//            display(DisplayStyle.Flex)
-//            flexDirection(FlexDirection.Row)
-//            alignItems(AlignItems.Center)
-//            padding(8.px, 16.px)
-        }
+        id("room-grid-card") style {}
         type("h3") style {
             padding(4.px, 8.px, 0.px)
         }
