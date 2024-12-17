@@ -3,6 +3,7 @@ package com.omasyo.gatherspace.pages
 import androidx.compose.runtime.*
 import com.omasyo.gatherspace.TextFieldState
 import com.omasyo.gatherspace.components.layouts.HomeLayout
+import com.omasyo.gatherspace.components.layouts.showSnackbar
 import com.omasyo.gatherspace.components.sections.Header
 import com.omasyo.gatherspace.components.sections.SideBar
 import com.omasyo.gatherspace.components.widgets.ImageCapture
@@ -15,6 +16,7 @@ import com.omasyo.gatherspace.styles.lightDark
 import com.omasyo.gatherspace.theme.surfaceVariantDark
 import com.omasyo.gatherspace.theme.surfaceVariantLight
 import com.omasyo.gatherspace.viewmodels.domainComponent
+import com.omasyo.gatherspace.viewmodels.homeViewModel
 import com.varabyte.kobweb.browser.file.readBytes
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.core.Page
@@ -84,6 +86,7 @@ fun CreateRoomPage() {
         image = createRoomViewModel.image,
         setImage = createRoomViewModel::updateImage,
         onSubmit = createRoomViewModel::submit,
+        onAuthError = profileViewModel::logout,
         onEventReceived = createRoomViewModel::onEventReceived,
         state = createRoomViewModel.state.collectAsState().value
     )
@@ -99,11 +102,11 @@ fun CreateRoomPage(
     image: Buffer?,
     setImage: (Buffer) -> Unit,
     onSubmit: () -> Unit,
+    onAuthError: () -> Unit,
     onEventReceived: (CreateRoomEvent) -> Unit,
     state: CreateRoomState
 ) {
     Style(CreateRoomStyle)
-    val scope = rememberCoroutineScope()
     HomeLayout(
         title = "GatherSpace - Create Room",
         topBar = {
@@ -208,9 +211,12 @@ fun CreateRoomPage(
     LaunchedEffect(state) {
         when (val event = state.event) {
             CreateRoomEvent.AuthError -> {
+                showSnackbar("Authentication Error")
+                onAuthError()
             }
 
             is CreateRoomEvent.Error -> {
+                showSnackbar(event.message)
             }
 
             is CreateRoomEvent.Success -> {

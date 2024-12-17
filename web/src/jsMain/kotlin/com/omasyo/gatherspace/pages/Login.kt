@@ -9,6 +9,7 @@ import com.omasyo.gatherspace.auth.AuthState
 import com.omasyo.gatherspace.auth.LoginViewModelImpl
 import com.omasyo.gatherspace.auth.SignupViewModelImpl
 import com.omasyo.gatherspace.components.layouts.FormLayout
+import com.omasyo.gatherspace.components.layouts.showSnackbar
 import com.omasyo.gatherspace.components.widgets.TextField
 import com.omasyo.gatherspace.styles.lightDark
 import com.omasyo.gatherspace.theme.primaryDark
@@ -95,8 +96,7 @@ fun LoginPage(
     LaunchedEffect(state) {
         when (val event = state.event) {
             is AuthEvent.Error -> {
-                //TODO
-//                snackbarHostState.showSnackbar(event.message)
+                showSnackbar(event.message)
             }
 
             AuthEvent.Success -> {

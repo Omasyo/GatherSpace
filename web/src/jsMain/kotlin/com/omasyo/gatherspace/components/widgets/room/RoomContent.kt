@@ -3,6 +3,7 @@ package com.omasyo.gatherspace.components.widgets.room
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import app.cash.paging.compose.LazyPagingItems
+import com.omasyo.gatherspace.components.layouts.showSnackbar
 import com.omasyo.gatherspace.models.response.Message
 import com.omasyo.gatherspace.models.response.RoomDetails
 import com.omasyo.gatherspace.pages.date
@@ -117,15 +118,10 @@ fun RoomContent(
 
             RoomEvent.JoinedRoom -> onJoin()
             is RoomEvent.Error -> {
-
-//                snackbarHostState.showSnackbar(event.message)
+                showSnackbar(event.message)
             }
 
-            RoomEvent.MessageReceived -> {
-//                if (listState.firstVisibleItemIndex <= 1) {
-//                    listState.animateScrollToItem(0)
-//                }
-            }
+            RoomEvent.MessageReceived -> Unit
 
             else -> Unit
         }
