@@ -17,7 +17,7 @@ internal class UserRepositoryImpl(
 ) : UserRepository {
     override fun createAccount(userName: String, password: String, image: Buffer?): Flow<DomainResponse<Unit>> =
         flow {
-            emit(userNetworkSource.createAccount(userName, password, image).mapToDomain())
+            emit(userNetworkSource.createAccount(userName.trim(), password.trim(), image).mapToDomain())
         }.flowOn(dispatcher)
 
     override fun deleteAccount(): Flow<DomainResponse<Unit>> =

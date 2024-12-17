@@ -60,8 +60,8 @@ object CreateRoomStyle : StyleSheet() {
 
     val image by style {
         backgroundColor(lightDark(surfaceVariantLight, surfaceVariantDark))
-        width(280.px)
-        height(280.px)
+        width(264.px)
+        height(264.px)
 
         alignSelf(Center)
     }
@@ -176,7 +176,7 @@ fun CreateRoomPage(
                                     chooseImage()
                                 }
                             }) {
-                                Text("Choose Picture")
+                                Text("Upload")
                             }
                         }
                         ImageCapture(
@@ -187,7 +187,7 @@ fun CreateRoomPage(
                                     openCamera()
                                 }
                             }) {
-                                Text("Open Camera")
+                                Text("Camera")
                             }
                         }
                     }

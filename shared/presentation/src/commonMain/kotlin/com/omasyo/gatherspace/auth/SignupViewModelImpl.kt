@@ -67,6 +67,9 @@ class SignupViewModelImpl(
         if (usernameField.value.isEmpty()) {
             usernameField = usernameField.copy(errorMessage = "Username cannot be empty")
             isValid = false
+        } else if (usernameField.value.contains(Regex("\\s"))) {
+            usernameField = usernameField.copy(errorMessage = "Username cannot contain whitespace")
+            isValid = false
         } else {
             usernameField = usernameField.copy(errorMessage = null)
         }

@@ -32,10 +32,7 @@ fun HomeLayout(
     roomView: @Composable (Int) -> Unit,
     createRoomView: @Composable () -> Unit,
     selectedView: HomeLayoutView,
-    windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
-//    roomView: @Composable (roomId: Int) -> Unit,
-//    createRoomView: @Composable () -> Unit,
-//    loginPlaceholder: @Composable () -> Unit
+    windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
 ) {
 
     BackHandler(enabled = selectedView !is HomeLayoutView.None, onBack = onBack)
