@@ -2,16 +2,12 @@ package com.omasyo.gatherspace.pages.rooms
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.paging.PagingData
 import app.cash.paging.compose.collectAsLazyPagingItems
 import com.omasyo.gatherspace.components.layouts.HomeLayout
-import com.omasyo.gatherspace.components.sections.SideBar
 import com.omasyo.gatherspace.components.sections.Header
+import com.omasyo.gatherspace.components.sections.SideBar
 import com.omasyo.gatherspace.components.widgets.room.RoomContent
 import com.omasyo.gatherspace.home.HomeViewModel
-import com.omasyo.gatherspace.models.response.Message
-import com.omasyo.gatherspace.models.response.User
-import com.omasyo.gatherspace.pages.date
 import com.omasyo.gatherspace.room.RoomViewModel
 import com.omasyo.gatherspace.room.RoomViewModelImpl
 import com.omasyo.gatherspace.viewmodels.domainComponent

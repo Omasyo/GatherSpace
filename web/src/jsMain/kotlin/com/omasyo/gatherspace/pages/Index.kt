@@ -8,7 +8,6 @@ import com.omasyo.gatherspace.components.sections.RoomsGrid
 import com.omasyo.gatherspace.components.sections.SideBar
 import com.omasyo.gatherspace.viewmodels.homeViewModel
 import com.varabyte.kobweb.core.Page
-import kotlinx.datetime.LocalDateTime
 
 @Page
 @Composable
