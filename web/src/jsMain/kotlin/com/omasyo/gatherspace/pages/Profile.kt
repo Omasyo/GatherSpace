@@ -3,15 +3,12 @@ package com.omasyo.gatherspace.pages
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.omasyo.gatherspace.components.layouts.BaseLayout
 import com.omasyo.gatherspace.components.layouts.showSnackbar
 import com.omasyo.gatherspace.components.widgets.Image
 import com.omasyo.gatherspace.components.widgets.ImageCapture
 import com.omasyo.gatherspace.components.widgets.ImageChooser
 import com.omasyo.gatherspace.components.widgets.SessionCard
-import com.omasyo.gatherspace.domain.formatDate
 import com.omasyo.gatherspace.domain.formatDateTime
 import com.omasyo.gatherspace.models.response.UserDetails
 import com.omasyo.gatherspace.models.response.UserSession
@@ -23,18 +20,12 @@ import com.omasyo.gatherspace.styles.lightDark
 import com.omasyo.gatherspace.theme.onSurfaceVariantDark
 import com.omasyo.gatherspace.theme.onSurfaceVariantLight
 import com.omasyo.gatherspace.viewmodels.domainComponent
-import com.varabyte.kobweb.browser.file.readBytes
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.core.Page
-import kotlinx.browser.document
 import kotlinx.browser.window
-import kotlinx.coroutines.launch
 import kotlinx.io.Buffer
 import org.jetbrains.compose.web.css.*
-import org.jetbrains.compose.web.css.AlignSelf.Companion.Center
 import org.jetbrains.compose.web.dom.*
-import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.asList
 
 val profileViewModel = ProfileViewModelImpl(domainComponent.authRepository, domainComponent.userRepository)
 

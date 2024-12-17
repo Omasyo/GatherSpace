@@ -5,34 +5,13 @@ import androidx.compose.runtime.LaunchedEffect
 import com.omasyo.gatherspace.theme.onSurfaceVariantDark
 import com.omasyo.gatherspace.theme.surfaceVariantDark
 import com.varabyte.kobweb.compose.css.*
-import com.varabyte.kobweb.compose.ui.graphics.Colors
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.compose.web.css.*
-import org.jetbrains.compose.web.css.textAlign
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Text
-import kotlin.time.Duration.Companion.seconds
 
 object BaseLayoutStyle : StyleSheet() {
-    val snackbar by style {
-        visibility(Visibility.Hidden)
-        minWidth(250.px)
-        marginLeft((-125).px)
-        backgroundColor(Colors.Red.copyf(alpha = 0.5f))
-        color(Colors.White)
-        textAlign(TextAlign.Center)
-        padding(16.px)
-        position(Position.Fixed)
-        zIndex(1)
-        left(50.percent)
-        bottom(30.px)
-        fontSize(17.px)
-    }
-
-    val show by style {
-        visibility(Visibility.Visible)
-    }
 
     private val fadeIn by keyframes {
         from {

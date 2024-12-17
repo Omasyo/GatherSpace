@@ -1,12 +1,8 @@
 package com.omasyo.gatherspace.styles
 
-import com.omasyo.gatherspace.theme.onSurfaceVariantDark
-import com.omasyo.gatherspace.theme.onSurfaceVariantLight
-import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.AlignContent
 import com.varabyte.kobweb.compose.css.alignContent
 import org.jetbrains.compose.web.css.*
-import org.jetbrains.compose.web.css.JustifyContent
 
 object FormLayoutStyle : StyleSheet() {
     val formPage by style {

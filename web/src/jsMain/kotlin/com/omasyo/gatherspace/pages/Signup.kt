@@ -17,8 +17,8 @@ import com.omasyo.gatherspace.theme.primaryLight
 import com.omasyo.gatherspace.viewmodels.domainComponent
 import com.varabyte.kobweb.core.Page
 import kotlinx.browser.window
-import org.jetbrains.compose.web.attributes.rows
-import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.color
+import org.jetbrains.compose.web.css.textAlign
 import org.jetbrains.compose.web.dom.*
 
 val signupViewModel = with(domainComponent) {

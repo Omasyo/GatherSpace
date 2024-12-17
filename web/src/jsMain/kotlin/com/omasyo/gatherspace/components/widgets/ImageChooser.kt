@@ -1,13 +1,12 @@
 package com.omasyo.gatherspace.components.widgets
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import com.varabyte.kobweb.browser.file.readBytes
 import kotlinx.browser.document
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.io.Buffer
-import org.jetbrains.compose.web.dom.Button
-import org.jetbrains.compose.web.dom.Text
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.asList
 import org.w3c.files.File
@@ -21,8 +20,8 @@ class WebImageChooserScope(
         input.type = "file"
         input.accept = "image/*"
 
-        input.onchange = {
-            (it.target as HTMLInputElement).files?.asList()?.get(0)?.let {
+        input.onchange = { inputeElement ->
+            (inputeElement.target as HTMLInputElement).files?.asList()?.get(0)?.let {
                 onSelect(it)
             }
         }

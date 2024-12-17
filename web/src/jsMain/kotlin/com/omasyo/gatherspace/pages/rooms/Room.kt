@@ -18,7 +18,6 @@ import com.omasyo.gatherspace.viewmodels.domainComponent
 import com.omasyo.gatherspace.viewmodels.homeViewModel
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.rememberPageContext
-import kotlinx.coroutines.flow.MutableStateFlow
 
 
 @Page("{}")
@@ -67,17 +66,3 @@ fun RoomPage(
     }
 }
 
-
-val fakeData = List(10) {
-    Message(
-        id = it + 3, content = "molestie", sender = User(
-            id = 9558,
-            username = "Marietta Lyons",
-            imageUrl = null
-        ), roomId = 2479, created = date, modified = date
-    )
-}
-
-val pagingData = PagingData.from(fakeData)
-
-val fakeDataFlow = MutableStateFlow(pagingData)

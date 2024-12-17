@@ -131,7 +131,7 @@ fun ImageCapture(
                 }
                 Button(
                     attrs = {
-                        id("startbutton")
+                        id("start-button")
                     }
                 ) {
                     Text("Take Picture")
@@ -172,7 +172,7 @@ class WebPhotoTakerScope(
         val data = canvas.toDataURL("image/png")
         data.encodeToByteString()
         canvas.toBlob({ blob ->
-            val file = File(arrayOf(blob), "tospi.png")
+            val file = File(arrayOf(blob), "temp.png")
             onCapture(file)
             clear()
         })
@@ -186,7 +186,7 @@ class WebPhotoTakerScope(
     fun startup() {
         video = document.getElementById("video") as HTMLVideoElement
         canvas = document.getElementById("canvas") as HTMLCanvasElement
-        startButton = document.getElementById("startbutton") as HTMLButtonElement
+        startButton = document.getElementById("start-button") as HTMLButtonElement
 
         window.navigator.mediaDevices
             .getUserMedia(MediaStreamConstraints(video = true, audio = false))

@@ -1,11 +1,11 @@
 package com.omasyo.gatherspace.styles
 
-import com.omasyo.gatherspace.theme.*
+import com.omasyo.gatherspace.theme.onSurfaceDark
+import com.omasyo.gatherspace.theme.onSurfaceLight
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.AlignContent
-import com.varabyte.kobweb.compose.ui.graphics.Color
 import com.varabyte.kobweb.compose.css.JustifyContent
-import com.varabyte.kobweb.compose.ui.graphics.Colors
+import com.varabyte.kobweb.compose.ui.graphics.Color
 import org.jetbrains.compose.web.css.*
 
 object MainStyle : StyleSheet() {

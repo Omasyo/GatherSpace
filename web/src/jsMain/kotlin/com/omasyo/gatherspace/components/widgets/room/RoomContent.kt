@@ -6,29 +6,15 @@ import app.cash.paging.compose.LazyPagingItems
 import com.omasyo.gatherspace.components.layouts.showSnackbar
 import com.omasyo.gatherspace.models.response.Message
 import com.omasyo.gatherspace.models.response.RoomDetails
-import com.omasyo.gatherspace.pages.date
 import com.omasyo.gatherspace.room.RoomEvent
 import com.omasyo.gatherspace.room.RoomState
 import com.omasyo.gatherspace.styles.lightDark
 import com.omasyo.gatherspace.theme.onSurfaceVariantDark
 import com.omasyo.gatherspace.theme.onSurfaceVariantLight
-import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.borderBottom
 import com.varabyte.kobweb.compose.css.borderTop
-import com.varabyte.kobweb.compose.css.width
-import com.varabyte.kobweb.compose.foundation.layout.Box
-import com.varabyte.kobweb.compose.foundation.layout.Column
-import com.varabyte.kobweb.compose.ui.Alignment
-import com.varabyte.kobweb.compose.ui.Modifier
-import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
-import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
-import com.varabyte.kobweb.compose.ui.modifiers.height
-import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.Div
-import org.jetbrains.compose.web.dom.P
-import org.jetbrains.compose.web.dom.Text
-import org.w3c.dom.HTMLDivElement
 
 private object RoomStyle : StyleSheet() {
     init {

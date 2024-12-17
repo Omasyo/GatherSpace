@@ -7,10 +7,6 @@ import com.varabyte.kobweb.compose.css.borderRight
 import org.jetbrains.compose.web.css.*
 
 object HomeLayoutStyle : StyleSheet() {
-    val homeLayout by style {
-        width(100.percent)
-        height(100.percent)
-    }
 
     val header by style {
 //        alignSelf(AlignSelf.Center)

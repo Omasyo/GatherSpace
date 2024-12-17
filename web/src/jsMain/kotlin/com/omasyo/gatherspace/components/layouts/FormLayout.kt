@@ -1,9 +1,7 @@
 package com.omasyo.gatherspace.components.layouts
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import com.omasyo.gatherspace.styles.FormLayoutStyle
-import kotlinx.browser.document
 import org.jetbrains.compose.web.css.Style
 import org.jetbrains.compose.web.dom.Div
 

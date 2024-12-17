@@ -6,16 +6,11 @@ import com.omasyo.gatherspace.components.widgets.Image
 import com.omasyo.gatherspace.domain.formatTime
 import com.omasyo.gatherspace.models.response.Message
 import com.omasyo.gatherspace.styles.MainStyle
-import com.omasyo.gatherspace.styles.MainStyle.style
 import com.omasyo.gatherspace.styles.lightDark
 import com.omasyo.gatherspace.theme.onSurfaceDark
 import com.omasyo.gatherspace.theme.onSurfaceLight
 import com.varabyte.kobweb.compose.css.FontWeight
-import com.varabyte.kobweb.compose.css.color
 import com.varabyte.kobweb.compose.css.fontWeight
-import com.varabyte.kobweb.compose.foundation.layout.Row
-import com.varabyte.kobweb.compose.ui.Modifier
-import com.varabyte.kobweb.compose.ui.graphics.Colors
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 
@@ -96,7 +91,7 @@ fun Message(
             ) {
                 val lines = remember(message) {
                     message.content.split("\n").map {
-                        it.replace(" ","\uFFa0")
+                        it.replace(" ", "\uFFa0")
                     }
                 }
                 for (line in lines) {

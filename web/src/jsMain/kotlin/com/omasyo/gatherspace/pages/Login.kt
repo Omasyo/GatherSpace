@@ -7,7 +7,6 @@ import com.omasyo.gatherspace.TextFieldState
 import com.omasyo.gatherspace.auth.AuthEvent
 import com.omasyo.gatherspace.auth.AuthState
 import com.omasyo.gatherspace.auth.LoginViewModelImpl
-import com.omasyo.gatherspace.auth.SignupViewModelImpl
 import com.omasyo.gatherspace.components.layouts.FormLayout
 import com.omasyo.gatherspace.components.layouts.showSnackbar
 import com.omasyo.gatherspace.components.widgets.TextField
@@ -18,8 +17,8 @@ import com.omasyo.gatherspace.theme.primaryLight
 import com.omasyo.gatherspace.viewmodels.domainComponent
 import com.varabyte.kobweb.core.Page
 import kotlinx.browser.window
-import org.jetbrains.compose.web.attributes.rows
-import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.color
+import org.jetbrains.compose.web.css.textAlign
 import org.jetbrains.compose.web.dom.*
 
 val loginViewModel = with(domainComponent) {

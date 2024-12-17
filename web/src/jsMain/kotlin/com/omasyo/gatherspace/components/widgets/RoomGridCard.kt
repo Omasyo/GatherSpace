@@ -4,14 +4,10 @@ import androidx.compose.runtime.Composable
 import com.omasyo.gatherspace.models.response.Room
 import com.omasyo.gatherspace.styles.MainStyle
 import com.omasyo.gatherspace.styles.lightDark
-import com.omasyo.gatherspace.theme.primaryContainerDark
-import com.omasyo.gatherspace.theme.primaryContainerLight
 import com.omasyo.gatherspace.theme.surfaceVariantDark
 import com.omasyo.gatherspace.theme.surfaceVariantLight
-import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.aspectRatio
 import com.varabyte.kobweb.compose.css.background
-import com.varabyte.kobweb.compose.css.overflow
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.A
 import org.jetbrains.compose.web.dom.Div

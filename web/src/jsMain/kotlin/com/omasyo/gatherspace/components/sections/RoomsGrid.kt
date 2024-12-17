@@ -5,9 +5,9 @@ import com.omasyo.gatherspace.UiState
 import com.omasyo.gatherspace.components.widgets.RoomGridCard
 import com.omasyo.gatherspace.components.widgets.RoomGridCardPlaceholder
 import com.omasyo.gatherspace.models.response.Room
-import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.Overflow
+import com.varabyte.kobweb.compose.css.overflowY
 import org.jetbrains.compose.web.css.*
-import org.jetbrains.compose.web.css.overflowY
 import org.jetbrains.compose.web.dom.Div
 
 private object RoomsGridLayout : StyleSheet() {

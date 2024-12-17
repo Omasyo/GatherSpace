@@ -1,6 +1,9 @@
 package com.omasyo.gatherspace.pages
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import com.omasyo.gatherspace.TextFieldState
 import com.omasyo.gatherspace.components.layouts.HomeLayout
 import com.omasyo.gatherspace.components.layouts.showSnackbar
@@ -17,21 +20,15 @@ import com.omasyo.gatherspace.styles.lightDark
 import com.omasyo.gatherspace.theme.surfaceVariantDark
 import com.omasyo.gatherspace.theme.surfaceVariantLight
 import com.omasyo.gatherspace.viewmodels.domainComponent
-import com.omasyo.gatherspace.viewmodels.homeViewModel
-import com.varabyte.kobweb.browser.file.readBytes
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.core.Page
-import kotlinx.browser.document
 import kotlinx.browser.window
-import kotlinx.coroutines.launch
 import kotlinx.io.Buffer
 import kotlinx.io.readByteArray
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.AlignSelf.Companion.Center
 import org.jetbrains.compose.web.dom.*
-import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.asList
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
