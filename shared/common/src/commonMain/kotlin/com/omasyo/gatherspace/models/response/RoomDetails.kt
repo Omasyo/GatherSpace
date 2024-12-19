@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class Room(
     val id: Int,
     val name: String,
-    val imageUrl: String?
+    val imageUrl: String?,
 )
 
 @Serializable

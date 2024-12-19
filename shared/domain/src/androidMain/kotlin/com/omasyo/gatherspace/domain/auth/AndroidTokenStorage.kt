@@ -16,24 +16,21 @@ import kotlinx.serialization.json.Json
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "token")
 
-@Suppress("unused")
 class AndroidTokenStorage(
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
 ) : TokenStorage {
     private val tokenKey = stringPreferencesKey("token")
 
 
-    override fun observeToken(): Flow<TokenResponse?> {
-        return dataStore.data.map { preferences ->
-            preferences[tokenKey]?.let {
-                Json.decodeFromString<TokenResponse>(it)
-            }
+    override fun observeToken(): Flow<TokenResponse?> = dataStore.data.map { preferences ->
+        preferences[tokenKey]?.let {
+            Json.decodeFromString<TokenResponse>(it)
         }
     }
 
-    override suspend fun getToken(): TokenResponse? {
-        return observeToken().first()
-    }
+
+    override suspend fun getToken(): TokenResponse? = observeToken().first()
+
 
     override suspend fun saveToken(tokenResponse: TokenResponse) {
         dataStore.edit { preferences ->

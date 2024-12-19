@@ -25,11 +25,12 @@ internal class MessageRepositoryImpl(
         )
     }.flow.flowOn(dispatcher)
 
-    override fun getMessageFlow(roomId: Int): Flow<Message> {
-        return networkSource.getMessageFlow(roomId).flowOn(dispatcher)
-    }
+    override fun getMessageFlow(roomId: Int): Flow<Message> =
+        networkSource.getMessageFlow(roomId).flowOn(dispatcher)
 
-    override fun sendMessage(roomId: Int, message: String): Flow<DomainResponse<Unit>> = flow {
-        emit(networkSource.sendMessage(roomId, message).mapToDomain())
-    }.flowOn(dispatcher)
+
+    override fun sendMessage(roomId: Int, message: String): Flow<DomainResponse<Unit>> =
+        flow {
+            emit(networkSource.sendMessage(roomId, message).mapToDomain())
+        }.flowOn(dispatcher)
 }

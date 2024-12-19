@@ -13,7 +13,7 @@ import kotlinx.io.Buffer
 
 internal class UserRepositoryImpl(
     private val userNetworkSource: UserNetworkSource,
-    private val dispatcher: CoroutineDispatcher
+    private val dispatcher: CoroutineDispatcher,
 ) : UserRepository {
     override fun createAccount(userName: String, password: String, image: Buffer?): Flow<DomainResponse<Unit>> =
         flow {

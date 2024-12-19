@@ -13,7 +13,7 @@ internal class MessagePagingSource(
     private val roomId: Int,
     private val networkSource: MessageNetworkSource
 ) : PagingSource<LocalDateTime, Message>() {
-    val tag = this::class.simpleName
+    private val tag = this::class.simpleName
 
     override fun getRefreshKey(state: PagingState<LocalDateTime, Message>): LocalDateTime? {
         return state.anchorPosition?.let { anchorPosition ->

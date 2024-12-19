@@ -1,5 +1,7 @@
 package com.omasyo.gatherspace.domain
 
+import com.omasyo.gatherspace.network.NetworkException
+
 sealed interface DomainResponse<out T>
 
 data class Success<T>(val data: T) : DomainResponse<T>
@@ -24,21 +26,23 @@ inline fun <T, R> DomainResponse<T>.onError(onError: (message: String) -> R): Do
     return this
 }
 
-inline fun <T> DomainResponse<T>.onAuthError(onAuthError: () -> Unit): DomainResponse<T> {
-    if (this is AuthError) {
-        onAuthError()
-    }
-    return this
-}
 
-inline fun <T, R> DomainResponse<T>.fold(
-    onSuccess: (T) -> R,
-    onDomainError: (message: String) -> R,
-    onAuthError: () -> R
-): R {
-    return when (this) {
-        AuthError -> onAuthError()
-        is DomainError -> onDomainError(message)
-        is Success -> onSuccess(data)
+inline fun <T, R> Result<T>.mapToDomain(
+    transform: (T) -> R
+): DomainResponse<R> = fold(
+    onSuccess = { Success(transform(it)) },
+    onFailure = { error ->
+        if (error is NetworkException) {
+            if (error.error.statusCode == 401) {
+                AuthError
+            } else {
+                DomainError(error.error.message)
+            }
+        } else {
+            DomainError("An Error Occurred")
+        }
     }
-}
+)
+
+fun <T> Result<T>.mapToDomain(): DomainResponse<T> =
+    mapToDomain { it }

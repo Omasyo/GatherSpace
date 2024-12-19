@@ -13,8 +13,8 @@ import java.util.prefs.Preferences
 class JvmTokenStorage(private val preferences: Preferences) : TokenStorage {
     private val tokenKey = "token"
 
-    override fun observeToken(): Flow<TokenResponse?> {
-        return callbackFlow {
+    override fun observeToken(): Flow<TokenResponse?> =
+        callbackFlow {
             val listener = PreferenceChangeListener { evt ->
                 if (evt?.key == tokenKey) {
                     trySend(evt.newValue?.let { Json.decodeFromString<TokenResponse>(it) })
@@ -24,11 +24,10 @@ class JvmTokenStorage(private val preferences: Preferences) : TokenStorage {
             preferences.addPreferenceChangeListener(listener)
             awaitClose { preferences.removePreferenceChangeListener(listener) }
         }
-    }
 
-    override suspend fun getToken(): TokenResponse? {
-        return preferences.get(tokenKey, null)?.let { Json.decodeFromString<TokenResponse>(it) }
-    }
+    override suspend fun getToken(): TokenResponse? =
+        preferences.get(tokenKey, null)?.let { Json.decodeFromString<TokenResponse>(it) }
+
 
     override suspend fun saveToken(tokenResponse: TokenResponse) {
         preferences.put(tokenKey, Json.encodeToString(tokenResponse))

@@ -23,6 +23,9 @@ class ProfileViewModelImpl(
 
     private val refreshEvent = MutableStateFlow(Any())
 
+    private val _state = MutableStateFlow(ProfileScreenState.Initial)
+    override val state = _state.asStateFlow()
+
     override val userDetails: StateFlow<UserDetails?> = refreshEvent.flatMapLatest {
         userRepository.getCurrentUser()
             .map {
@@ -60,9 +63,6 @@ class ProfileViewModelImpl(
                 }
             }
     }.stateIn(coroutineScope, SharingStarted.Lazily, emptyList())
-
-    private val _state = MutableStateFlow(ProfileScreenState.Initial)
-    override val state = _state.asStateFlow()
 
     override fun updateImage(buffer: Buffer) {
         coroutineScope.launch {

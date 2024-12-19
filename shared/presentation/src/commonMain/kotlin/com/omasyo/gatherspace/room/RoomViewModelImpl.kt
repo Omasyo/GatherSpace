@@ -96,7 +96,6 @@ class RoomViewModelImpl(
                 }
                 .onSuccess {
                     message = ""
-//                    _state.value = _state.value.copy(event = RoomEvent.MessageSent)
                 }
 
             _state.value = _state.value.copy(isSending = false)

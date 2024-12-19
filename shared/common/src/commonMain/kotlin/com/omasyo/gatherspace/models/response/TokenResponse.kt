@@ -9,5 +9,5 @@ import kotlin.js.JsExport
 @Serializable
 data class TokenResponse(
     val accessToken: String,
-    val refreshToken: String
+    val refreshToken: String,
 )

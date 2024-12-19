@@ -10,11 +10,11 @@ interface ProfileViewModel {
 
     val coroutineScope: CoroutineScope
 
+    val state: StateFlow<ProfileScreenState>
+
     val userDetails: StateFlow<UserDetails?>
 
     val userSessions: StateFlow<List<UserSession>>
-
-    val state: StateFlow<ProfileScreenState>
 
     fun updateImage(buffer: Buffer)
 

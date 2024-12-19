@@ -60,12 +60,6 @@ fun createClient(
             }
         }
         defaultRequest {
-//            headers {
-//                set(HttpHeaders.AccessControlAllowHeaders, "Content-Type")
-//                set(HttpHeaders.AccessControlAllowOrigin, "*")
-//                set(HttpHeaders.AccessControlAllowMethods, "POST,PATCH,OPTIONS,GET,HEAD")
-////                set(HttpHeaders.ContentType, "application/json")
-//            }
             url {
                 protocol = URLProtocol(Api.PROTOCOL, 80)
                 host = Api.HOST
