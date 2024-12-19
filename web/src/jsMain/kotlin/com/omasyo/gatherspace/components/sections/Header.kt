@@ -100,7 +100,7 @@ private fun Header(
                     }
                 }
                 A(
-                    href = "profile",
+                    href = "/profile",
                 ) {
                     Div(
                         attrs = {
