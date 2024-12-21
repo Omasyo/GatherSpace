@@ -3,6 +3,7 @@ package com.omasyo.gatherspace.pages
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import com.omasyo.gatherspace.common.domainComponent
 import com.omasyo.gatherspace.components.layouts.BaseLayout
 import com.omasyo.gatherspace.components.layouts.showSnackbar
 import com.omasyo.gatherspace.components.widgets.Image
@@ -19,7 +20,6 @@ import com.omasyo.gatherspace.styles.MainStyle
 import com.omasyo.gatherspace.styles.lightDark
 import com.omasyo.gatherspace.theme.onSurfaceVariantDark
 import com.omasyo.gatherspace.theme.onSurfaceVariantLight
-import com.omasyo.gatherspace.viewmodels.domainComponent
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.core.Page
 import kotlinx.browser.window

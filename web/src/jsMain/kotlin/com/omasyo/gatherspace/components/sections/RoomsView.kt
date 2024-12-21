@@ -9,10 +9,14 @@ import com.omasyo.gatherspace.styles.MainStyle
 import com.omasyo.gatherspace.styles.lightDark
 import com.omasyo.gatherspace.theme.onSurfaceVariantDark
 import com.omasyo.gatherspace.theme.onSurfaceVariantLight
-import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.Overflow
+import com.varabyte.kobweb.compose.css.borderBottom
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.ui.Modifier
-import com.varabyte.kobweb.compose.ui.modifiers.*
+import com.varabyte.kobweb.compose.ui.modifiers.fillMaxHeight
+import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
+import com.varabyte.kobweb.compose.ui.modifiers.overflow
+import com.varabyte.kobweb.compose.ui.modifiers.padding
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.A
 import org.jetbrains.compose.web.dom.H4

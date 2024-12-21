@@ -1,4 +1,4 @@
-package com.omasyo.gatherspace.viewmodels
+package com.omasyo.gatherspace.common
 
 import com.omasyo.gatherspace.home.HomeViewModel
 import com.omasyo.gatherspace.home.HomeViewModelImpl

@@ -14,7 +14,7 @@ import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.H3
 import org.jetbrains.compose.web.dom.Text
 
-object RoomGridCardStyle : StyleSheet() {
+private object RoomGridCardStyle : StyleSheet() {
     init {
         id("room-grid-card") style {}
         type("h3") style {

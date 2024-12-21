@@ -47,7 +47,6 @@ object HomeLayoutStyle : StyleSheet() {
     }
 
     val content by style {
-//        minWidth(400.px)
         flexGrow(1)
         height(100.percent)
     }

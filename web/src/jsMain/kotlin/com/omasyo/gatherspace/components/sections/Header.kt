@@ -3,6 +3,7 @@ package com.omasyo.gatherspace.components.sections
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import com.omasyo.gatherspace.UiState
+import com.omasyo.gatherspace.common.homeViewModel
 import com.omasyo.gatherspace.components.widgets.Image
 import com.omasyo.gatherspace.models.response.UserDetails
 import com.omasyo.gatherspace.styles.HomeLayoutStyle
@@ -10,12 +11,11 @@ import com.omasyo.gatherspace.styles.MainStyle
 import com.omasyo.gatherspace.styles.lightDark
 import com.omasyo.gatherspace.theme.primaryDark
 import com.omasyo.gatherspace.theme.primaryLight
-import com.omasyo.gatherspace.viewmodels.homeViewModel
 import com.varabyte.kobweb.silk.components.icons.mdi.MdiAdd
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 
-object HeaderStyle : StyleSheet() {
+private object HeaderStyle : StyleSheet() {
     init {
         type("header") style {
             display(DisplayStyle.Flex)

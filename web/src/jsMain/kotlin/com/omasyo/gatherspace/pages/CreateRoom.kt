@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import com.omasyo.gatherspace.TextFieldState
+import com.omasyo.gatherspace.common.domainComponent
 import com.omasyo.gatherspace.components.layouts.HomeLayout
 import com.omasyo.gatherspace.components.layouts.showSnackbar
 import com.omasyo.gatherspace.components.sections.Header
@@ -19,7 +20,6 @@ import com.omasyo.gatherspace.styles.MainStyle
 import com.omasyo.gatherspace.styles.lightDark
 import com.omasyo.gatherspace.theme.surfaceVariantDark
 import com.omasyo.gatherspace.theme.surfaceVariantLight
-import com.omasyo.gatherspace.viewmodels.domainComponent
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.core.Page
 import kotlinx.browser.window
@@ -34,7 +34,7 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 
 val createRoomViewModel = CreateRoomViewModelImpl(domainComponent.roomRepository)
 
-object CreateRoomStyle : StyleSheet() {
+private object CreateRoomStyle : StyleSheet() {
     val createRoomPage by style {
         justifyContent(com.varabyte.kobweb.compose.css.JustifyContent.Center)
         alignContent(org.jetbrains.compose.web.css.AlignContent.Center)

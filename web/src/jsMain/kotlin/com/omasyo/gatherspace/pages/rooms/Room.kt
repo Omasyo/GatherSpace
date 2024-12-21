@@ -3,6 +3,8 @@ package com.omasyo.gatherspace.pages.rooms
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import app.cash.paging.compose.collectAsLazyPagingItems
+import com.omasyo.gatherspace.common.domainComponent
+import com.omasyo.gatherspace.common.homeViewModel
 import com.omasyo.gatherspace.components.layouts.HomeLayout
 import com.omasyo.gatherspace.components.sections.Header
 import com.omasyo.gatherspace.components.sections.SideBar
@@ -10,8 +12,6 @@ import com.omasyo.gatherspace.components.widgets.room.RoomContent
 import com.omasyo.gatherspace.home.HomeViewModel
 import com.omasyo.gatherspace.room.RoomViewModel
 import com.omasyo.gatherspace.room.RoomViewModelImpl
-import com.omasyo.gatherspace.viewmodels.domainComponent
-import com.omasyo.gatherspace.viewmodels.homeViewModel
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.rememberPageContext
 

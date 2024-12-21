@@ -13,7 +13,7 @@ import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.H3
 import org.jetbrains.compose.web.dom.Text
 
-object RoomListCardStyle : StyleSheet() {
+private object RoomListCardStyle : StyleSheet() {
     init {
         id("room-list-card") style {
             display(DisplayStyle.Flex)

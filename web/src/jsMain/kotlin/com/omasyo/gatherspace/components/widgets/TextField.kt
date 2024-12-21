@@ -1,8 +1,12 @@
 package com.omasyo.gatherspace.components.widgets
 
 import androidx.compose.runtime.Composable
-import org.jetbrains.compose.web.attributes.*
-import org.jetbrains.compose.web.dom.*
+import org.jetbrains.compose.web.attributes.placeholder
+import org.jetbrains.compose.web.attributes.rows
+import org.jetbrains.compose.web.dom.AttrBuilderContext
+import org.jetbrains.compose.web.dom.PasswordInput
+import org.jetbrains.compose.web.dom.TextArea
+import org.jetbrains.compose.web.dom.TextInput
 import org.w3c.dom.Element
 
 @Composable

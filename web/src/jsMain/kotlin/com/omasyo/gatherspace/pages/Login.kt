@@ -7,6 +7,7 @@ import com.omasyo.gatherspace.TextFieldState
 import com.omasyo.gatherspace.auth.AuthEvent
 import com.omasyo.gatherspace.auth.AuthState
 import com.omasyo.gatherspace.auth.LoginViewModelImpl
+import com.omasyo.gatherspace.common.domainComponent
 import com.omasyo.gatherspace.components.layouts.FormLayout
 import com.omasyo.gatherspace.components.layouts.showSnackbar
 import com.omasyo.gatherspace.components.widgets.TextField
@@ -14,7 +15,6 @@ import com.omasyo.gatherspace.styles.MainStyle
 import com.omasyo.gatherspace.styles.lightDark
 import com.omasyo.gatherspace.theme.primaryDark
 import com.omasyo.gatherspace.theme.primaryLight
-import com.omasyo.gatherspace.viewmodels.domainComponent
 import com.varabyte.kobweb.core.Page
 import kotlinx.browser.window
 import org.jetbrains.compose.web.css.color
