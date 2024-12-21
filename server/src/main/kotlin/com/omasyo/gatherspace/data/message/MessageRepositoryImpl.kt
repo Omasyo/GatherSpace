@@ -26,19 +26,17 @@ internal class MessageRepositoryImpl(private val messageQueries: MessageQueries)
 
     override fun getMessages(
         roomId: Int, before: kotlinx.datetime.LocalDateTime, limit: Int
-    ): List<Message> {
-        return messageQueries.messagesWithRoomId(
+    ): List<Message> =
+        messageQueries.messagesWithRoomId(
             roomId = roomId,
             before = before.toJavaLocalDateTime(),
             limit = limit.toLong(),
             mapper = ::messageMapper
         ).executeAsList()
-    }
 
-    override fun lastMessageFlow(roomId: Int): Flow<Message> {
-        return messageQueries.lastMessage(roomId, mapper = ::messageMapper)
+    override fun lastMessageFlow(roomId: Int): Flow<Message> =
+        messageQueries.lastMessage(roomId, mapper = ::messageMapper)
             .asFlow().mapToOne(Dispatchers.IO)
-    }
 
     private fun messageMapper(
         id: Int,

@@ -8,7 +8,9 @@ import kotlinx.io.Buffer
 interface UserRepository {
     fun create(username: String, password: String, imageBuffer: Buffer?): DatabaseResponse<Unit>
 
-    fun update(id: Int, username: String?, password: String?, imageBuffer: Buffer?): DatabaseResponse<Unit>
+    fun update(id: Int, username: String?, imageBuffer: Buffer?): DatabaseResponse<Unit>
+
+    fun updatePassword(id: Int, password: String): DatabaseResponse<Unit>
 
     fun getUserById(id: Int): UserDetails?
 

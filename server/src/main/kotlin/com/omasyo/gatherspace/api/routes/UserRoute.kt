@@ -96,7 +96,7 @@ fun Application.userRoute(repository: UserRepository) {
                 }
                 error?.let { return@patch call.respond(it) }
 
-                when (val result = repository.update(userId, details?.username, details?.password, imageBuffer)) {
+                when (val result = repository.update(userId, details?.username, imageBuffer)) {
                     is DatabaseResponse.Failure -> call.respond(result.toErrorResponse())
                     is DatabaseResponse.Success -> call.respond(HttpStatusCode.OK)
                 }

@@ -25,16 +25,15 @@ internal class RoomRepositoryImpl(
         description: String,
         creatorId: Int,
         imageBuffer: Buffer?
-    ): DatabaseResponse<Int> {
-        return roomQueries.transactionWithResult {
+    ): DatabaseResponse<Int> =
+        roomQueries.transactionWithResult {
             val imageId = imageBuffer?.let { createImageFile(it) }
             val roomId = roomQueries.create(name, description, imageId, creatorId).executeAsOne()
             roomMemberQueries.create(roomId, creatorId)
             DatabaseResponse.Success(roomId)
         }
-    }
 
-    override fun updateRoom(name: String?, description: String?, imageBuffer: Buffer?, roomId: Int) {
+    override fun updateRoom(name: String?, description: String?, imageBuffer: Buffer?, roomId: Int) =
         roomQueries.transaction {
             val room = roomQueries.getRoomById(roomId).executeAsOne()
 
@@ -49,30 +48,26 @@ internal class RoomRepositoryImpl(
                 id = roomId
             )
         }
-    }
 
-    override fun addMembers(roomId: Int, userIds: List<Int>) {
+    override fun addMembers(roomId: Int, userIds: List<Int>) =
         roomMemberQueries.transaction {
             for (userId in userIds) {
                 roomMemberQueries.create(roomId, userId)
             }
         }
-    }
 
-    override fun removeMembers(roomId: Int, userIds: List<Int>) {
+    override fun removeMembers(roomId: Int, userIds: List<Int>) =
         roomMemberQueries.transaction {
             for (userId in userIds) {
                 roomMemberQueries.delete(roomId, userId)
             }
         }
-    }
 
-    override fun getMembers(roomId: Int): List<User> {
-        return roomMemberQueries.getRoomMembers(roomId, ::User).executeAsList()
-    }
+    override fun getMembers(roomId: Int): List<User> =
+        roomMemberQueries.getRoomMembers(roomId, ::User).executeAsList()
 
-    override fun getRoom(roomId: Int, userId: Int?): RoomDetails? {
-        return roomQueries.transactionWithResult {
+    override fun getRoom(roomId: Int, userId: Int?): RoomDetails? =
+        roomQueries.transactionWithResult {
             val room = roomQueries.getRoomById(roomId).executeAsOneOrNull()
                 ?: return@transactionWithResult null
             val creator = room.creator?.let { userAccountQueries.getById(it, ::userMapper).executeAsOne() }
@@ -92,17 +87,14 @@ internal class RoomRepositoryImpl(
                 )
             }
         }
-    }
 
-    override fun getUserRooms(userId: Int): List<Room> {
-        return roomQueries.getUserRooms(userId) { id, name, image ->
+    override fun getUserRooms(userId: Int): List<Room> =
+        roomQueries.getUserRooms(userId) { id, name, image ->
             Room(id, name, getImagePath(image))
         }.executeAsList()
-    }
 
-    override fun getAllRooms(): List<Room> {
-        return roomQueries.getAll { id, name, image ->
+    override fun getAllRooms(): List<Room> =
+        roomQueries.getAll { id, name, image ->
             Room(id, name, getImagePath(image))
         }.executeAsList()
-    }
 }

@@ -17,8 +17,13 @@ VALUES (:username, crypt(COALESCE(:password, ''), gen_salt('bf', 8)), :image);
 update:
 UPDATE user_account
 SET username = COALESCE(:username, username),
-    password = COALESCE(crypt(COALESCE(:password, ''), gen_salt('bf', 8)), :password),
     image = COALESCE(:image, image),
+    modified = CURRENT_TIMESTAMP
+WHERE id = ?;
+
+updatePassword:
+UPDATE user_account
+SET password = crypt(COALESCE(:password, ''), gen_salt('bf', 8)),
     modified = CURRENT_TIMESTAMP
 WHERE id = ?;
 
