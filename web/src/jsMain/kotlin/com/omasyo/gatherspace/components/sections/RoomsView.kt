@@ -27,7 +27,10 @@ fun RoomsView(
     state: UiState<List<Room>>
 ) {
     when (state) {
-        is UiState.Error -> {}
+        is UiState.Error -> {
+            JoinRoomButton()
+        }
+
         UiState.Loading -> Placeholder()
         is UiState.Success -> {
             Column(
@@ -39,33 +42,38 @@ fun RoomsView(
                         y(Overflow.Scroll)
                     },
             ) {
-                A(
-                    href = "/join-room",
-                    attrs = {
-
-                        classes(MainStyle.customLink)
-                    }) {
-                    H4(
-                        attrs = {
-                            style {
-                                width(100.percent)
-                                textAlign("center")
-                                padding(8.px, 0.px)
-                                borderBottom {
-                                    width(1.px)
-                                    style(LineStyle.Solid)
-                                    color(lightDark(onSurfaceVariantDark, onSurfaceVariantLight))
-                                }
-                            }
-                        }
-                    ) {
-                        Text("Join A Room")
-                    }
-                }
+                JoinRoomButton()
                 for (room in state.data) {
                     RoomListCard(room = room)
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun JoinRoomButton() {
+    A(
+        href = "/join-room",
+        attrs = {
+
+            classes(MainStyle.customLink)
+        }) {
+        H4(
+            attrs = {
+                style {
+                    width(100.percent)
+                    textAlign("center")
+                    padding(8.px, 0.px)
+                    borderBottom {
+                        width(1.px)
+                        style(LineStyle.Solid)
+                        color(lightDark(onSurfaceVariantDark, onSurfaceVariantLight))
+                    }
+                }
+            }
+        ) {
+            Text("Join A Room")
         }
     }
 }

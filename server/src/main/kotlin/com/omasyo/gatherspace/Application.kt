@@ -50,7 +50,6 @@ fun Application.module() {
         allowHeader(HttpHeaders.CacheControl)
         allowHeader(HttpHeaders.Connection)
         anyMethod()
-//        allowMethod(HttpMethod.Patch)
         anyHost()
     }
     install(WebSockets) {
@@ -69,7 +68,12 @@ fun Application.module() {
 }
 
 
-val database = createDatabase("postgres", "pass")
+val database = createDatabase(
+    username = "postgres", //TODO("Enter database username")
+    password = "pass" //TODO("Enter database password")
+)
+
+
 val userRepository: UserRepository = UserRepositoryImpl(database.user_accountQueries, database.refresh_tokenQueries)
 val tokenRepository: TokenRepository = TokenRepositoryImpl(database.refresh_tokenQueries)
 val roomRepository: RoomRepository =

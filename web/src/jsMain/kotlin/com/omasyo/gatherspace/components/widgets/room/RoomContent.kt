@@ -77,7 +77,7 @@ fun RoomContent(
                 Message(message = receivedMessage)
             }
             for (index in 0..<oldMessages.itemCount) {
-                oldMessages[index]?.let { Message(message = it) } // TODO: Loads the full data, you know why - Find solution
+                oldMessages[index]?.let { Message(message = it) }
             }
         }
         when {

@@ -168,7 +168,7 @@ fun ProfileScreen(
 
                 PhotoTaker(onComplete = onComplete) {
                     BottomSheetMenuItem(
-                        text = "Choose from gallery",
+                        text = "Take a picture",
                         onTap = ::takePhoto
                     )
                 }

@@ -32,7 +32,10 @@ class HomeViewModelImpl(
                 .map {
                     when (it) {
                         is DomainError -> UiState.Error(it.message)
-                        AuthError -> UiState.Error("Invalid State")
+                        AuthError -> {
+                            authRepository.logout()
+                            UiState.Error("Auth Error")
+                        }
                         is Success -> UiState.Success(it.data)
                     }
                 }
