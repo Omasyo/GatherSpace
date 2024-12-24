@@ -69,8 +69,8 @@ fun Application.module() {
 
 
 val database = createDatabase(
-    username = "postgres", //TODO("Enter database username")
-    password = "pass" //TODO("Enter database password")
+    username = TODO("Enter database username"),
+    password = TODO("Enter database password")
 )
 
 
