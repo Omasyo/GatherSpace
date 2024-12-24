@@ -14,7 +14,8 @@ import kotlin.io.path.outputStream
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-const val ImageDirPath = "images"
+val ImageDirPath: String =
+    System.getProperty("user.home") + "/GatherSpace/images" //TODO: You can modify the path to store image files
 
 fun getImagePath(imageId: String?): String? {
     return imageId?.let { "${IMAGE_URL_PATH}$it" }

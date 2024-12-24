@@ -39,7 +39,7 @@ fun RoomTopBar(
         }
     ) {
         MdiArrowBack(Modifier.attrsModifier {
-            onClick { window.history.back() }
+            onClick { window.location.href = "/" }
             classes(MainStyle.clickable)
         })
         if (roomDetails != null) {
