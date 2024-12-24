@@ -64,12 +64,10 @@ fun Application.module() {
     imageRoute()
 }
 
-
 val database = createDatabase(
     username = TODO("Enter database username"),
     password = TODO("Enter database password")
 )
-
 
 val userRepository: UserRepository = UserRepositoryImpl(database.user_accountQueries, database.refresh_tokenQueries)
 val tokenRepository: TokenRepository = TokenRepositoryImpl(database.refresh_tokenQueries)

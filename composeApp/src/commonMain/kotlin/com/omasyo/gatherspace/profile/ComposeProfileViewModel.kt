@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.omasyo.gatherspace.domain.auth.AuthRepository
 import com.omasyo.gatherspace.domain.user.UserRepository
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class ComposeProfileViewModel(
     authRepository: AuthRepository,

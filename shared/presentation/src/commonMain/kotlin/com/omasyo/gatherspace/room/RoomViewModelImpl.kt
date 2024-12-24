@@ -53,15 +53,12 @@ class RoomViewModelImpl(
         private set
 
     init {
-        println("RoomView init")
         coroutineScope.launch {
-            println("RoomView corout launch")
             messageRepository.getMessageFlow(roomId)
                 .catch {
                     _state.value = _state.value.copy(event = RoomEvent.Error("An Error occurred"))
                 }
                 .collect {
-                    println("Got message $it")
                     messages.add(it)
                     _state.value = _state.value.copy(event = RoomEvent.MessageReceived)
                 }

@@ -34,12 +34,10 @@ actual fun ImageChooser(
                 scope.isOpen = false
 
                 if (file == null) return@FileDialog
-                println("Mime type ${Files.probeContentType(file.toPath())}")
 
                 val mime = Files.probeContentType(file.toPath())
                 if (mime != null && mime.contains("image/")) {
                     onComplete(Buffer().transferFrom(file.inputStream()))
-                    println("Result ${file.absolutePath}")
                 }
             }
         )

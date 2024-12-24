@@ -3,7 +3,6 @@ package com.omasyo.gatherspace
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.omasyo.gatherspace.domain.deps.DomainComponent
 import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
 import io.github.aakira.napier.DebugAntilog
@@ -12,9 +11,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
-fun App(
-    appViewModel: AppViewModel = dependencyProvider { viewModel{ AppViewModel(authRepository) } }
-) {
+fun App() {
     LaunchedEffect(Unit) {
         Napier.base(DebugAntilog())
         Napier.i { "Starting Napier" }

@@ -40,7 +40,6 @@ class UserRepositoryImpl(
 
             user.image?.let {
                 val file = File(ImageDirPath, it)
-                println("Found image: $it")
                 file.delete()
             }
             val imageId = imageBuffer?.let { createImageFile(it) }

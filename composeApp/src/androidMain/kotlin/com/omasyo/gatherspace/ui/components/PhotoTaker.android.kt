@@ -51,7 +51,6 @@ private var fileUri: Uri? = null
 
 private fun createTempFile(context: Context): Uri {
     val file = File(context.cacheDir, "temp.jpg")
-    println(file.absolutePath)
 
     return FileProvider.getUriForFile(context, context.packageName + ".provider", file)
 }

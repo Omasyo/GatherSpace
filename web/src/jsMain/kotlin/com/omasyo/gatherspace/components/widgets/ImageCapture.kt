@@ -75,7 +75,6 @@ fun ImageCapture(
             coroutineScope.launch {
                 val buffer = Buffer()
                 buffer.write(file.readBytes())
-                println(buffer)
                 onComplete(buffer)
             }
         })

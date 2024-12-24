@@ -36,6 +36,7 @@ class HomeViewModelImpl(
                             authRepository.logout()
                             UiState.Error("Auth Error")
                         }
+
                         is Success -> UiState.Success(it.data)
                     }
                 }

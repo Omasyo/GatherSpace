@@ -22,7 +22,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import app.cash.paging.compose.itemKey
@@ -30,19 +29,10 @@ import com.omasyo.gatherspace.dependencyProvider
 import com.omasyo.gatherspace.domain.formatTime
 import com.omasyo.gatherspace.models.response.Message
 import com.omasyo.gatherspace.models.response.RoomDetails
-import com.omasyo.gatherspace.models.response.User
-import com.omasyo.gatherspace.models.response.UserDetails
 import com.omasyo.gatherspace.ui.components.Image
 import com.omasyo.gatherspace.ui.components.TextField
-import com.omasyo.gatherspace.ui.theme.GatherSpaceTheme
 import gatherspace.composeapp.generated.resources.Res
 import gatherspace.composeapp.generated.resources.user_placeholder
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun RoomPanel(
@@ -268,9 +258,7 @@ private fun Message(
         modifier = modifier,
         verticalAlignment = Alignment.Top,
     ) {
-        Box(
-
-        ) {
+        Box {
             Image(
                 message.sender?.imageUrl,
                 placeholder = Res.drawable.user_placeholder,
@@ -279,12 +267,6 @@ private fun Message(
                     .size(40f.dp)
                     .clip(MaterialTheme.shapes.small)
             )
-//            Image(
-//                painterResource(Res.drawable.user_placeholder),
-//                null,
-//                alignment = Alignment.Center,
-//                contentScale = ContentScale.Crop
-//            )
         }
         Spacer(Modifier.width(8.dp))
         Column(
@@ -307,62 +289,3 @@ private fun Message(
         }
     }
 }
-
-
-@Preview
-@Composable
-private fun Preview() {
-    GatherSpaceTheme {
-
-        RoomPanel(
-            onBackTap = {},
-            message = "Lorem Ipsum",
-            onMessageChange = {},
-            onRegisterTap = {},
-            onJoinTap = {},
-            isAuthenticated = true,
-            onSendTap = {},
-            room = RoomDetails(
-                id = 8697, name = "Caleb Wolfe", members = listOf(), created = date, modified = date,
-                imageUrl = "", isMember = true,
-                creator = UserDetails(
-                    id = 7788,
-                    username = "Allison Davis",
-                    imageUrl = null,
-                    created = LocalDateTime(1, 1, 1, 1, 1),
-                    modified = LocalDateTime(1, 1, 1, 1, 1)
-                )
-            ),
-            oldMessages = fakeDataFlow.collectAsLazyPagingItems(),
-            messages = List(3) {
-                Message(
-                    id = it,
-                    content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                    sender = User(id = 5019, username = "Will Rutledge", imageUrl = null),
-                    roomId = 2479,
-                    created = date,
-                    modified = date
-                )
-            },
-            onJoin = {},
-            onEventReceived = {},
-            state = RoomState.Initial
-        )
-    }
-}
-
-private val date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-
-private val fakeData = List(10) {
-    Message(
-        id = it + 3, content = "molestie", sender = User(
-            id = 9558,
-            username = "Marietta Lyons",
-            imageUrl = null
-        ), roomId = 2479, created = date, modified = date
-    )
-}
-
-private val pagingData = PagingData.from(fakeData)
-
-private val fakeDataFlow = MutableStateFlow(pagingData)

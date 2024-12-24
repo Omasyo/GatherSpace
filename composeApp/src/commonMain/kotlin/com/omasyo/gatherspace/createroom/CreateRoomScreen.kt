@@ -144,9 +144,7 @@ fun CreateRoomScreen(
                     ) {
                         AsyncImage(
                             remember(image) {
-                                image?.snapshot()?.also {
-                                    println("Image size is ${it.size}")
-                                }?.toByteArray()
+                                image?.snapshot()?.toByteArray()
                             },
                             null,
                             contentScale = ContentScale.Crop,
