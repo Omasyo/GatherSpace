@@ -42,9 +42,6 @@ fun Application.module() {
         json()
     }
     install(CORS) {
-//        allowHost("localhost:8081")
-//        allowHeader(HttpHeaders.AccessControlAllowOrigin)
-//        allowHeader(HttpHeaders.AccessControlAllowHeaders)
         allowHeader(HttpHeaders.ContentType)
         allowHeader(HttpHeaders.Authorization)
         allowHeader(HttpHeaders.CacheControl)
