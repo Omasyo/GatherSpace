@@ -1,6 +1,6 @@
 # GatherSpace
 
-A simple messaging application developed using Kotlin Multiplatform with Desktop, Android and Web clients.
+A messaging application developed using Kotlin Multiplatform with Desktop, Android and Web clients.
 
 ## Project Structure
 
